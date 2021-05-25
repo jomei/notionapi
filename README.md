@@ -1,5 +1,5 @@
 # notionapi
-An API client for the [Notion API](api) implemented in Golang
+An API client for the [Notion API](https://developers.notion.com/) implemented in Golang
 
 # Roadmap
 - [ ] Databases
@@ -8,6 +8,3 @@ An API client for the [Notion API](api) implemented in Golang
 - [ ] Blocks
 - [ ] Users
 - [ ] Search
-
-
-[api]: https://developers.notion.com/
