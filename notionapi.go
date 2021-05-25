@@ -1,6 +1,9 @@
 package notionapi
 
-import "net/http"
+import (
+	"fmt"
+	"net/http"
+)
 
 const (
 	ApiURL        = "https://api.notion.com"
@@ -34,4 +37,12 @@ type Color string
 
 func (c Color) String() string {
 	return string(c)
+}
+
+func (c *Client) addRequestHeaders(req *http.Request) *http.Request {
+	req.Header.Add("application/json", "application/json")
+	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", c.Token.String()))
+	req.Header.Add("Notion-Version", NotionVersion)
+
+	return req
 }
