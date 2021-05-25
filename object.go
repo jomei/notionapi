@@ -14,6 +14,7 @@ const (
 	ObjectTypeMultiSelect ObjectType = "multi_select"
 	ObjectTypePeople      ObjectType = "people"
 	ObjectTypeFiles       ObjectType = "files"
+	ObjectTypeList        ObjectType = "list"
 )
 
 type ObjectType string
