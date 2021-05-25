@@ -46,3 +46,9 @@ func (c *Client) addRequestHeaders(req *http.Request) *http.Request {
 
 	return req
 }
+
+type Cursor string
+
+func (c Cursor) String() string {
+	return string(c)
+}

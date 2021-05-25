@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"github.com/pkg/errors"
 	"net/http"
+	"net/url"
+	"strconv"
 	"time"
 )
 
@@ -61,8 +63,8 @@ type DBRetrieveResponse struct {
 	Properties     map[string]Object `json:"properties"`
 }
 
-func (c *Client) DBList(ctx context.Context) (*DBListResponse, error) {
-	req, err := c.makeDBListRequest()
+func (c *Client) DBList(ctx context.Context, startCursor Cursor, pageSize int) (*DBListResponse, error) {
+	req, err := c.makeDBListRequest(startCursor, pageSize)
 	if err != nil {
 		return nil, err
 	}
@@ -89,9 +91,19 @@ func (c *Client) DBList(ctx context.Context) (*DBListResponse, error) {
 
 }
 
-func (c *Client) makeDBListRequest() (*http.Request, error) {
+func (c *Client) makeDBListRequest(startCursor Cursor, pageSize int) (*http.Request, error) {
 	reqURL := fmt.Sprintf("%s/%s/databases", ApiURL, ApiVersion)
-	req, err := http.NewRequest(http.MethodGet, reqURL, nil)
+	urlObj, err := url.Parse(reqURL)
+	if err != nil {
+		return nil, err
+	}
+
+	query := urlObj.Query()
+	query.Add("start_cursor", startCursor.String())
+	query.Add("page_size", strconv.Itoa(pageSize)) //TODO: empty values?
+
+	urlObj.RawQuery = query.Encode()
+	req, err := http.NewRequest(http.MethodGet, urlObj.String(), nil)
 	if err != nil {
 		return nil, err
 	}
