@@ -62,12 +62,12 @@ func (pn PropertyName) String() string {
 }
 
 type DatabaseObject struct {
-	Object         ObjectType              `json:"object"`
-	ID             ObjectID                `json:"id"`
-	CreatedTime    time.Time               `json:"created_time"` //TODO: format
-	LastEditedTime time.Time               `json:"last_edited_time"`
-	Title          TextObject              `json:"title"`
-	Properties     map[PropertyName]Object `json:"properties"`
+	Object         ObjectType                   `json:"object"`
+	ID             ObjectID                     `json:"id"`
+	CreatedTime    time.Time                    `json:"created_time"` //TODO: format
+	LastEditedTime time.Time                    `json:"last_edited_time"`
+	Title          TextObject                   `json:"title"`
+	Properties     map[PropertyName]BasicObject `json:"properties"`
 }
 
 func (c *Client) DBList(ctx context.Context, startCursor Cursor, pageSize int) (*DBListResponse, error) {

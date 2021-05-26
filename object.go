@@ -34,7 +34,7 @@ func (oID ObjectID) String() string {
 	return string(oID)
 }
 
-type Object struct {
+type BasicObject struct {
 	ID    ObjectID   `json:"id"`
 	Type  ObjectType `json:"type"`
 	Title *struct{}  `json:"title,omitempty"`

@@ -17,13 +17,13 @@ func (pID PageID) String() string {
 }
 
 type PageObject struct {
-	Object         ObjectType              `json:"object"`
-	ID             ObjectID                `json:"id"`
-	CreatedTime    time.Time               `json:"created_time"` // TODO: format
-	LastEditedTime time.Time               `json:"last_edited_time"`
-	Archived       bool                    `json:"archived"`
-	Properties     map[PropertyName]Object `json:"properties"`
-	Parent         Parent                  `json:"parent"`
+	Object         ObjectType                   `json:"object"`
+	ID             ObjectID                     `json:"id"`
+	CreatedTime    time.Time                    `json:"created_time"` // TODO: format
+	LastEditedTime time.Time                    `json:"last_edited_time"`
+	Archived       bool                         `json:"archived"`
+	Properties     map[PropertyName]BasicObject `json:"properties"`
+	Parent         Parent                       `json:"parent"`
 }
 
 type Parent struct {
@@ -54,9 +54,9 @@ func (c *Client) makePageRetrieveRequest(id PageID) (*http.Request, error) {
 }
 
 type PageCreateRequest struct {
-	Parent     Parent                  `json:"parent"`
-	Properties map[PropertyName]Object `json:"properties"`
-	Children   []BlockType             `json:"children"`
+	Parent     Parent                       `json:"parent"`
+	Properties map[PropertyName]BasicObject `json:"properties"`
+	Children   []BlockType                  `json:"children"`
 }
 
 func (c *Client) PageCreate(ctx context.Context, requestBody PageCreateRequest) (*PageObject, error) {
@@ -84,7 +84,7 @@ func (c *Client) makePageCreateRequest(requestBody PageCreateRequest) (*http.Req
 	return req, nil
 }
 
-func (c *Client) PageUpdate(ctx context.Context, id PageID, properties map[PropertyName]Object) (*PageObject, error) {
+func (c *Client) PageUpdate(ctx context.Context, id PageID, properties map[PropertyName]BasicObject) (*PageObject, error) {
 	req, err := c.makePageUpdateRequest(id, properties)
 	if err != nil {
 		return nil, err
@@ -92,7 +92,7 @@ func (c *Client) PageUpdate(ctx context.Context, id PageID, properties map[Prope
 	return c.doPageRequest(ctx, req)
 }
 
-func (c *Client) makePageUpdateRequest(id PageID, properties map[PropertyName]Object) (*http.Request, error) {
+func (c *Client) makePageUpdateRequest(id PageID, properties map[PropertyName]BasicObject) (*http.Request, error) {
 	reqURL := fmt.Sprintf("%s/%s/pages/%s", ApiURL, ApiVersion, id.String())
 	body, err := json.Marshal(properties)
 	if err != nil {
