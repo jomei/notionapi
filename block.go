@@ -18,23 +18,6 @@ func (bID BlockID) String() string {
 	return string(bID)
 }
 
-type BlockType string
-
-const (
-	BlockTypeParagraph BlockType = "paragraph"
-	BlockTypeHeading1  BlockType = "heading_1"
-	BlockTypeHeading2  BlockType = "heading_2"
-	BlockTypeHeading3  BlockType = "heading_3"
-
-	BlockTypeBulletedListItem BlockType = "bulleted_list_item"
-	BlockTypeNumberedListItem BlockType = "numbered_list_item"
-
-	BlockTypeToDo        BlockType = "to_do"
-	BlockTypeToggle      BlockType = "toggle"
-	BlockTypeChildPage   BlockType = "child_page"
-	BlockTypeUnsupported BlockType = "unsupported"
-)
-
 type BlockObject struct {
 	BasicObject
 	Object         ObjectType `json:"object"`
@@ -44,7 +27,7 @@ type BlockObject struct {
 	HasChildren    bool       `json:"has_children"`
 }
 
-func (c *Client) RetrieveBlockChildren(ctx context.Context, id BlockID, startCursor Cursor, pageSize int) ([]BasicObject, error) {
+func (c *Client) BlockChildrenRetrieve(ctx context.Context, id BlockID, startCursor Cursor, pageSize int) ([]BasicObject, error) {
 	req, err := c.makeRetrieveBlockChildrenRequest(id, startCursor, pageSize)
 	if err != nil {
 		return nil, err
@@ -97,7 +80,7 @@ type AppendBlockChildrenRequest struct {
 	Children []BasicObject `json:"children"`
 }
 
-func (c *Client) AppendBlockChildren(ctx context.Context, id BlockID, requestBody AppendBlockChildrenRequest) (*BlockObject, error) {
+func (c *Client) BlockChildrenAppend(ctx context.Context, id BlockID, requestBody AppendBlockChildrenRequest) (*BlockObject, error) {
 	req, err := c.makeAppendBlockChildrenRequest(id, &requestBody)
 	if err != nil {
 		return nil, err

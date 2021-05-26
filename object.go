@@ -20,6 +20,16 @@ const (
 	ObjectTypeHeading3    ObjectType = "heading_3"
 	ObjectTypeParagraph   ObjectType = "paragraph"
 	ObjectTypeToggle      ObjectType = "toggle"
+	ObjectTypeUser        ObjectType = "user"
+	ObjectTypePerson      ObjectType = "person"
+	ObjectTypeBot         ObjectType = "bot"
+
+	ObjectTypeBulletedListItem ObjectType = "bulleted_list_item"
+	ObjectTypeNumberedListItem ObjectType = "numbered_list_item"
+
+	ObjectTypeToDo        ObjectType = "to_do"
+	ObjectTypeChildPage   ObjectType = "child_page"
+	ObjectTypeUnsupported ObjectType = "unsupported"
 )
 
 type ObjectType string

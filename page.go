@@ -56,7 +56,7 @@ func (c *Client) makePageRetrieveRequest(id PageID) (*http.Request, error) {
 type PageCreateRequest struct {
 	Parent     Parent                       `json:"parent"`
 	Properties map[PropertyName]BasicObject `json:"properties"`
-	Children   []BlockType                  `json:"children"`
+	Children   []BlockObject                `json:"children"`
 }
 
 func (c *Client) PageCreate(ctx context.Context, requestBody PageCreateRequest) (*PageObject, error) {

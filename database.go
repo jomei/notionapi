@@ -127,10 +127,10 @@ type DBListResponse struct {
 }
 
 type DBQueryRequest struct {
-	Filter      FilterObject `json:"filter"`
-	Sorts       []SortObject `json:"sorts"`
-	StartCursor Cursor       `json:"start_cursor"`
-	PageSize    int          `json:"page_size"`
+	Filter      *FilterObject `json:"filter,omitempty"`
+	Sorts       []SortObject  `json:"sorts"`
+	StartCursor Cursor        `json:"start_cursor,omiempty"`
+	PageSize    int           `json:"page_size"`
 }
 
 func (c *Client) DBQuery(ctx context.Context, id DatabaseID, requestBody DBQueryRequest) (*DBQueryResponse, error) {
