@@ -1,6 +1,7 @@
 package notionapi
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 )
@@ -12,7 +13,20 @@ const (
 )
 
 type ApiClient interface {
+	DBRetrieve(context.Context, DatabaseID) (*DatabaseObject, error)
+	DBList(context.Context, Cursor, int) (*DBListResponse, error)
+	DBQuery(context.Context, DatabaseID, DBQueryRequest) (*DBQueryResponse, error)
+	BlockChildrenRetrieve(context.Context, BlockID, Cursor, int) ([]BasicObject, error)
+	BlockChildrenAppend(context.Context, BlockID, AppendBlockChildrenRequest) (*BlockObject, error)
+	PageRetrieve(context.Context, PageID) (*PageObject, error)
+	PageCreate(context.Context, PageCreateRequest) (*PageObject, error)
+	PageUpdate(context.Context, PageID, map[PropertyName]BasicObject) (*PageObject, error)
+	UserRetrieve(context.Context, UserID) (*UserObject, error)
+	UsersList(context.Context, Cursor, int) (*UsersListResponse, error)
+	Search(context.Context, SearchRequest) (*SearchResponse, error)
 }
+
+type ClientOption func(*Client)
 
 type Client struct {
 	httpClient *http.Client
@@ -20,11 +34,17 @@ type Client struct {
 	Token IntegrationToken
 }
 
-func NewClient(httpClient *http.Client, token IntegrationToken) *Client {
-	return &Client{
+func NewClient(httpClient *http.Client, token IntegrationToken, opts ...ClientOption) *Client {
+	c := &Client{
 		httpClient: httpClient,
 		Token:      token,
 	}
+
+	for _, opt := range opts {
+		opt(c)
+	}
+
+	return c
 }
 
 type IntegrationToken string
