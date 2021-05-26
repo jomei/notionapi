@@ -1,4 +1,7 @@
 # notionapi
+[![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/jomei/notionapi?label=go%20module)](https://github.com/jomei/notionapi/tags)
+[![Go Reference](https://pkg.go.dev/badge/github.com/jomei/notionapi.svg)](https://pkg.go.dev/github.com/jomei/notionapi)
+
 An API client for the [Notion API](https://developers.notion.com/) implemented in Golang
 
 # Roadmap
