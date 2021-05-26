@@ -15,6 +15,11 @@ const (
 	ObjectTypePeople      ObjectType = "people"
 	ObjectTypeFiles       ObjectType = "files"
 	ObjectTypeList        ObjectType = "list"
+	ObjectTypeHeading1    ObjectType = "heading_1"
+	ObjectTypeHeading2    ObjectType = "heading_2"
+	ObjectTypeHeading3    ObjectType = "heading_3"
+	ObjectTypeParagraph   ObjectType = "paragraph"
+	ObjectTypeToggle      ObjectType = "toggle"
 )
 
 type ObjectType string
@@ -30,10 +35,13 @@ func (oID ObjectID) String() string {
 }
 
 type Object struct {
-	ID          ObjectID           `json:"id"`
-	Type        ObjectType         `json:"type"`
-	Title       *struct{}          `json:"title,omitempty"`
-	Text        *struct{}          `json:"text,omitempty"`
+	ID    ObjectID   `json:"id"`
+	Type  ObjectType `json:"type"`
+	Title *struct{}  `json:"title,omitempty"`
+	Text  struct {
+		Content string `json:"content"`
+		Link    string `json:"link"`
+	} `json:"text,omitempty"`
 	Checkbox    *struct{}          `json:"checkbox,omitempty"`
 	Select      *SelectObject      `json:"select,omitempty"`
 	Number      *NumberObject      `json:"number,omitempty"`
@@ -44,6 +52,8 @@ type Object struct {
 	MultiSelect *MultiSelectObject `json:"multi_select,omitempty"`
 	People      *struct{}          `json:"people,omitempty"`
 	Files       *struct{}          `json:"files,omitempty"`
+	Paragraph   *ParagraphObject   `json:"paragraph,omitempty"`
+	Toggle      *Toggle            `json:"toggle,omitempty"`
 }
 
 type TextObject struct {
@@ -63,6 +73,8 @@ type TextObject struct {
 	PlainText string `json:"plain_text"`
 	Href      string `json:"href"`
 }
+
+type ParagraphObject []TextObject
 
 type SelectObject struct {
 	Options []SelectObject `json:"options"`
@@ -109,4 +121,8 @@ type RollupObject struct {
 
 type MultiSelectObject struct {
 	Options [][]SelectOption `json:"options"`
+}
+
+type Toggle struct {
+	Text TextObject `json:"text"`
 }

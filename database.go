@@ -18,7 +18,7 @@ func (dID DatabaseID) String() string {
 	return string(dID)
 }
 
-func (c *Client) DBRetrieve(ctx context.Context, id DatabaseID) (*DBRetrieveResponse, error) {
+func (c *Client) DBRetrieve(ctx context.Context, id DatabaseID) (*DatabaseObject, error) {
 	req, err := c.makeDBRetrieveRequest(id)
 	if err != nil {
 		return nil, err
@@ -34,7 +34,7 @@ func (c *Client) DBRetrieve(ctx context.Context, id DatabaseID) (*DBRetrieveResp
 		return nil, errors.Errorf("http status: %d", res.StatusCode)
 	}
 
-	var response DBRetrieveResponse
+	var response DatabaseObject
 	err = json.NewDecoder(res.Body).Decode(&response)
 	if err != nil {
 		return nil, err
@@ -61,7 +61,7 @@ func (pn PropertyName) String() string {
 	return string(pn)
 }
 
-type DBRetrieveResponse struct {
+type DatabaseObject struct {
 	Object         ObjectType              `json:"object"`
 	ID             ObjectID                `json:"id"`
 	CreatedTime    time.Time               `json:"created_time"` //TODO: format
@@ -124,13 +124,6 @@ type DBListResponse struct {
 	Results    []DatabaseObject `json:"results"`
 	NextCursor string           `json:"next_cursor"`
 	HasMore    bool             `json:"has_more"`
-}
-
-type DatabaseObject struct {
-	Object     ObjectType        `json:"object"`
-	ID         ObjectID          `json:"id"`
-	Title      string            `json:"title"`
-	Properties map[string]Object `json:"properties"`
 }
 
 type DBQueryRequest struct {
