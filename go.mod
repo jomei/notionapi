@@ -1,3 +1,3 @@
 module github.com/jomei/notionapi
 
-go 0.1
+go 1.16
