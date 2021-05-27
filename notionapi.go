@@ -29,6 +29,7 @@ type Client struct {
 
 	Database DatabaseService
 	Block    BlockService
+	Page     PageService
 }
 
 func NewClient(token Token, opts ...ClientOption) *Client {
@@ -46,6 +47,7 @@ func NewClient(token Token, opts ...ClientOption) *Client {
 
 	c.Database = &DatabaseClient{apiClient: c}
 	c.Block = &BlockClient{apiClient: c}
+	c.Page = &PageClient{apiClient: c}
 
 	for _, opt := range opts {
 		opt(c)
