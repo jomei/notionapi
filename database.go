@@ -1,13 +1,10 @@
 package notionapi
 
 import (
-	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/pkg/errors"
 	"net/http"
-	"net/url"
 	"strconv"
 	"time"
 )
@@ -19,21 +16,10 @@ func (dID DatabaseID) String() string {
 }
 
 func (c *Client) DBRetrieve(ctx context.Context, id DatabaseID) (*DatabaseObject, error) {
-	req, err := c.makeDBRetrieveRequest(id)
+	res, err := c.request(ctx, http.MethodGet, fmt.Sprintf("databases/%s", id.String()), nil, nil)
 	if err != nil {
 		return nil, err
 	}
-	req = req.WithContext(ctx)
-	res, err := c.httpClient.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer res.Body.Close()
-
-	if res.StatusCode != http.StatusOK {
-		return nil, errors.Errorf("http status: %d", res.StatusCode)
-	}
-
 	var response DatabaseObject
 	err = json.NewDecoder(res.Body).Decode(&response)
 	if err != nil {
@@ -41,18 +27,6 @@ func (c *Client) DBRetrieve(ctx context.Context, id DatabaseID) (*DatabaseObject
 	}
 
 	return &response, nil
-}
-
-func (c *Client) makeDBRetrieveRequest(id DatabaseID) (*http.Request, error) {
-	reqURL := fmt.Sprintf("%s/%s/databases/%s", ApiURL, ApiVersion, id.String())
-	req, err := http.NewRequest(http.MethodGet, reqURL, nil)
-	if err != nil {
-		return nil, err
-	}
-
-	req = c.addRequestHeaders(req)
-
-	return req, nil
 }
 
 type PropertyName string
@@ -71,21 +45,10 @@ type DatabaseObject struct {
 }
 
 func (c *Client) DBList(ctx context.Context, startCursor Cursor, pageSize int) (*DBListResponse, error) {
-	req, err := c.makeDBListRequest(startCursor, pageSize)
+	queryParams := map[string]string{"start_cursor": startCursor.String(), "page_size": strconv.Itoa(pageSize)}
+	res, err := c.request(ctx, http.MethodGet, "/databases", queryParams, nil)
 	if err != nil {
 		return nil, err
-	}
-
-	req = req.WithContext(ctx)
-
-	res, err := c.httpClient.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer res.Body.Close()
-
-	if res.StatusCode != http.StatusOK {
-		return nil, errors.Errorf("http status: %d", res.StatusCode)
 	}
 
 	var response DBListResponse
@@ -96,28 +59,6 @@ func (c *Client) DBList(ctx context.Context, startCursor Cursor, pageSize int) (
 
 	return &response, nil
 
-}
-
-func (c *Client) makeDBListRequest(startCursor Cursor, pageSize int) (*http.Request, error) {
-	reqURL := fmt.Sprintf("%s/%s/databases", ApiURL, ApiVersion)
-	urlObj, err := url.Parse(reqURL)
-	if err != nil {
-		return nil, err
-	}
-
-	query := urlObj.Query()
-	query.Add("start_cursor", startCursor.String())
-	query.Add("page_size", strconv.Itoa(pageSize)) //TODO: empty values?
-
-	urlObj.RawQuery = query.Encode()
-	req, err := http.NewRequest(http.MethodGet, urlObj.String(), nil)
-	if err != nil {
-		return nil, err
-	}
-
-	req = c.addRequestHeaders(req)
-
-	return req, nil
 }
 
 type DBListResponse struct {
@@ -134,21 +75,9 @@ type DBQueryRequest struct {
 }
 
 func (c *Client) DBQuery(ctx context.Context, id DatabaseID, requestBody DBQueryRequest) (*DBQueryResponse, error) {
-	req, err := c.makeDBQueryRequest(id, requestBody)
+	res, err := c.request(ctx, http.MethodPost, fmt.Sprintf("databases/%s", id.String()), nil, requestBody)
 	if err != nil {
 		return nil, err
-	}
-
-	req = req.WithContext(ctx)
-
-	res, err := c.httpClient.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer res.Body.Close()
-
-	if res.StatusCode != http.StatusOK {
-		return nil, errors.Errorf("http status: %d", res.StatusCode)
 	}
 
 	var response DBQueryResponse
@@ -158,23 +87,6 @@ func (c *Client) DBQuery(ctx context.Context, id DatabaseID, requestBody DBQuery
 	}
 
 	return &response, nil
-}
-
-func (c *Client) makeDBQueryRequest(id DatabaseID, requestBody DBQueryRequest) (*http.Request, error) {
-	reqURL := fmt.Sprintf("%s/%s/databases/%s", ApiURL, ApiVersion, id.String())
-	body, err := json.Marshal(requestBody)
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest(http.MethodPost, reqURL, bytes.NewBuffer(body))
-	if err != nil {
-		return nil, err
-	}
-
-	req = c.addRequestHeaders(req)
-
-	return req, nil
 }
 
 type DBQueryResponse struct {

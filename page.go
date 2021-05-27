@@ -1,11 +1,9 @@
 package notionapi
 
 import (
-	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/pkg/errors"
 	"net/http"
 	"time"
 )
@@ -33,24 +31,12 @@ type Parent struct {
 }
 
 func (c *Client) PageRetrieve(ctx context.Context, id PageID) (*PageObject, error) {
-	req, err := c.makePageRetrieveRequest(id)
+	res, err := c.request(ctx, http.MethodGet, fmt.Sprintf("pages/%s", id.String()), nil, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	return c.doPageRequest(ctx, req)
-}
-
-func (c *Client) makePageRetrieveRequest(id PageID) (*http.Request, error) {
-	reqURL := fmt.Sprintf("%s/%s/pages/%s", ApiURL, ApiVersion, id.String())
-	req, err := http.NewRequest(http.MethodGet, reqURL, nil)
-	if err != nil {
-		return nil, err
-	}
-
-	req = c.addRequestHeaders(req)
-
-	return req, nil
+	return handlePageResponse(res)
 }
 
 type PageCreateRequest struct {
@@ -60,68 +46,26 @@ type PageCreateRequest struct {
 }
 
 func (c *Client) PageCreate(ctx context.Context, requestBody PageCreateRequest) (*PageObject, error) {
-	req, err := c.makePageCreateRequest(requestBody)
+	res, err := c.request(ctx, http.MethodPost, "pages", nil, requestBody)
 	if err != nil {
 		return nil, err
 	}
 
-	return c.doPageRequest(ctx, req)
-}
-
-func (c *Client) makePageCreateRequest(requestBody PageCreateRequest) (*http.Request, error) {
-	reqURL := fmt.Sprintf("%s/%s/pages", ApiURL, ApiVersion)
-	body, err := json.Marshal(requestBody)
-	if err != nil {
-		return nil, err
-	}
-	req, err := http.NewRequest(http.MethodPost, reqURL, bytes.NewBuffer(body))
-	if err != nil {
-		return nil, err
-	}
-
-	req = c.addRequestHeaders(req)
-
-	return req, nil
+	return handlePageResponse(res)
 }
 
 func (c *Client) PageUpdate(ctx context.Context, id PageID, properties map[PropertyName]BasicObject) (*PageObject, error) {
-	req, err := c.makePageUpdateRequest(id, properties)
+	res, err := c.request(ctx, http.MethodPatch, fmt.Sprintf("pages/%s", id.String()), nil, properties)
 	if err != nil {
 		return nil, err
 	}
-	return c.doPageRequest(ctx, req)
+
+	return handlePageResponse(res)
 }
 
-func (c *Client) makePageUpdateRequest(id PageID, properties map[PropertyName]BasicObject) (*http.Request, error) {
-	reqURL := fmt.Sprintf("%s/%s/pages/%s", ApiURL, ApiVersion, id.String())
-	body, err := json.Marshal(properties)
-	if err != nil {
-		return nil, err
-	}
-	req, err := http.NewRequest(http.MethodPatch, reqURL, bytes.NewBuffer(body))
-	if err != nil {
-		return nil, err
-	}
-
-	req = c.addRequestHeaders(req)
-
-	return req, nil
-}
-
-func (c *Client) doPageRequest(ctx context.Context, req *http.Request) (*PageObject, error) {
-	req = req.WithContext(ctx)
-	res, err := c.httpClient.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer res.Body.Close()
-
-	if res.StatusCode != http.StatusOK {
-		return nil, errors.Errorf("http status: %d", res.StatusCode)
-	}
-
+func handlePageResponse(res *http.Response) (*PageObject, error) {
 	var response PageObject
-	err = json.NewDecoder(res.Body).Decode(&response)
+	err := json.NewDecoder(res.Body).Decode(&response)
 	if err != nil {
 		return nil, err
 	}

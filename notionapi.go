@@ -1,15 +1,19 @@
 package notionapi
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
+	"github.com/pkg/errors"
 	"net/http"
+	"net/url"
 )
 
 const (
-	ApiURL        = "https://api.notion.com"
-	ApiVersion    = "v1"
-	NotionVersion = "2021-05-13"
+	apiURL        = "https://api.notion.com"
+	apiVersion    = "v1"
+	notionVersion = "2021-05-13"
 )
 
 type ApiClient interface {
@@ -26,18 +30,29 @@ type ApiClient interface {
 	Search(context.Context, SearchRequest) (*SearchResponse, error)
 }
 
+// ClientOption to configure API client
 type ClientOption func(*Client)
 
 type Client struct {
 	httpClient *http.Client
 
-	Token IntegrationToken
+	Token         Token
+	baseUrl       *url.URL
+	apiVersion    string
+	notionVersion string
 }
 
-func NewClient(httpClient *http.Client, token IntegrationToken, opts ...ClientOption) *Client {
+func NewClient(token Token, opts ...ClientOption) *Client {
+	u, err := url.Parse(apiURL)
+	if err != nil {
+		panic(err)
+	}
 	c := &Client{
-		httpClient: httpClient,
-		Token:      token,
+		httpClient:    http.DefaultClient,
+		Token:         token,
+		baseUrl:       u,
+		apiVersion:    apiVersion,
+		notionVersion: notionVersion,
 	}
 
 	for _, opt := range opts {
@@ -47,24 +62,57 @@ func NewClient(httpClient *http.Client, token IntegrationToken, opts ...ClientOp
 	return c
 }
 
-type IntegrationToken string
+type Token string
 
-func (it IntegrationToken) String() string {
+func (it Token) String() string {
 	return string(it)
 }
 
-type Color string
+func (c *Client) request(ctx context.Context, method string, urlStr string, queryParams map[string]string, requestBody interface{}) (*http.Response, error) {
+	u, err := c.baseUrl.Parse(fmt.Sprintf("%s/%s", c.apiVersion, urlStr))
+	if err != nil {
+		return nil, err
+	}
 
-func (c Color) String() string {
-	return string(c)
-}
+	var buf *bytes.Buffer
+	if requestBody != nil {
+		body, err := json.Marshal(requestBody)
+		if err != nil {
+			return nil, err
+		}
+		buf = bytes.NewBuffer(body)
+	}
 
-func (c *Client) addRequestHeaders(req *http.Request) *http.Request {
-	req.Header.Add("application/json", "application/json")
+	if len(queryParams) > 0 {
+		q := u.Query()
+		for k, v := range queryParams {
+			q.Add(k, v)
+		}
+		u.RawQuery = q.Encode()
+	}
+
+	req, err := http.NewRequest(method, u.String(), buf)
+	if err != nil {
+		return nil, err
+	}
+
 	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", c.Token.String()))
-	req.Header.Add("Notion-Version", NotionVersion)
+	req.Header.Add("Notion-Version", c.notionVersion)
 
-	return req
+	if requestBody != nil {
+		req.Header.Add("Content-Type", "application/json")
+	}
+
+	res, err := c.httpClient.Do(req.WithContext(ctx))
+	if err != nil {
+		return nil, err
+	}
+
+	if res.StatusCode != http.StatusOK {
+		return nil, errors.Errorf("http status: %d", res.StatusCode)
+	}
+
+	return res, nil
 }
 
 type Cursor string

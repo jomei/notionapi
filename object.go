@@ -66,6 +66,12 @@ type BasicObject struct {
 	Toggle      *Toggle            `json:"toggle,omitempty"`
 }
 
+type Color string
+
+func (c Color) String() string {
+	return string(c)
+}
+
 type TextObject struct {
 	Type ObjectType `json:"type"`
 	Text struct {
