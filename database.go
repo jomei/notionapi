@@ -16,7 +16,7 @@ func (dID DatabaseID) String() string {
 }
 
 type DatabaseService interface {
-	Retrieve(context.Context, DatabaseID) (*DatabaseObject, error)
+	Get(context.Context, DatabaseID) (*DatabaseObject, error)
 	List(context.Context, Cursor, int) (*DBListResponse, error)
 	Query(context.Context, DatabaseID, DatabaseQueryRequest) (*DatabaseQueryResponse, error)
 }
@@ -25,7 +25,8 @@ type DatabaseClient struct {
 	apiClient *Client
 }
 
-func (dc *DatabaseClient) Retrieve(ctx context.Context, id DatabaseID) (*DatabaseObject, error) {
+// Get https://developers.notion.com/reference/get-database
+func (dc *DatabaseClient) Get(ctx context.Context, id DatabaseID) (*DatabaseObject, error) {
 	res, err := dc.apiClient.request(ctx, http.MethodGet, fmt.Sprintf("databases/%s", id.String()), nil, nil)
 	if err != nil {
 		return nil, err
@@ -39,6 +40,7 @@ func (dc *DatabaseClient) Retrieve(ctx context.Context, id DatabaseID) (*Databas
 	return &response, nil
 }
 
+// List https://developers.notion.com/reference/get-databases
 func (dc *DatabaseClient) List(ctx context.Context, startCursor Cursor, pageSize int) (*DBListResponse, error) {
 	queryParams := map[string]string{"start_cursor": startCursor.String(), "page_size": strconv.Itoa(pageSize)}
 	res, err := dc.apiClient.request(ctx, http.MethodGet, "/databases", queryParams, nil)
@@ -55,6 +57,7 @@ func (dc *DatabaseClient) List(ctx context.Context, startCursor Cursor, pageSize
 	return &response, nil
 }
 
+// Query https://developers.notion.com/reference/post-database-query
 func (dc *DatabaseClient) Query(ctx context.Context, id DatabaseID, requestBody DatabaseQueryRequest) (*DatabaseQueryResponse, error) {
 	res, err := dc.apiClient.request(ctx, http.MethodPost, fmt.Sprintf("databases/%s", id.String()), nil, requestBody)
 	if err != nil {

@@ -15,7 +15,7 @@ func (pID PageID) String() string {
 }
 
 type PageService interface {
-	Retrieve(context.Context, PageID) (*PageObject, error)
+	Get(context.Context, PageID) (*PageObject, error)
 	Create(context.Context, PageCreateRequest) (*PageObject, error)
 	Update(context.Context, PageID, map[PropertyName]BasicObject) (*PageObject, error)
 }
@@ -24,7 +24,8 @@ type PageClient struct {
 	apiClient *Client
 }
 
-func (pc *PageClient) Retrieve(ctx context.Context, id PageID) (*PageObject, error) {
+// Get https://developers.notion.com/reference/get-page
+func (pc *PageClient) Get(ctx context.Context, id PageID) (*PageObject, error) {
 	res, err := pc.apiClient.request(ctx, http.MethodGet, fmt.Sprintf("pages/%s", id.String()), nil, nil)
 	if err != nil {
 		return nil, err
@@ -33,6 +34,7 @@ func (pc *PageClient) Retrieve(ctx context.Context, id PageID) (*PageObject, err
 	return handlePageResponse(res)
 }
 
+// Create https://developers.notion.com/reference/post-page
 func (pc *PageClient) Create(ctx context.Context, requestBody PageCreateRequest) (*PageObject, error) {
 	res, err := pc.apiClient.request(ctx, http.MethodPost, "pages", nil, requestBody)
 	if err != nil {
@@ -42,6 +44,7 @@ func (pc *PageClient) Create(ctx context.Context, requestBody PageCreateRequest)
 	return handlePageResponse(res)
 }
 
+// Update https://developers.notion.com/reference/patch-page
 func (pc *PageClient) Update(ctx context.Context, id PageID, properties map[PropertyName]BasicObject) (*PageObject, error) {
 	res, err := pc.apiClient.request(ctx, http.MethodPatch, fmt.Sprintf("pages/%s", id.String()), nil, properties)
 	if err != nil {

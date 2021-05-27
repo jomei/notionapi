@@ -15,7 +15,7 @@ func (uID UserID) String() string {
 }
 
 type UserService interface {
-	Retrieve(context.Context, UserID) (*UserObject, error)
+	Get(context.Context, UserID) (*UserObject, error)
 	List(context.Context, Cursor, int) (*UsersListResponse, error)
 }
 
@@ -23,7 +23,8 @@ type UserClient struct {
 	apiClient *Client
 }
 
-func (uc *UserClient) Retrieve(ctx context.Context, id UserID) (*UserObject, error) {
+// Get https://developers.notion.com/reference/get-user
+func (uc *UserClient) Get(ctx context.Context, id UserID) (*UserObject, error) {
 	res, err := uc.apiClient.request(ctx, http.MethodGet, fmt.Sprintf("users/%s", id.String()), nil, nil)
 	if err != nil {
 		return nil, err
@@ -38,6 +39,7 @@ func (uc *UserClient) Retrieve(ctx context.Context, id UserID) (*UserObject, err
 	return &response, nil
 }
 
+// List https://developers.notion.com/reference/get-users
 func (uc *UserClient) List(ctx context.Context, startCursor Cursor, pageSize int) (*UsersListResponse, error) {
 	queryParams := map[string]string{"start_cursor": startCursor.String(), "page_size": strconv.Itoa(pageSize)}
 	res, err := uc.apiClient.request(ctx, http.MethodGet, "users", queryParams, nil)

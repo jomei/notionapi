@@ -16,7 +16,7 @@ func (bID BlockID) String() string {
 }
 
 type BlockService interface {
-	RetrieveChildren(context.Context, BlockID, Cursor, int) ([]BasicObject, error)
+	GetChildren(context.Context, BlockID, Cursor, int) ([]BasicObject, error)
 	AppendChildren(context.Context, BlockID, AppendBlockChildrenRequest) (*BlockObject, error)
 }
 
@@ -24,7 +24,8 @@ type BlockClient struct {
 	apiClient *Client
 }
 
-func (bc *BlockClient) RetrieveChildren(ctx context.Context, id BlockID, startCursor Cursor, pageSize int) ([]BasicObject, error) {
+// GetChildren https://developers.notion.com/reference/get-block-children
+func (bc *BlockClient) GetChildren(ctx context.Context, id BlockID, startCursor Cursor, pageSize int) ([]BasicObject, error) {
 	queryParams := map[string]string{"start_cursor": startCursor.String(), "page_size": strconv.Itoa(pageSize)}
 	res, err := bc.apiClient.request(ctx, http.MethodGet, fmt.Sprintf("blocks/%s", id.String()), queryParams, nil)
 	if err != nil {
@@ -40,6 +41,7 @@ func (bc *BlockClient) RetrieveChildren(ctx context.Context, id BlockID, startCu
 	return response, nil
 }
 
+// AppendChildren https://developers.notion.com/reference/patch-block-children
 func (bc *BlockClient) AppendChildren(ctx context.Context, id BlockID, requestBody AppendBlockChildrenRequest) (*BlockObject, error) {
 	res, err := bc.apiClient.request(ctx, http.MethodPost, fmt.Sprintf("blocks/%s", id.String()), nil, requestBody)
 	if err != nil {
