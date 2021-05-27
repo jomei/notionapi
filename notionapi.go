@@ -16,20 +16,6 @@ const (
 	notionVersion = "2021-05-13"
 )
 
-type ApiClient interface {
-	DBRetrieve(context.Context, DatabaseID) (*DatabaseObject, error)
-	DBList(context.Context, Cursor, int) (*DBListResponse, error)
-	DBQuery(context.Context, DatabaseID, DBQueryRequest) (*DBQueryResponse, error)
-	BlockChildrenRetrieve(context.Context, BlockID, Cursor, int) ([]BasicObject, error)
-	BlockChildrenAppend(context.Context, BlockID, AppendBlockChildrenRequest) (*BlockObject, error)
-	PageRetrieve(context.Context, PageID) (*PageObject, error)
-	PageCreate(context.Context, PageCreateRequest) (*PageObject, error)
-	PageUpdate(context.Context, PageID, map[PropertyName]BasicObject) (*PageObject, error)
-	UserRetrieve(context.Context, UserID) (*UserObject, error)
-	UsersList(context.Context, Cursor, int) (*UsersListResponse, error)
-	Search(context.Context, SearchRequest) (*SearchResponse, error)
-}
-
 // ClientOption to configure API client
 type ClientOption func(*Client)
 
@@ -40,6 +26,8 @@ type Client struct {
 	baseUrl       *url.URL
 	apiVersion    string
 	notionVersion string
+
+	Database DatabaseService
 }
 
 func NewClient(token Token, opts ...ClientOption) *Client {
@@ -54,6 +42,8 @@ func NewClient(token Token, opts ...ClientOption) *Client {
 		apiVersion:    apiVersion,
 		notionVersion: notionVersion,
 	}
+
+	c.Database = &DatabaseClient{apiClient: c}
 
 	for _, opt := range opts {
 		opt(c)
