@@ -32,6 +32,7 @@ func (dc *DatabaseClient) Get(ctx context.Context, id DatabaseID) (*DatabaseObje
 		return nil, err
 	}
 	var response DatabaseObject
+
 	err = json.NewDecoder(res.Body).Decode(&response)
 	if err != nil {
 		return nil, err
@@ -84,7 +85,7 @@ type DatabaseObject struct {
 	ID             ObjectID                     `json:"id"`
 	CreatedTime    time.Time                    `json:"created_time"` //TODO: format
 	LastEditedTime time.Time                    `json:"last_edited_time"`
-	Title          []TextObject                 `json:"title"`
+	Title          []RichTextObject             `json:"title"`
 	Properties     map[PropertyName]BasicObject `json:"properties"`
 }
 

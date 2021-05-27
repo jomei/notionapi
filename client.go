@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/pkg/errors"
+	"io"
 	"net/http"
 	"net/url"
 )
@@ -15,6 +16,12 @@ const (
 	apiVersion    = "v1"
 	notionVersion = "2021-05-13"
 )
+
+type Token string
+
+func (it Token) String() string {
+	return string(it)
+}
 
 // ClientOption to configure API client
 type ClientOption func(*Client)
@@ -60,10 +67,18 @@ func NewClient(token Token, opts ...ClientOption) *Client {
 	return c
 }
 
-type Token string
+// WithHTTPClient overrides the default http.Client
+func WithHTTPClient(client *http.Client) ClientOption {
+	return func(c *Client) {
+		c.httpClient = client
+	}
+}
 
-func (it Token) String() string {
-	return string(it)
+// WithVersion overrides the Notion API version
+func WithVersion(version string) ClientOption {
+	return func(c *Client) {
+		c.notionVersion = version
+	}
 }
 
 func (c *Client) request(ctx context.Context, method string, urlStr string, queryParams map[string]string, requestBody interface{}) (*http.Response, error) {
@@ -72,7 +87,7 @@ func (c *Client) request(ctx context.Context, method string, urlStr string, quer
 		return nil, err
 	}
 
-	var buf *bytes.Buffer
+	var buf io.ReadWriter
 	if requestBody != nil {
 		body, err := json.Marshal(requestBody)
 		if err != nil {
@@ -111,10 +126,4 @@ func (c *Client) request(ctx context.Context, method string, urlStr string, quer
 	}
 
 	return res, nil
-}
-
-type Cursor string
-
-func (c Cursor) String() string {
-	return string(c)
 }

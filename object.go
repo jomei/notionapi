@@ -4,6 +4,7 @@ const (
 	ObjectTypeDatabase    ObjectType = "database"
 	ObjectTypeTitle       ObjectType = "title"
 	ObjectTypeText        ObjectType = "text"
+	ObjectTypeRichText    ObjectType = "rich_text"
 	ObjectTypeCheckbox    ObjectType = "checkbox"
 	ObjectTypeSelect      ObjectType = "select"
 	ObjectTypeNumber      ObjectType = "number"
@@ -45,13 +46,11 @@ func (oID ObjectID) String() string {
 }
 
 type BasicObject struct {
-	ID    ObjectID   `json:"id"`
-	Type  ObjectType `json:"type"`
-	Title *struct{}  `json:"title,omitempty"`
-	Text  struct {
-		Content string `json:"content"`
-		Link    string `json:"link"`
-	} `json:"text,omitempty"`
+	ID          ObjectID           `json:"id"`
+	Type        ObjectType         `json:"type"`
+	Title       *TextObject        `json:"title,omitempty"`
+	Text        *TextObject        `json:"text,omitempty"`
+	RichText    *RichTextObject    `json:"rich_text,omitempty"`
 	Checkbox    *struct{}          `json:"checkbox,omitempty"`
 	Select      *SelectObject      `json:"select,omitempty"`
 	Number      *NumberObject      `json:"number,omitempty"`
@@ -72,25 +71,29 @@ func (c Color) String() string {
 	return string(c)
 }
 
-type TextObject struct {
-	Type ObjectType `json:"type"`
-	Text struct {
-		Content string `json:"content"`
-		Link    string `json:"link"`
-	} `json:"text"`
-	Annotations struct {
-		Bold          bool  `json:"bold"`
-		Italic        bool  `json:"italic"`
-		Strikethrough bool  `json:"strikethrough"`
-		Underline     bool  `json:"underline"`
-		Code          bool  `json:"code"`
-		Color         Color `json:"color"`
-	} `json:"annotations"`
-	PlainText string `json:"plain_text"`
-	Href      string `json:"href"`
+type RichTextObject struct {
+	Type        ObjectType  `json:"type"`
+	Text        TextObject  `json:"text"`
+	Annotations Annotations `json:"annotations"`
+	PlainText   string      `json:"plain_text"`
+	Href        string      `json:"href"`
 }
 
-type ParagraphObject []TextObject
+type TextObject struct {
+	Content string `json:"content"`
+	Link    string `json:"link"`
+}
+
+type Annotations struct {
+	Bold          bool  `json:"bold"`
+	Italic        bool  `json:"italic"`
+	Strikethrough bool  `json:"strikethrough"`
+	Underline     bool  `json:"underline"`
+	Code          bool  `json:"code"`
+	Color         Color `json:"color"`
+}
+
+type ParagraphObject []RichTextObject
 
 type SelectObject struct {
 	Options []SelectObject `json:"options"`
@@ -136,9 +139,15 @@ type RollupObject struct {
 }
 
 type MultiSelectObject struct {
-	Options [][]SelectOption `json:"options"`
+	Options []SelectOption `json:"options"`
 }
 
 type Toggle struct {
-	Text TextObject `json:"text"`
+	Text RichTextObject `json:"text"`
+}
+
+type Cursor string
+
+func (c Cursor) String() string {
+	return string(c)
 }
