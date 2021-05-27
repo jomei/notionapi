@@ -31,6 +31,7 @@ type Client struct {
 	Block    BlockService
 	Page     PageService
 	User     UserService
+	Search   SearchService
 }
 
 func NewClient(token Token, opts ...ClientOption) *Client {
@@ -50,6 +51,7 @@ func NewClient(token Token, opts ...ClientOption) *Client {
 	c.Block = &BlockClient{apiClient: c}
 	c.Page = &PageClient{apiClient: c}
 	c.User = &UserClient{apiClient: c}
+	c.Search = &SearchClient{apiClient: c}
 
 	for _, opt := range opts {
 		opt(c)
