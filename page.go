@@ -17,7 +17,7 @@ func (pID PageID) String() string {
 type PageService interface {
 	Get(context.Context, PageID) (*PageObject, error)
 	Create(context.Context, PageCreateRequest) (*PageObject, error)
-	Update(context.Context, PageID, map[PropertyName]BasicObject) (*PageObject, error)
+	Update(context.Context, PageID, map[string]BasicObject) (*PageObject, error)
 }
 
 type PageClient struct {
@@ -45,7 +45,7 @@ func (pc *PageClient) Create(ctx context.Context, requestBody PageCreateRequest)
 }
 
 // Update https://developers.notion.com/reference/patch-page
-func (pc *PageClient) Update(ctx context.Context, id PageID, properties map[PropertyName]BasicObject) (*PageObject, error) {
+func (pc *PageClient) Update(ctx context.Context, id PageID, properties map[string]BasicObject) (*PageObject, error) {
 	res, err := pc.apiClient.request(ctx, http.MethodPatch, fmt.Sprintf("pages/%s", id.String()), nil, properties)
 	if err != nil {
 		return nil, err
@@ -55,13 +55,13 @@ func (pc *PageClient) Update(ctx context.Context, id PageID, properties map[Prop
 }
 
 type PageObject struct {
-	Object         ObjectType                   `json:"object"`
-	ID             ObjectID                     `json:"id"`
-	CreatedTime    time.Time                    `json:"created_time"` // TODO: format
-	LastEditedTime time.Time                    `json:"last_edited_time"`
-	Archived       bool                         `json:"archived"`
-	Properties     map[PropertyName]BasicObject `json:"properties"`
-	Parent         Parent                       `json:"parent"`
+	Object         ObjectType             `json:"object"`
+	ID             ObjectID               `json:"id"`
+	CreatedTime    time.Time              `json:"created_time"` // TODO: format
+	LastEditedTime time.Time              `json:"last_edited_time"`
+	Archived       bool                   `json:"archived"`
+	Properties     map[string]BasicObject `json:"properties"`
+	Parent         Parent                 `json:"parent"`
 }
 
 type Parent struct {
@@ -71,9 +71,9 @@ type Parent struct {
 }
 
 type PageCreateRequest struct {
-	Parent     Parent                       `json:"parent"`
-	Properties map[PropertyName]BasicObject `json:"properties"`
-	Children   []BlockObject                `json:"children"`
+	Parent     Parent                 `json:"parent"`
+	Properties map[string]BasicObject `json:"properties"`
+	Children   []BlockObject          `json:"children"`
 }
 
 func handlePageResponse(res *http.Response) (*PageObject, error) {

@@ -1,7 +1,6 @@
 package notionapi
 
 const (
-	ObjectTypeDatabase    ObjectType = "database"
 	ObjectTypeTitle       ObjectType = "title"
 	ObjectTypeText        ObjectType = "text"
 	ObjectTypeRichText    ObjectType = "rich_text"
@@ -48,12 +47,10 @@ func (oID ObjectID) String() string {
 type BasicObject struct {
 	ID          ObjectID           `json:"id"`
 	Type        ObjectType         `json:"type"`
-	Title       *TextObject        `json:"title,omitempty"`
-	Text        *TextObject        `json:"text,omitempty"`
-	RichText    *RichTextObject    `json:"rich_text,omitempty"`
+	Title       *Text              `json:"title,omitempty"`
+	Text        *Text              `json:"text,omitempty"`
+	RichText    *TextObject        `json:"rich_text,omitempty"`
 	Checkbox    *struct{}          `json:"checkbox,omitempty"`
-	Select      *SelectObject      `json:"select,omitempty"`
-	Number      *NumberObject      `json:"number,omitempty"`
 	Formula     *FormulaObject     `json:"formula,omitempty"`
 	Date        *struct{}          `json:"date,omitempty"`
 	Relation    *RelationObject    `json:"relation,omitempty"`
@@ -71,15 +68,15 @@ func (c Color) String() string {
 	return string(c)
 }
 
-type RichTextObject struct {
+type TextObject struct {
 	Type        ObjectType  `json:"type"`
-	Text        TextObject  `json:"text"`
+	Text        Text        `json:"text"`
 	Annotations Annotations `json:"annotations"`
 	PlainText   string      `json:"plain_text"`
 	Href        string      `json:"href"`
 }
 
-type TextObject struct {
+type Text struct {
 	Content string `json:"content"`
 	Link    string `json:"link"`
 }
@@ -93,27 +90,7 @@ type Annotations struct {
 	Color         Color `json:"color"`
 }
 
-type ParagraphObject []RichTextObject
-
-type SelectObject struct {
-	Options []SelectObject `json:"options"`
-}
-
-type SelectOption struct {
-	ID    ObjectID
-	Name  string `json:"name"`
-	Color Color  `json:"color"`
-}
-
-type FormatType string
-
-func (ft FormatType) String() string {
-	return string(ft)
-}
-
-type NumberObject struct {
-	Format FormatType `json:"format"`
-}
+type ParagraphObject []TextObject
 
 type FormulaObject struct {
 	Value string `json:"value"`
@@ -139,11 +116,11 @@ type RollupObject struct {
 }
 
 type MultiSelectObject struct {
-	Options []SelectOption `json:"options"`
+	Options []Option `json:"options"`
 }
 
 type Toggle struct {
-	Text RichTextObject `json:"text"`
+	Text TextObject `json:"text"`
 }
 
 type Cursor string

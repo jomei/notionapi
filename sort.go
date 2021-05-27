@@ -15,7 +15,7 @@ const (
 )
 
 type SortObject struct {
-	Property  PropertyName  `json:"property"`
+	Property  string        `json:"property"`
 	Timestamp TimestampType `json:"timestamp"`
 	Direction SortOrder     `json:"direction"`
 }

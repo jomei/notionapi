@@ -19,48 +19,48 @@ func TestDatabaseClient(t *testing.T) {
 			name     string
 			filePath string
 			id       notionapi.DatabaseID
-			want     *notionapi.DatabaseObject
+			want     *notionapi.Database
 			wantErr  bool
 			err      error
 		}{
 			{
 				name: "returns database by id",
 				id:   "some_id",
-				want: &notionapi.DatabaseObject{
+				want: &notionapi.Database{
 					Object:         notionapi.ObjectTypeDatabase,
 					ID:             "some_id",
 					CreatedTime:    timestamp,
 					LastEditedTime: timestamp,
-					Title: []notionapi.RichTextObject{
+					Title: []notionapi.TextObject{
 						{
 							Type:        notionapi.ObjectTypeText,
-							Text:        notionapi.TextObject{Content: "Test Database", Link: ""},
+							Text:        notionapi.Text{Content: "Test Database", Link: ""},
 							Annotations: notionapi.Annotations{Color: "default"},
 							PlainText:   "Test Database",
 							Href:        "",
 						},
 					},
 
-					Properties: map[notionapi.PropertyName]notionapi.BasicObject{
-						"Tags": {
+					Properties: map[string]notionapi.Property{
+						"Tags": notionapi.MultiSelectProperty{
 							ID:          ";s|V",
-							Type:        "multi_select",
-							MultiSelect: &notionapi.MultiSelectObject{Options: []notionapi.SelectOption{{ID: "id", Name: "tag", Color: "Blue"}}},
+							Type:        notionapi.PropertyTypeMultiSelect,
+							MultiSelect: notionapi.Select{Options: []notionapi.Option{{ID: "id", Name: "tag", Color: "Blue"}}},
 						},
-						"Some another column": {
+						"Some another column": notionapi.PeopleProperty{
 							ID:     "rJt\\",
-							Type:   notionapi.ObjectTypePeople,
+							Type:   notionapi.PropertyTypePeople,
 							People: &struct{}{},
 						},
-						"SomeColumn": {
+						"SomeColumn": notionapi.RichTextProperty{
 							ID:       "~j_@",
-							Type:     notionapi.ObjectTypeRichText,
-							RichText: &notionapi.RichTextObject{},
+							Type:     notionapi.PropertyTypeRichText,
+							RichText: notionapi.TextObject{},
 						},
-						"Name": {
+						"Name": notionapi.TitleProperty{
 							ID:    "title",
-							Type:  notionapi.ObjectTypeTitle,
-							Title: &notionapi.TextObject{},
+							Type:  notionapi.PropertyTypeTitle,
+							Title: notionapi.TextObject{},
 						},
 					},
 				},

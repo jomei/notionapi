@@ -16,7 +16,7 @@ func (dID DatabaseID) String() string {
 }
 
 type DatabaseService interface {
-	Get(context.Context, DatabaseID) (*DatabaseObject, error)
+	Get(context.Context, DatabaseID) (*Database, error)
 	List(context.Context, Cursor, int) (*DBListResponse, error)
 	Query(context.Context, DatabaseID, DatabaseQueryRequest) (*DatabaseQueryResponse, error)
 }
@@ -26,12 +26,12 @@ type DatabaseClient struct {
 }
 
 // Get https://developers.notion.com/reference/get-database
-func (dc *DatabaseClient) Get(ctx context.Context, id DatabaseID) (*DatabaseObject, error) {
+func (dc *DatabaseClient) Get(ctx context.Context, id DatabaseID) (*Database, error) {
 	res, err := dc.apiClient.request(ctx, http.MethodGet, fmt.Sprintf("databases/%s", id.String()), nil, nil)
 	if err != nil {
 		return nil, err
 	}
-	var response DatabaseObject
+	var response Database
 
 	err = json.NewDecoder(res.Body).Decode(&response)
 	if err != nil {
@@ -74,25 +74,19 @@ func (dc *DatabaseClient) Query(ctx context.Context, id DatabaseID, requestBody 
 	return &response, nil
 }
 
-type PropertyName string
-
-func (pn PropertyName) String() string {
-	return string(pn)
-}
-
-type DatabaseObject struct {
-	Object         ObjectType                   `json:"object"`
-	ID             ObjectID                     `json:"id"`
-	CreatedTime    time.Time                    `json:"created_time"` //TODO: format
-	LastEditedTime time.Time                    `json:"last_edited_time"`
-	Title          []RichTextObject             `json:"title"`
-	Properties     map[PropertyName]BasicObject `json:"properties"`
+type Database struct {
+	Object         ObjectType          `json:"object"`
+	ID             ObjectID            `json:"id"`
+	CreatedTime    time.Time           `json:"created_time"` //TODO: format
+	LastEditedTime time.Time           `json:"last_edited_time"`
+	Title          []TextObject        `json:"title"`
+	Properties     map[string]Property `json:"properties"`
 }
 
 type DBListResponse struct {
-	Results    []DatabaseObject `json:"results"`
-	NextCursor string           `json:"next_cursor"`
-	HasMore    bool             `json:"has_more"`
+	Results    []Database `json:"results"`
+	NextCursor string     `json:"next_cursor"`
+	HasMore    bool       `json:"has_more"`
 }
 
 type DatabaseQueryRequest struct {
