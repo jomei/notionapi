@@ -20,16 +20,17 @@ const (
 type ClientOption func(*Client)
 
 type Client struct {
-	httpClient *http.Client
-
-	Token         Token
+	httpClient    *http.Client
 	baseUrl       *url.URL
 	apiVersion    string
 	notionVersion string
 
+	Token Token
+
 	Database DatabaseService
 	Block    BlockService
 	Page     PageService
+	User     UserService
 }
 
 func NewClient(token Token, opts ...ClientOption) *Client {
@@ -48,6 +49,7 @@ func NewClient(token Token, opts ...ClientOption) *Client {
 	c.Database = &DatabaseClient{apiClient: c}
 	c.Block = &BlockClient{apiClient: c}
 	c.Page = &PageClient{apiClient: c}
+	c.User = &UserClient{apiClient: c}
 
 	for _, opt := range opts {
 		opt(c)
