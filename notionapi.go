@@ -28,6 +28,7 @@ type Client struct {
 	notionVersion string
 
 	Database DatabaseService
+	Block    BlockService
 }
 
 func NewClient(token Token, opts ...ClientOption) *Client {
@@ -44,6 +45,7 @@ func NewClient(token Token, opts ...ClientOption) *Client {
 	}
 
 	c.Database = &DatabaseClient{apiClient: c}
+	c.Block = &BlockClient{apiClient: c}
 
 	for _, opt := range opts {
 		opt(c)

@@ -15,18 +15,18 @@ func (bID BlockID) String() string {
 	return string(bID)
 }
 
-type BlockObject struct {
-	BasicObject
-	Object         ObjectType `json:"object"`
-	ID             BlockID    `json:"id"`
-	CreatedTime    time.Time  `json:"created_time"`
-	LastEditedTime time.Time  `json:"last_edited_time"`
-	HasChildren    bool       `json:"has_children"`
+type BlockService interface {
+	RetrieveChildren(context.Context, BlockID, Cursor, int) ([]BasicObject, error)
+	AppendChildren(context.Context, BlockID, AppendBlockChildrenRequest) (*BlockObject, error)
 }
 
-func (c *Client) BlockChildrenRetrieve(ctx context.Context, id BlockID, startCursor Cursor, pageSize int) ([]BasicObject, error) {
+type BlockClient struct {
+	apiClient *Client
+}
+
+func (bc *BlockClient) RetrieveChildren(ctx context.Context, id BlockID, startCursor Cursor, pageSize int) ([]BasicObject, error) {
 	queryParams := map[string]string{"start_cursor": startCursor.String(), "page_size": strconv.Itoa(pageSize)}
-	res, err := c.request(ctx, http.MethodGet, fmt.Sprintf("blocks/%s", id.String()), queryParams, nil)
+	res, err := bc.apiClient.request(ctx, http.MethodGet, fmt.Sprintf("blocks/%s", id.String()), queryParams, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -40,12 +40,8 @@ func (c *Client) BlockChildrenRetrieve(ctx context.Context, id BlockID, startCur
 	return response, nil
 }
 
-type AppendBlockChildrenRequest struct {
-	Children []BasicObject `json:"children"`
-}
-
-func (c *Client) BlockChildrenAppend(ctx context.Context, id BlockID, requestBody AppendBlockChildrenRequest) (*BlockObject, error) {
-	res, err := c.request(ctx, http.MethodPost, fmt.Sprintf("blocks/%s", id.String()), nil, requestBody)
+func (bc *BlockClient) AppendChildren(ctx context.Context, id BlockID, requestBody AppendBlockChildrenRequest) (*BlockObject, error) {
+	res, err := bc.apiClient.request(ctx, http.MethodPost, fmt.Sprintf("blocks/%s", id.String()), nil, requestBody)
 	if err != nil {
 		return nil, err
 	}
@@ -57,4 +53,17 @@ func (c *Client) BlockChildrenAppend(ctx context.Context, id BlockID, requestBod
 	}
 
 	return &response, nil
+}
+
+type BlockObject struct {
+	BasicObject
+	Object         ObjectType `json:"object"`
+	ID             BlockID    `json:"id"`
+	CreatedTime    time.Time  `json:"created_time"`
+	LastEditedTime time.Time  `json:"last_edited_time"`
+	HasChildren    bool       `json:"has_children"`
+}
+
+type AppendBlockChildrenRequest struct {
+	Children []BasicObject `json:"children"`
 }

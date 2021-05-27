@@ -16,9 +16,9 @@ func (dID DatabaseID) String() string {
 }
 
 type DatabaseService interface {
-	Retrieve(ctx context.Context, id DatabaseID) (*DatabaseObject, error)
-	List(ctx context.Context, startCursor Cursor, pageSize int) (*DBListResponse, error)
-	Query(ctx context.Context, id DatabaseID, requestBody DatabaseQueryRequest) (*DatabaseQueryResponse, error)
+	Retrieve(context.Context, DatabaseID) (*DatabaseObject, error)
+	List(context.Context, Cursor, int) (*DBListResponse, error)
+	Query(context.Context, DatabaseID, DatabaseQueryRequest) (*DatabaseQueryResponse, error)
 }
 
 type DatabaseClient struct {
