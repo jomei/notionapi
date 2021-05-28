@@ -1,5 +1,11 @@
 package notionapi
 
+import (
+	"encoding/json"
+	"fmt"
+	"github.com/pkg/errors"
+)
+
 type PropertyType string
 
 type Property interface {
@@ -239,4 +245,85 @@ type LastEditedByProperty struct {
 
 func (p LastEditedByProperty) GetType() PropertyType {
 	return p.Type
+}
+
+type Properties map[string]Property
+
+func (p *Properties) UnmarshalJSON(data []byte) error {
+	var raw map[string]interface{}
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+	props, err := parseProperties(raw)
+	if err != nil {
+		fmt.Println("hello")
+		return err
+	}
+
+	*p = props
+	return nil
+}
+
+func parseProperties(raw map[string]interface{}) (map[string]Property, error) {
+	result := make(map[string]Property)
+	for k, v := range raw {
+		var p Property
+		switch rawProperty := v.(type) {
+		case map[string]interface{}:
+			switch PropertyType(rawProperty["type"].(string)) {
+			case PropertyTypeTitle:
+				p = &TitleProperty{}
+			case PropertyTypeRichText:
+				p = &RichTextProperty{}
+			case PropertyTypeSelect:
+				p = &SelectProperty{}
+			case PropertyTypeMultiSelect:
+				p = &MultiSelectProperty{}
+			case PropertyTypeNumber:
+				p = &NumberProperty{}
+			case PropertyTypeCheckbox:
+				p = &CheckboxProperty{}
+			case PropertyTypeEmail:
+				p = &EmailProperty{}
+			case PropertyTypeURL:
+				p = &FileProperty{}
+			case PropertyTypePhoneNumber:
+				p = PhoneNumberProperty{}
+			case PropertyTypeFormula:
+				p = &FormulaProperty{}
+			case PropertyTypeDate:
+				p = &DateProperty{}
+			case PropertyTypeRelation:
+				p = &RelationProperty{}
+			case PropertyTypeRollup:
+				p = &RollupProperty{}
+			case PropertyTypePeople:
+				p = &PeopleProperty{}
+			case PropertyTypeCreatedTime:
+				p = &CreatedTimeProperty{}
+			case PropertyTypeCreatedBy:
+				p = &CreatedByProperty{}
+			case PropertyTypeLastEditedTime:
+				p = &LastEditedTimeProperty{}
+			case PropertyTypeLastEditedBy:
+				p = &LastEditedByProperty{}
+			default:
+				return nil, errors.New(fmt.Sprintf("unsupported property type: %s", rawProperty["type"].(string)))
+			}
+			b, err := json.Marshal(rawProperty)
+			if err != nil {
+				return nil, err
+			}
+
+			if err = json.Unmarshal(b, &p); err != nil {
+				return nil, err
+			}
+
+			result[k] = p
+		default:
+			return nil, errors.New(fmt.Sprintf("unsupported property format %T", v))
+		}
+	}
+
+	return result, nil
 }
