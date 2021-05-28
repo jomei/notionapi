@@ -4,6 +4,8 @@ const (
 	ObjectTypeDatabase ObjectType = "database"
 	ObjectTypeBlock    ObjectType = "block"
 	ObjectTypePage     ObjectType = "page"
+	ObjectTypeList     ObjectType = "list"
+	ObjectTypeText     ObjectType = "text"
 )
 
 const (

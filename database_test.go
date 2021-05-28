@@ -86,4 +86,62 @@ func TestDatabaseClient(t *testing.T) {
 			})
 		}
 	})
+
+	t.Run("List", func(t *testing.T) {
+		tests := []struct {
+			name     string
+			filePath string
+			want     *notionapi.DatabaseListResponse
+			wantErr  bool
+			err      error
+		}{
+			{
+				name:     "returns list of databases",
+				filePath: "testdata/database_list.json",
+				want: &notionapi.DatabaseListResponse{
+					Object: notionapi.ObjectTypeList,
+					Results: []notionapi.Database{
+						{
+							Object:         notionapi.ObjectTypeDatabase,
+							ID:             "some_id",
+							CreatedTime:    timestamp,
+							LastEditedTime: timestamp,
+							Title: notionapi.Paragraph{
+								{
+									Type: notionapi.ObjectTypeText,
+									Text: notionapi.Text{
+										Content: "Test Database",
+									},
+									Annotations: notionapi.Annotations{
+										Color: notionapi.ColorDefault,
+									},
+									PlainText: "Test Database",
+								},
+							},
+						},
+					},
+					HasMore: false,
+				},
+				wantErr: false,
+			},
+		}
+
+		for _, tt := range tests {
+			t.Run(tt.name, func(t *testing.T) {
+				c := newMockedClient(t, tt.filePath)
+				client := notionapi.NewClient("some_token", notionapi.WithHTTPClient(c))
+
+				got, err := client.Database.List(context.Background(), nil)
+
+				if (err != nil) != tt.wantErr {
+					t.Errorf("Get() error = %v, wantErr %v", err, tt.wantErr)
+					return
+				}
+				got.Results[0].Properties = nil
+				if !reflect.DeepEqual(got, tt.want) {
+					t.Errorf("Get() got = %v, want %v", got, tt.want)
+				}
+			})
+		}
+	})
 }

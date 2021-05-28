@@ -2,7 +2,6 @@ package notionapi
 
 const (
 	ObjectTypeTitle       ObjectType = "title"
-	ObjectTypeText        ObjectType = "text"
 	ObjectTypeRichText    ObjectType = "rich_text"
 	ObjectTypeCheckbox    ObjectType = "checkbox"
 	ObjectTypeSelect      ObjectType = "select"
@@ -14,7 +13,6 @@ const (
 	ObjectTypeMultiSelect ObjectType = "multi_select"
 	ObjectTypePeople      ObjectType = "people"
 	ObjectTypeFiles       ObjectType = "files"
-	ObjectTypeList        ObjectType = "list"
 	ObjectTypeHeading1    ObjectType = "heading_1"
 	ObjectTypeHeading2    ObjectType = "heading_2"
 	ObjectTypeHeading3    ObjectType = "heading_3"
@@ -58,7 +56,7 @@ type BasicObject struct {
 	MultiSelect *MultiSelectObject `json:"multi_select,omitempty"`
 	People      *struct{}          `json:"people,omitempty"`
 	Files       *struct{}          `json:"files,omitempty"`
-	Paragraph   *ParagraphObject   `json:"paragraph,omitempty"`
+	Paragraph   *Paragraph         `json:"paragraph,omitempty"`
 	Toggle      *Toggle            `json:"toggle,omitempty"`
 }
 
@@ -90,7 +88,7 @@ type Annotations struct {
 	Color         Color `json:"color"`
 }
 
-type ParagraphObject []TextObject
+type Paragraph []TextObject
 
 type FormulaObject struct {
 	Value string `json:"value"`

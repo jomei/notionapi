@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"strconv"
 	"time"
 )
 
@@ -16,7 +15,7 @@ func (bID BlockID) String() string {
 }
 
 type BlockService interface {
-	GetChildren(context.Context, BlockID, Cursor, int) ([]BasicObject, error)
+	GetChildren(context.Context, BlockID, *Pagination) ([]BasicObject, error)
 	AppendChildren(context.Context, BlockID, AppendBlockChildrenRequest) (*BlockObject, error)
 }
 
@@ -25,9 +24,8 @@ type BlockClient struct {
 }
 
 // GetChildren https://developers.notion.com/reference/get-block-children
-func (bc *BlockClient) GetChildren(ctx context.Context, id BlockID, startCursor Cursor, pageSize int) ([]BasicObject, error) {
-	queryParams := map[string]string{"start_cursor": startCursor.String(), "page_size": strconv.Itoa(pageSize)}
-	res, err := bc.apiClient.request(ctx, http.MethodGet, fmt.Sprintf("blocks/%s", id.String()), queryParams, nil)
+func (bc *BlockClient) GetChildren(ctx context.Context, id BlockID, pagination *Pagination) ([]BasicObject, error) {
+	res, err := bc.apiClient.request(ctx, http.MethodGet, fmt.Sprintf("blocks/%s", id.String()), pagination.ToQuery(), nil)
 	if err != nil {
 		return nil, err
 	}

@@ -1,0 +1,62 @@
+{
+  "object": "list",
+  "results": [
+    {
+      "object": "database",
+      "id": "some_id",
+      "created_time": "2021-05-24T05:06:34.827Z",
+      "last_edited_time": "2021-05-24T05:06:34.827Z",
+      "title": [
+        {
+          "type": "text",
+          "text": {
+            "content": "Test Database",
+            "link": null
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "Test Database",
+          "href": null
+        }
+      ],
+      "properties": {
+        "Tags": {
+          "id": ";s|V",
+          "type": "multi_select",
+          "multi_select": {
+            "options": [
+              {
+                "id": "ae326f54-a0f6-4e79-a57a-87760d050ba6",
+                "name": "tag",
+                "color": "blue"
+              }
+            ]
+          }
+        },
+        "Some another columg": {
+          "id": "rJt\\",
+          "type": "people",
+          "people": {}
+        },
+        "SomeColumn": {
+          "id": "~j_@",
+          "type": "rich_text",
+          "rich_text": {}
+        },
+        "Name": {
+          "id": "title",
+          "type": "title",
+          "title": {}
+        }
+      }
+    }
+  ],
+  "next_cursor": null,
+  "has_more": false
+}

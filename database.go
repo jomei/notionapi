@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"strconv"
 	"time"
 )
 
@@ -17,7 +16,7 @@ func (dID DatabaseID) String() string {
 
 type DatabaseService interface {
 	Get(context.Context, DatabaseID) (*Database, error)
-	List(context.Context, Cursor, int) (*DBListResponse, error)
+	List(context.Context, *Pagination) (*DatabaseListResponse, error)
 	Query(context.Context, DatabaseID, DatabaseQueryRequest) (*DatabaseQueryResponse, error)
 }
 
@@ -42,14 +41,13 @@ func (dc *DatabaseClient) Get(ctx context.Context, id DatabaseID) (*Database, er
 }
 
 // List https://developers.notion.com/reference/get-databases
-func (dc *DatabaseClient) List(ctx context.Context, startCursor Cursor, pageSize int) (*DBListResponse, error) {
-	queryParams := map[string]string{"start_cursor": startCursor.String(), "page_size": strconv.Itoa(pageSize)}
-	res, err := dc.apiClient.request(ctx, http.MethodGet, "/databases", queryParams, nil)
+func (dc *DatabaseClient) List(ctx context.Context, pagination *Pagination) (*DatabaseListResponse, error) {
+	res, err := dc.apiClient.request(ctx, http.MethodGet, "databases", pagination.ToQuery(), nil)
 	if err != nil {
 		return nil, err
 	}
 
-	var response DBListResponse
+	var response DatabaseListResponse
 	err = json.NewDecoder(res.Body).Decode(&response)
 	if err != nil {
 		return nil, err
@@ -75,15 +73,16 @@ func (dc *DatabaseClient) Query(ctx context.Context, id DatabaseID, requestBody 
 }
 
 type Database struct {
-	Object         ObjectType   `json:"object"`
-	ID             ObjectID     `json:"id"`
-	CreatedTime    time.Time    `json:"created_time"`
-	LastEditedTime time.Time    `json:"last_edited_time"`
-	Title          []TextObject `json:"title"`
-	Properties     Properties   `json:"properties"`
+	Object         ObjectType `json:"object"`
+	ID             ObjectID   `json:"id"`
+	CreatedTime    time.Time  `json:"created_time"`
+	LastEditedTime time.Time  `json:"last_edited_time"`
+	Title          Paragraph  `json:"title"`
+	Properties     Properties `json:"properties"`
 }
 
-type DBListResponse struct {
+type DatabaseListResponse struct {
+	Object     ObjectType `json:"object"`
 	Results    []Database `json:"results"`
 	NextCursor string     `json:"next_cursor"`
 	HasMore    bool       `json:"has_more"`

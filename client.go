@@ -9,6 +9,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"strconv"
 )
 
 const (
@@ -111,10 +112,7 @@ func (c *Client) request(ctx context.Context, method string, urlStr string, quer
 
 	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", c.Token.String()))
 	req.Header.Add("Notion-Version", c.notionVersion)
-
-	if requestBody != nil {
-		req.Header.Add("Content-Type", "application/json")
-	}
+	req.Header.Add("Content-Type", "application/json")
 
 	res, err := c.httpClient.Do(req.WithContext(ctx))
 	if err != nil {
@@ -126,4 +124,25 @@ func (c *Client) request(ctx context.Context, method string, urlStr string, quer
 	}
 
 	return res, nil
+}
+
+type Pagination struct {
+	StartCursor Cursor
+	PageSize    int
+}
+
+func (p *Pagination) ToQuery() map[string]string {
+	if p == nil {
+		return nil
+	}
+	r := map[string]string{}
+	if p.StartCursor != "" {
+		r["start_cursor"] = p.StartCursor.String()
+	}
+
+	if p.PageSize != 0 {
+		r["page_size"] = strconv.Itoa(p.PageSize)
+	}
+
+	return r
 }
