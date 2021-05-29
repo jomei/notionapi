@@ -49,4 +49,56 @@ func TestUserClient(t *testing.T) {
 			})
 		}
 	})
+
+	t.Run("List", func(t *testing.T) {
+		tests := []struct {
+			name     string
+			filePath string
+			want     *notionapi.UsersListResponse
+			wantErr  bool
+			err      error
+		}{
+			{
+				name:     "returns list of users",
+				filePath: "testdata/user_list.json",
+				want: &notionapi.UsersListResponse{
+					Object: notionapi.ObjectTypeList,
+					Results: []notionapi.User{
+						{
+							Object:    notionapi.ObjectTypeUser,
+							ID:        "some_id",
+							Type:      notionapi.UserTypePerson,
+							Name:      "John Doe",
+							AvatarURL: "some.url",
+							Person:    &notionapi.Person{Email: "some@email.com"},
+						},
+						{
+							Object: notionapi.ObjectTypeUser,
+							ID:     "some_id",
+							Type:   notionapi.UserTypeBot,
+							Name:   "Test",
+							Bot:    &notionapi.Bot{},
+						},
+					},
+					HasMore: false,
+				},
+			},
+		}
+
+		for _, tt := range tests {
+			t.Run(tt.name, func(t *testing.T) {
+				c := newMockedClient(t, tt.filePath)
+				client := notionapi.NewClient("some_token", notionapi.WithHTTPClient(c))
+				got, err := client.User.List(context.Background(), nil)
+				if (err != nil) != tt.wantErr {
+					t.Errorf("Get() error = %v, wantErr %v", err, tt.wantErr)
+					return
+				}
+
+				if !reflect.DeepEqual(got, tt.want) {
+					t.Errorf("Get() got = %v, want %v", got, tt.want)
+				}
+			})
+		}
+	})
 }

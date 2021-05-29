@@ -1,0 +1,26 @@
+{
+  "object": "list",
+  "results": [
+    {
+      "object": "user",
+      "id": "some_id",
+      "name": "John Doe",
+      "avatar_url": "some.url",
+      "type": "person",
+      "person": {
+        "email": "some@email.com"
+      }
+    },
+    {
+      "object": "user",
+      "id": "some_id",
+      "name": "Test",
+      "avatar_url": null,
+      "type": "bot",
+      "bot": {}
+    }
+  ],
+  "next_cursor": null,
+  "has_more": false
+}
+

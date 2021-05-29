@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"strconv"
 )
 
 type UserID string
@@ -16,7 +15,7 @@ func (uID UserID) String() string {
 
 type UserService interface {
 	Get(context.Context, UserID) (*User, error)
-	List(context.Context, Cursor, int) (*UsersListResponse, error)
+	List(context.Context, *Pagination) (*UsersListResponse, error)
 }
 
 type UserClient struct {
@@ -40,9 +39,8 @@ func (uc *UserClient) Get(ctx context.Context, id UserID) (*User, error) {
 }
 
 // List https://developers.notion.com/reference/get-users
-func (uc *UserClient) List(ctx context.Context, startCursor Cursor, pageSize int) (*UsersListResponse, error) {
-	queryParams := map[string]string{"start_cursor": startCursor.String(), "page_size": strconv.Itoa(pageSize)}
-	res, err := uc.apiClient.request(ctx, http.MethodGet, "users", queryParams, nil)
+func (uc *UserClient) List(ctx context.Context, pagination *Pagination) (*UsersListResponse, error) {
+	res, err := uc.apiClient.request(ctx, http.MethodGet, "users", pagination.ToQuery(), nil)
 	if err != nil {
 		return nil, err
 	}
@@ -65,17 +63,18 @@ type User struct {
 	Name      string     `json:"name"`
 	AvatarURL string     `json:"avatar_url"`
 	Person    *Person    `json:"person"`
-	Bot       *BotObject `json:"bot"`
+	Bot       *Bot       `json:"bot"`
 }
 
 type Person struct {
 	Email string `json:"email"`
 }
 
-type BotObject struct{}
+type Bot struct{}
 
 type UsersListResponse struct {
-	Results    []User `json:"results"`
-	HasMore    bool   `json:"has_more"`
-	NextCursor Cursor `json:"next_cursor"`
+	Object     ObjectType `json:"object"`
+	Results    []User     `json:"results"`
+	HasMore    bool       `json:"has_more"`
+	NextCursor Cursor     `json:"next_cursor"`
 }
