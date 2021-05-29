@@ -96,8 +96,8 @@ type DatabaseQueryRequest struct {
 }
 
 type DatabaseQueryResponse struct {
-	Object     ObjectType   `json:"object"`
-	Results    []PageObject `json:"results"`
-	HasMore    bool         `json:"has_more"`
-	NextCursor Cursor       `json:"next_cursor"`
+	Object     ObjectType `json:"object"`
+	Results    []Page     `json:"results"`
+	HasMore    bool       `json:"has_more"`
+	NextCursor Cursor     `json:"next_cursor"`
 }

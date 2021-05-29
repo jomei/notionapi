@@ -104,6 +104,16 @@ func (p MultiSelectProperty) GetType() PropertyType {
 	return p.Type
 }
 
+type MultiSelectOptionsProperty struct {
+	ID          ObjectID     `json:"id"`
+	Type        PropertyType `json:"type"`
+	MultiSelect []Option     `json:"multi_select"`
+}
+
+func (p MultiSelectOptionsProperty) GetType() PropertyType {
+	return p.Type
+}
+
 type Option struct {
 	ID    PropertyID
 	Name  string `json:"name"`
@@ -307,7 +317,12 @@ func parseProperties(raw map[string]interface{}) (map[string]Property, error) {
 			case PropertyTypeSelect:
 				p = &SelectProperty{}
 			case PropertyTypeMultiSelect:
-				p = &MultiSelectProperty{}
+				switch v.(map[string]interface{})["multi_select"].(type) {
+				case map[string]interface{}:
+					p = &MultiSelectProperty{}
+				default:
+					p = &MultiSelectOptionsProperty{}
+				}
 			case PropertyTypeNumber:
 				p = &NumberProperty{}
 			case PropertyTypeCheckbox:

@@ -15,9 +15,9 @@ func (pID PageID) String() string {
 }
 
 type PageService interface {
-	Get(context.Context, PageID) (*PageObject, error)
-	Create(context.Context, PageCreateRequest) (*PageObject, error)
-	Update(context.Context, PageID, map[string]BasicObject) (*PageObject, error)
+	Get(context.Context, PageID) (*Page, error)
+	Create(context.Context, PageCreateRequest) (*Page, error)
+	Update(context.Context, PageID, map[string]BasicObject) (*Page, error)
 }
 
 type PageClient struct {
@@ -25,7 +25,7 @@ type PageClient struct {
 }
 
 // Get https://developers.notion.com/reference/get-page
-func (pc *PageClient) Get(ctx context.Context, id PageID) (*PageObject, error) {
+func (pc *PageClient) Get(ctx context.Context, id PageID) (*Page, error) {
 	res, err := pc.apiClient.request(ctx, http.MethodGet, fmt.Sprintf("pages/%s", id.String()), nil, nil)
 	if err != nil {
 		return nil, err
@@ -35,7 +35,7 @@ func (pc *PageClient) Get(ctx context.Context, id PageID) (*PageObject, error) {
 }
 
 // Create https://developers.notion.com/reference/post-page
-func (pc *PageClient) Create(ctx context.Context, requestBody PageCreateRequest) (*PageObject, error) {
+func (pc *PageClient) Create(ctx context.Context, requestBody PageCreateRequest) (*Page, error) {
 	res, err := pc.apiClient.request(ctx, http.MethodPost, "pages", nil, requestBody)
 	if err != nil {
 		return nil, err
@@ -45,7 +45,7 @@ func (pc *PageClient) Create(ctx context.Context, requestBody PageCreateRequest)
 }
 
 // Update https://developers.notion.com/reference/patch-page
-func (pc *PageClient) Update(ctx context.Context, id PageID, properties map[string]BasicObject) (*PageObject, error) {
+func (pc *PageClient) Update(ctx context.Context, id PageID, properties map[string]BasicObject) (*Page, error) {
 	res, err := pc.apiClient.request(ctx, http.MethodPatch, fmt.Sprintf("pages/%s", id.String()), nil, properties)
 	if err != nil {
 		return nil, err
@@ -54,7 +54,7 @@ func (pc *PageClient) Update(ctx context.Context, id PageID, properties map[stri
 	return handlePageResponse(res)
 }
 
-type PageObject struct {
+type Page struct {
 	Object         ObjectType `json:"object"`
 	ID             ObjectID   `json:"id"`
 	CreatedTime    time.Time  `json:"created_time"`
@@ -78,8 +78,8 @@ type PageCreateRequest struct {
 	Children   []BlockObject          `json:"children"`
 }
 
-func handlePageResponse(res *http.Response) (*PageObject, error) {
-	var response PageObject
+func handlePageResponse(res *http.Response) (*Page, error) {
+	var response Page
 	err := json.NewDecoder(res.Body).Decode(&response)
 	if err != nil {
 		return nil, err

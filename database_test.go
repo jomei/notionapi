@@ -169,7 +169,7 @@ func TestDatabaseClient(t *testing.T) {
 				},
 				want: &notionapi.DatabaseQueryResponse{
 					Object: notionapi.ObjectTypeList,
-					Results: []notionapi.PageObject{
+					Results: []notionapi.Page{
 						{
 							Object:         notionapi.ObjectTypePage,
 							ID:             "some_id",
