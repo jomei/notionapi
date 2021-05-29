@@ -17,7 +17,7 @@ func (dID DatabaseID) String() string {
 type DatabaseService interface {
 	Get(context.Context, DatabaseID) (*Database, error)
 	List(context.Context, *Pagination) (*DatabaseListResponse, error)
-	Query(context.Context, DatabaseID, DatabaseQueryRequest) (*DatabaseQueryResponse, error)
+	Query(context.Context, DatabaseID, *DatabaseQueryRequest) (*DatabaseQueryResponse, error)
 }
 
 type DatabaseClient struct {
@@ -57,8 +57,8 @@ func (dc *DatabaseClient) List(ctx context.Context, pagination *Pagination) (*Da
 }
 
 // Query https://developers.notion.com/reference/post-database-query
-func (dc *DatabaseClient) Query(ctx context.Context, id DatabaseID, requestBody DatabaseQueryRequest) (*DatabaseQueryResponse, error) {
-	res, err := dc.apiClient.request(ctx, http.MethodPost, fmt.Sprintf("databases/%s", id.String()), nil, requestBody)
+func (dc *DatabaseClient) Query(ctx context.Context, id DatabaseID, requestBody *DatabaseQueryRequest) (*DatabaseQueryResponse, error) {
+	res, err := dc.apiClient.request(ctx, http.MethodPost, fmt.Sprintf("databases/%s/query", id.String()), nil, requestBody)
 	if err != nil {
 		return nil, err
 	}
@@ -89,10 +89,10 @@ type DatabaseListResponse struct {
 }
 
 type DatabaseQueryRequest struct {
-	Filter      *FilterObject `json:"filter,omitempty"`
-	Sorts       []SortObject  `json:"sorts"`
-	StartCursor Cursor        `json:"start_cursor,omiempty"`
-	PageSize    int           `json:"page_size"`
+	Filter      Filter       `json:"filter,omitempty"`
+	Sorts       []SortObject `json:"sorts"`
+	StartCursor Cursor       `json:"start_cursor,omitempty"`
+	PageSize    int          `json:"page_size,omitempty"`
 }
 
 type DatabaseQueryResponse struct {

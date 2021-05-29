@@ -144,4 +144,65 @@ func TestDatabaseClient(t *testing.T) {
 			})
 		}
 	})
+
+	t.Run("Query", func(t *testing.T) {
+		tests := []struct {
+			name     string
+			filePath string
+			id       notionapi.DatabaseID
+			request  *notionapi.DatabaseQueryRequest
+			want     *notionapi.DatabaseQueryResponse
+			wantErr  bool
+			err      error
+		}{
+			{
+				name:     "returns query results",
+				id:       "some_id",
+				filePath: "testdata/database_query.json",
+				request: &notionapi.DatabaseQueryRequest{
+					Filter: &notionapi.PropertyFilter{
+						Property: "Name",
+						Text: map[notionapi.Condition]string{
+							notionapi.ConditionContains: "Hel",
+						},
+					},
+				},
+				want: &notionapi.DatabaseQueryResponse{
+					Object: notionapi.ObjectTypeList,
+					Results: []notionapi.PageObject{
+						{
+							Object:         notionapi.ObjectTypePage,
+							ID:             "some_id",
+							CreatedTime:    timestamp,
+							LastEditedTime: timestamp,
+							Parent: notionapi.Parent{
+								Type:       notionapi.ParentTypeDatabaseID,
+								DatabaseID: "some_id",
+							},
+							Archived: false,
+						},
+					},
+					HasMore:    false,
+					NextCursor: "",
+				},
+			},
+		}
+
+		for _, tt := range tests {
+			t.Run(tt.name, func(t *testing.T) {
+				c := newMockedClient(t, tt.filePath)
+				client := notionapi.NewClient("some_token", notionapi.WithHTTPClient(c))
+				got, err := client.Database.Query(context.Background(), tt.id, tt.request)
+
+				if (err != nil) != tt.wantErr {
+					t.Errorf("Get() error = %v, wantErr %v", err, tt.wantErr)
+					return
+				}
+				got.Results[0].Properties = nil
+				if !reflect.DeepEqual(got, tt.want) {
+					t.Errorf("Get() got = %v, want %v", got, tt.want)
+				}
+			})
+		}
+	})
 }

@@ -55,17 +55,19 @@ func (pc *PageClient) Update(ctx context.Context, id PageID, properties map[stri
 }
 
 type PageObject struct {
-	Object         ObjectType             `json:"object"`
-	ID             ObjectID               `json:"id"`
-	CreatedTime    time.Time              `json:"created_time"` // TODO: format
-	LastEditedTime time.Time              `json:"last_edited_time"`
-	Archived       bool                   `json:"archived"`
-	Properties     map[string]BasicObject `json:"properties"`
-	Parent         Parent                 `json:"parent"`
+	Object         ObjectType `json:"object"`
+	ID             ObjectID   `json:"id"`
+	CreatedTime    time.Time  `json:"created_time"`
+	LastEditedTime time.Time  `json:"last_edited_time"`
+	Archived       bool       `json:"archived"`
+	Properties     Properties `json:"properties"`
+	Parent         Parent     `json:"parent"`
 }
 
+type ParentType string
+
 type Parent struct {
-	Type       ObjectType `json:"type"`
+	Type       ParentType `json:"type"`
 	PageID     PageID     `json:"page_id,omitempty"`
 	DatabaseID DatabaseID `json:"database_id,omitempty"`
 }

@@ -31,11 +31,11 @@ func (sc *SearchClient) Do(ctx context.Context, request SearchRequest) (*SearchR
 }
 
 type SearchRequest struct {
-	Query       string        `json:"query,omitempty"`
-	Sort        *SortObject   `json:"sort,omitempty"`
-	Filter      *FilterObject `json:"filter,omitempty"`
-	StartCursor Cursor        `json:"start_cursor,omitempty"`
-	PageSize    int           `json:"page_size"`
+	Query       string      `json:"query,omitempty"`
+	Sort        *SortObject `json:"sort,omitempty"`
+	Filter      Filter      `json:"filter,omitempty"`
+	StartCursor Cursor      `json:"start_cursor,omitempty"`
+	PageSize    int         `json:"page_size"`
 }
 
 type SearchResponse struct {

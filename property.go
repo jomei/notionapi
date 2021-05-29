@@ -28,23 +28,43 @@ func (p TextProperty) GetType() PropertyType {
 	return p.Type
 }
 
+type EmptyRichTextProperty struct {
+	ID       PropertyID   `json:"id"`
+	Type     PropertyType `json:"type"`
+	RichText struct{}     `json:"rich_text"`
+}
+
+func (p EmptyRichTextProperty) GetType() PropertyType {
+	return p.Type
+}
+
 type RichTextProperty struct {
 	ID       PropertyID   `json:"id"`
 	Type     PropertyType `json:"type"`
-	RichText TextObject   `json:"rich_text"`
+	RichText []TextObject `json:"rich_text"`
 }
 
 func (p RichTextProperty) GetType() PropertyType {
 	return p.Type
 }
 
-type TitleProperty struct {
+type DatabaseTitleProperty struct {
 	ID    PropertyID   `json:"id"`
 	Type  PropertyType `json:"type"`
-	Title TextObject   `json:"rich_text"`
+	Title TextObject   `json:"title"`
 }
 
-func (p TitleProperty) GetType() PropertyType {
+func (p DatabaseTitleProperty) GetType() PropertyType {
+	return p.Type
+}
+
+type PageTitleProperty struct {
+	ID    PropertyID   `json:"id"`
+	Type  PropertyType `json:"type"`
+	Title Paragraph    `json:"title"`
+}
+
+func (p PageTitleProperty) GetType() PropertyType {
 	return p.Type
 }
 
@@ -256,7 +276,6 @@ func (p *Properties) UnmarshalJSON(data []byte) error {
 	}
 	props, err := parseProperties(raw)
 	if err != nil {
-		fmt.Println("hello")
 		return err
 	}
 
@@ -272,9 +291,19 @@ func parseProperties(raw map[string]interface{}) (map[string]Property, error) {
 		case map[string]interface{}:
 			switch PropertyType(rawProperty["type"].(string)) {
 			case PropertyTypeTitle:
-				p = &TitleProperty{}
+				switch v.(map[string]interface{})["title"].(type) {
+				case map[string]interface{}:
+					p = &DatabaseTitleProperty{}
+				default:
+					p = &PageTitleProperty{}
+				}
 			case PropertyTypeRichText:
-				p = &RichTextProperty{}
+				switch v.(map[string]interface{})["rich_text"].(type) {
+				case map[string]interface{}:
+					p = &EmptyRichTextProperty{}
+				default:
+					p = &RichTextProperty{}
+				}
 			case PropertyTypeSelect:
 				p = &SelectProperty{}
 			case PropertyTypeMultiSelect:
