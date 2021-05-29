@@ -71,7 +71,7 @@ func TestPageClient(t *testing.T) {
 			err      error
 		}{
 			{
-				name:     "returns page by id",
+				name:     "returns a new page",
 				filePath: "testdata/page_create.json",
 				request: &notionapi.PageCreateRequest{
 					Parent: notionapi.Parent{

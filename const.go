@@ -122,3 +122,8 @@ const (
 	ParentTypeDatabaseID ParentType = "database_id"
 	ParentTypePageID     ParentType = "page_id"
 )
+
+const (
+	UserTypePerson UserType = "person"
+	UserTypeBot    UserType = "bot"
+)

@@ -19,8 +19,6 @@ const (
 	ObjectTypeParagraph   ObjectType = "paragraph"
 	ObjectTypeToggle      ObjectType = "toggle"
 	ObjectTypeUser        ObjectType = "user"
-	ObjectTypePerson      ObjectType = "person"
-	ObjectTypeBot         ObjectType = "bot"
 
 	ObjectTypeBulletedListItem ObjectType = "bulleted_list_item"
 	ObjectTypeNumberedListItem ObjectType = "numbered_list_item"
