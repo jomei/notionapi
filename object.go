@@ -42,6 +42,7 @@ func (oID ObjectID) String() string {
 	return string(oID)
 }
 
+//TODO: dont need anymore
 type BasicObject struct {
 	ID          ObjectID           `json:"id"`
 	Type        ObjectType         `json:"type"`
@@ -67,16 +68,16 @@ func (c Color) String() string {
 }
 
 type TextObject struct {
-	Type        ObjectType  `json:"type"`
-	Text        Text        `json:"text"`
-	Annotations Annotations `json:"annotations"`
-	PlainText   string      `json:"plain_text"`
-	Href        string      `json:"href"`
+	Type        ObjectType   `json:"type,omitempty"`
+	Text        Text         `json:"text"`
+	Annotations *Annotations `json:"annotations,omitempty"`
+	PlainText   string       `json:"plain_text,omitempty"`
+	Href        string       `json:"href,omitempty"`
 }
 
 type Text struct {
 	Content string `json:"content"`
-	Link    string `json:"link"`
+	Link    string `json:"link,omitempty"`
 }
 
 type Annotations struct {

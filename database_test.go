@@ -36,7 +36,7 @@ func TestDatabaseClient(t *testing.T) {
 						{
 							Type:        notionapi.ObjectTypeText,
 							Text:        notionapi.Text{Content: "Test Database", Link: ""},
-							Annotations: notionapi.Annotations{Color: "default"},
+							Annotations: &notionapi.Annotations{Color: "default"},
 							PlainText:   "Test Database",
 							Href:        "",
 						},
@@ -112,7 +112,7 @@ func TestDatabaseClient(t *testing.T) {
 									Text: notionapi.Text{
 										Content: "Test Database",
 									},
-									Annotations: notionapi.Annotations{
+									Annotations: &notionapi.Annotations{
 										Color: notionapi.ColorDefault,
 									},
 									PlainText: "Test Database",

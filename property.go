@@ -59,8 +59,8 @@ func (p DatabaseTitleProperty) GetType() PropertyType {
 }
 
 type PageTitleProperty struct {
-	ID    PropertyID   `json:"id"`
-	Type  PropertyType `json:"type"`
+	ID    PropertyID   `json:"id,omitempty"`
+	Type  PropertyType `json:"type,omitempty"`
 	Title Paragraph    `json:"title"`
 }
 

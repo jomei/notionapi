@@ -1,0 +1,51 @@
+{
+  "object": "page",
+  "id": "some_id",
+  "created_time": "2021-05-24T05:06:34.827Z",
+  "last_edited_time": "2021-05-24T05:06:34.827Z",
+  "parent": {
+    "type": "database_id",
+    "database_id": "some_id"
+  },
+  "archived": false,
+  "properties": {
+    "Tags": {
+      "id": ";s|V",
+      "type": "multi_select",
+      "multi_select": []
+    },
+    "Some another columg": {
+      "id": "rJt\\",
+      "type": "people",
+      "people": []
+    },
+    "SomeColumn": {
+      "id": "~j_@",
+      "type": "rich_text",
+      "rich_text": []
+    },
+    "Name": {
+      "id": "title",
+      "type": "title",
+      "title": [
+        {
+          "type": "text",
+          "text": {
+            "content": "Yurts in Big Sur, California",
+            "link": null
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "Yurts in Big Sur, California",
+          "href": null
+        }
+      ]
+    }
+  }
+}

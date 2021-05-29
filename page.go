@@ -16,7 +16,7 @@ func (pID PageID) String() string {
 
 type PageService interface {
 	Get(context.Context, PageID) (*Page, error)
-	Create(context.Context, PageCreateRequest) (*Page, error)
+	Create(context.Context, *PageCreateRequest) (*Page, error)
 	Update(context.Context, PageID, map[string]BasicObject) (*Page, error)
 }
 
@@ -35,7 +35,7 @@ func (pc *PageClient) Get(ctx context.Context, id PageID) (*Page, error) {
 }
 
 // Create https://developers.notion.com/reference/post-page
-func (pc *PageClient) Create(ctx context.Context, requestBody PageCreateRequest) (*Page, error) {
+func (pc *PageClient) Create(ctx context.Context, requestBody *PageCreateRequest) (*Page, error) {
 	res, err := pc.apiClient.request(ctx, http.MethodPost, "pages", nil, requestBody)
 	if err != nil {
 		return nil, err
@@ -73,9 +73,9 @@ type Parent struct {
 }
 
 type PageCreateRequest struct {
-	Parent     Parent                 `json:"parent"`
-	Properties map[string]BasicObject `json:"properties"`
-	Children   []BlockObject          `json:"children"`
+	Parent     Parent        `json:"parent"`
+	Properties Properties    `json:"properties"`
+	Children   []BlockObject `json:"children,omitempty"`
 }
 
 func handlePageResponse(res *http.Response) (*Page, error) {

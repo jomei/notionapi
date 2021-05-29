@@ -55,10 +55,12 @@ func (bc *BlockClient) AppendChildren(ctx context.Context, id BlockID, requestBo
 	return &response, nil
 }
 
+type BlockType string
+
 type BlockObject struct {
-	BasicObject
 	Object         ObjectType `json:"object"`
 	ID             BlockID    `json:"id"`
+	Type           BlockType  `json:"type"`
 	CreatedTime    time.Time  `json:"created_time"`
 	LastEditedTime time.Time  `json:"last_edited_time"`
 	HasChildren    bool       `json:"has_children"`
