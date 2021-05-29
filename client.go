@@ -91,7 +91,6 @@ func (c *Client) request(ctx context.Context, method string, urlStr string, quer
 	var buf io.ReadWriter
 	if requestBody != nil {
 		body, err := json.Marshal(requestBody)
-		fmt.Println(string(body))
 		if err != nil {
 			return nil, err
 		}
