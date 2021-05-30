@@ -81,6 +81,10 @@ type Database struct {
 	Properties     Properties `json:"properties"`
 }
 
+func (db *Database) GetObject() ObjectType {
+	return db.Object
+}
+
 type DatabaseListResponse struct {
 	Object     ObjectType `json:"object"`
 	Results    []Database `json:"results"`

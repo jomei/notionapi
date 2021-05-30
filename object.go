@@ -40,13 +40,17 @@ func (oID ObjectID) String() string {
 	return string(oID)
 }
 
+type Object interface {
+	GetObject() ObjectType
+}
+
 //TODO: dont need anymore
 type BasicObject struct {
 	ID          ObjectID           `json:"id"`
 	Type        ObjectType         `json:"type"`
 	Title       *Text              `json:"title,omitempty"`
 	Text        *Text              `json:"text,omitempty"`
-	RichText    *TextObject        `json:"rich_text,omitempty"`
+	RichText    *RichText          `json:"rich_text,omitempty"`
 	Checkbox    *struct{}          `json:"checkbox,omitempty"`
 	Formula     *FormulaObject     `json:"formula,omitempty"`
 	Date        *struct{}          `json:"date,omitempty"`
@@ -65,7 +69,7 @@ func (c Color) String() string {
 	return string(c)
 }
 
-type TextObject struct {
+type RichText struct {
 	Type        ObjectType   `json:"type,omitempty"`
 	Text        Text         `json:"text"`
 	Annotations *Annotations `json:"annotations,omitempty"`
@@ -87,7 +91,7 @@ type Annotations struct {
 	Color         Color `json:"color"`
 }
 
-type Paragraph []TextObject
+type Paragraph []RichText
 
 type FormulaObject struct {
 	Value string `json:"value"`
@@ -117,7 +121,7 @@ type MultiSelectObject struct {
 }
 
 type Toggle struct {
-	Text TextObject `json:"text"`
+	Text RichText `json:"text"`
 }
 
 type Cursor string

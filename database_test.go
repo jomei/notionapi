@@ -32,7 +32,7 @@ func TestDatabaseClient(t *testing.T) {
 					ID:             "some_id",
 					CreatedTime:    timestamp,
 					LastEditedTime: timestamp,
-					Title: []notionapi.TextObject{
+					Title: []notionapi.RichText{
 						{
 							Type:        notionapi.ObjectTypeText,
 							Text:        notionapi.Text{Content: "Test Database", Link: ""},
@@ -55,12 +55,12 @@ func TestDatabaseClient(t *testing.T) {
 					//		"SomeColumn": notionapi.RichTextProperty{
 					//			ID:       "~j_@",
 					//			Type:     notionapi.PropertyTypeRichText,
-					//			RichText: notionapi.TextObject{},
+					//			RichText: notionapi.RichText{},
 					//		},
 					//		"Name": notionapi.TitleProperty{
 					//			ID:    "title",
 					//			Type:  notionapi.PropertyTypeTitle,
-					//			Title: notionapi.TextObject{},
+					//			Title: notionapi.RichText{},
 					//		},
 					//	},
 				},

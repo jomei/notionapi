@@ -64,6 +64,10 @@ type Page struct {
 	Parent         Parent     `json:"parent"`
 }
 
+func (p *Page) GetObject() ObjectType {
+	return p.Object
+}
+
 type ParentType string
 
 type Parent struct {

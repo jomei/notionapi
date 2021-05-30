@@ -21,7 +21,7 @@ func (pID PropertyID) String() string {
 type TextProperty struct {
 	ID    PropertyID   `json:"id"`
 	Type  PropertyType `json:"type"`
-	Title []TextObject `json:"title"`
+	Title []RichText   `json:"title"`
 }
 
 func (p TextProperty) GetType() PropertyType {
@@ -41,7 +41,7 @@ func (p EmptyRichTextProperty) GetType() PropertyType {
 type RichTextProperty struct {
 	ID       PropertyID   `json:"id"`
 	Type     PropertyType `json:"type"`
-	RichText []TextObject `json:"rich_text"`
+	RichText []RichText   `json:"rich_text"`
 }
 
 func (p RichTextProperty) GetType() PropertyType {
@@ -51,7 +51,7 @@ func (p RichTextProperty) GetType() PropertyType {
 type DatabaseTitleProperty struct {
 	ID    PropertyID   `json:"id"`
 	Type  PropertyType `json:"type"`
-	Title TextObject   `json:"title"`
+	Title RichText     `json:"title"`
 }
 
 func (p DatabaseTitleProperty) GetType() PropertyType {
