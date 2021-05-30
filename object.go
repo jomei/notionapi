@@ -16,25 +16,6 @@ type Object interface {
 	GetObject() ObjectType
 }
 
-//TODO: dont need anymore
-type BasicObject struct {
-	ID          ObjectID           `json:"id"`
-	Type        ObjectType         `json:"type"`
-	Title       *Text              `json:"title,omitempty"`
-	Text        *Text              `json:"text,omitempty"`
-	RichText    *RichText          `json:"rich_text,omitempty"`
-	Checkbox    *struct{}          `json:"checkbox,omitempty"`
-	Formula     *FormulaObject     `json:"formula,omitempty"`
-	Date        *struct{}          `json:"date,omitempty"`
-	Relation    *RelationObject    `json:"relation,omitempty"`
-	Rollup      *RollupObject      `json:"rollup,omitempty"`
-	MultiSelect *MultiSelectObject `json:"multi_select,omitempty"`
-	People      *struct{}          `json:"people,omitempty"`
-	Files       *struct{}          `json:"files,omitempty"`
-	Paragraph   *Paragraph         `json:"paragraph,omitempty"`
-	Toggle      *Toggle            `json:"toggle,omitempty"`
-}
-
 type Color string
 
 func (c Color) String() string {

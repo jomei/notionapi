@@ -117,4 +117,62 @@ func TestPageClient(t *testing.T) {
 			})
 		}
 	})
+
+	t.Run("Update", func(t *testing.T) {
+		tests := []struct {
+			name     string
+			filePath string
+			id       notionapi.PageID
+			request  *notionapi.PageUpdateRequest
+			want     *notionapi.Page
+			wantErr  bool
+			err      error
+		}{
+			{
+				name:     "change requested properties and return the result",
+				id:       "some_id",
+				filePath: "testdata/page_update.json",
+				request: &notionapi.PageUpdateRequest{
+					Properties: notionapi.Properties{
+						"SomeColumn": notionapi.RichTextProperty{
+							Type: notionapi.PropertyTypeRichText,
+							RichText: notionapi.Paragraph{
+								{
+									Type: notionapi.ObjectTypeText,
+									Text: notionapi.Text{Content: "patch"},
+								},
+							},
+						},
+					},
+				},
+				want: &notionapi.Page{
+					Object:         notionapi.ObjectTypePage,
+					ID:             "some_id",
+					CreatedTime:    timestamp,
+					LastEditedTime: timestamp,
+					Parent: notionapi.Parent{
+						Type:       notionapi.ParentTypeDatabaseID,
+						DatabaseID: "some_id",
+					},
+					Archived: false,
+				},
+			},
+		}
+		for _, tt := range tests {
+			t.Run(tt.name, func(t *testing.T) {
+				c := newMockedClient(t, tt.filePath)
+				client := notionapi.NewClient("some_token", notionapi.WithHTTPClient(c))
+				got, err := client.Page.Update(context.Background(), tt.id, tt.request)
+				if (err != nil) != tt.wantErr {
+					t.Errorf("Update() error = %v, wantErr %v", err, tt.wantErr)
+					return
+				}
+				// TODO: remove properties from comparing for a while. Have to compare with interface somehow
+				got.Properties = nil
+				if !reflect.DeepEqual(got, tt.want) {
+					t.Errorf("Update() got = %v, want %v", got, tt.want)
+				}
+			})
+		}
+	})
 }

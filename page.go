@@ -17,7 +17,7 @@ func (pID PageID) String() string {
 type PageService interface {
 	Get(context.Context, PageID) (*Page, error)
 	Create(context.Context, *PageCreateRequest) (*Page, error)
-	Update(context.Context, PageID, map[string]BasicObject) (*Page, error)
+	Update(context.Context, PageID, *PageUpdateRequest) (*Page, error)
 }
 
 type PageClient struct {
@@ -44,9 +44,13 @@ func (pc *PageClient) Create(ctx context.Context, requestBody *PageCreateRequest
 	return handlePageResponse(res)
 }
 
+type PageUpdateRequest struct {
+	Properties Properties `json:"properties"`
+}
+
 // Update https://developers.notion.com/reference/patch-page
-func (pc *PageClient) Update(ctx context.Context, id PageID, properties map[string]BasicObject) (*Page, error) {
-	res, err := pc.apiClient.request(ctx, http.MethodPatch, fmt.Sprintf("pages/%s", id.String()), nil, properties)
+func (pc *PageClient) Update(ctx context.Context, id PageID, request *PageUpdateRequest) (*Page, error) {
+	res, err := pc.apiClient.request(ctx, http.MethodPatch, fmt.Sprintf("pages/%s", id.String()), nil, request)
 	if err != nil {
 		return nil, err
 	}

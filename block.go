@@ -106,8 +106,8 @@ type Heading1Block struct {
 	Object         ObjectType `json:"object"`
 	ID             BlockID    `json:"id,omitempty"`
 	Type           BlockType  `json:"type"`
-	CreatedTime    time.Time  `json:"created_time,omitempty"`
-	LastEditedTime time.Time  `json:"last_edited_time,omitempty"`
+	CreatedTime    *time.Time `json:"created_time,omitempty"`
+	LastEditedTime *time.Time `json:"last_edited_time,omitempty"`
 	HasChildren    bool       `json:"has_children,omitempty"`
 	Heading1       struct {
 		Text Paragraph `json:"text"`
@@ -138,8 +138,8 @@ type Heading3Block struct {
 	Object         ObjectType `json:"object"`
 	ID             BlockID    `json:"id,omitempty"`
 	Type           BlockType  `json:"type"`
-	CreatedTime    time.Time  `json:"created_time,omitempty"`
-	LastEditedTime time.Time  `json:"last_edited_time,omitempty"`
+	CreatedTime    *time.Time `json:"created_time,omitempty"`
+	LastEditedTime *time.Time `json:"last_edited_time,omitempty"`
 	HasChildren    bool       `json:"has_children,omitempty"`
 	Heading3       struct {
 		Text Paragraph `json:"text"`
@@ -154,8 +154,8 @@ type BulletedListItemBlock struct {
 	Object           ObjectType `json:"object"`
 	ID               BlockID    `json:"id,omitempty"`
 	Type             BlockType  `json:"type"`
-	CreatedTime      time.Time  `json:"created_time,omitempty"`
-	LastEditedTime   time.Time  `json:"last_edited_time,omitempty"`
+	CreatedTime      *time.Time `json:"created_time,omitempty"`
+	LastEditedTime   *time.Time `json:"last_edited_time,omitempty"`
 	HasChildren      bool       `json:"has_children,omitempty"`
 	BulletedListItem struct {
 		Text     Paragraph `json:"text"`
@@ -171,8 +171,8 @@ type NumberedListItemBlock struct {
 	Object           ObjectType `json:"object"`
 	ID               BlockID    `json:"id,omitempty"`
 	Type             BlockType  `json:"type"`
-	CreatedTime      time.Time  `json:"created_time,omitempty"`
-	LastEditedTime   time.Time  `json:"last_edited_time,omitempty"`
+	CreatedTime      *time.Time `json:"created_time,omitempty"`
+	LastEditedTime   *time.Time `json:"last_edited_time,omitempty"`
 	HasChildren      bool       `json:"has_children,omitempty"`
 	NumberedListItem struct {
 		Text     Paragraph `json:"text"`
@@ -188,8 +188,8 @@ type ToDoBlock struct {
 	Object         ObjectType `json:"object"`
 	ID             BlockID    `json:"id,omitempty"`
 	Type           BlockType  `json:"type"`
-	CreatedTime    time.Time  `json:"created_time,omitempty"`
-	LastEditedTime time.Time  `json:"last_edited_time,omitempty"`
+	CreatedTime    *time.Time `json:"created_time,omitempty"`
+	LastEditedTime *time.Time `json:"last_edited_time,omitempty"`
 	HasChildren    bool       `json:"has_children"`
 	ToDo           struct {
 		Text     Paragraph `json:"text"`
@@ -206,8 +206,8 @@ type ToggleBlock struct {
 	Object         ObjectType `json:"object"`
 	ID             BlockID    `json:"id,omitempty"`
 	Type           BlockType  `json:"type"`
-	CreatedTime    time.Time  `json:"created_time,omitempty"`
-	LastEditedTime time.Time  `json:"last_edited_time,omitempty"`
+	CreatedTime    *time.Time `json:"created_time,omitempty"`
+	LastEditedTime *time.Time `json:"last_edited_time,omitempty"`
 	HasChildren    bool       `json:"has_children,omitempty"`
 	Text           Paragraph  `json:"text"`
 	Children       []Block    `json:"children"`

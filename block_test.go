@@ -24,7 +24,7 @@ func TestBlockClient(t *testing.T) {
 		}{
 			{
 				name:     "returns blocks by id of parent block",
-				id:       "d1c2fdf4-9f12-46cc-b168-1ed1bcb732d8",
+				id:       "some_id",
 				filePath: "testdata/block_get_children.json",
 				len:      2,
 			},
@@ -60,7 +60,7 @@ func TestBlockClient(t *testing.T) {
 		}{
 			{
 				name:     "returns blocks by id of parent block",
-				id:       "d1c2fdf4-9f12-46cc-b168-1ed1bcb732d8",
+				id:       "some_id",
 				filePath: "testdata/block_append_children.json",
 				request: &notionapi.AppendBlockChildrenRequest{
 					Children: []notionapi.Block{

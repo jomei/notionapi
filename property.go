@@ -19,7 +19,7 @@ func (pID PropertyID) String() string {
 }
 
 type TextProperty struct {
-	ID    PropertyID   `json:"id"`
+	ID    PropertyID   `json:"id,omitempty"`
 	Type  PropertyType `json:"type"`
 	Title []RichText   `json:"title"`
 }
@@ -29,7 +29,7 @@ func (p TextProperty) GetType() PropertyType {
 }
 
 type EmptyRichTextProperty struct {
-	ID       PropertyID   `json:"id"`
+	ID       PropertyID   `json:"id,omitempty"`
 	Type     PropertyType `json:"type"`
 	RichText struct{}     `json:"rich_text"`
 }
@@ -39,7 +39,7 @@ func (p EmptyRichTextProperty) GetType() PropertyType {
 }
 
 type RichTextProperty struct {
-	ID       PropertyID   `json:"id"`
+	ID       PropertyID   `json:"id,omitempty"`
 	Type     PropertyType `json:"type"`
 	RichText []RichText   `json:"rich_text"`
 }
@@ -49,7 +49,7 @@ func (p RichTextProperty) GetType() PropertyType {
 }
 
 type DatabaseTitleProperty struct {
-	ID    PropertyID   `json:"id"`
+	ID    PropertyID   `json:"id,omitempty"`
 	Type  PropertyType `json:"type"`
 	Title RichText     `json:"title"`
 }
@@ -75,7 +75,7 @@ func (ft FormatType) String() string {
 }
 
 type NumberProperty struct {
-	ID     ObjectID     `json:"id"`
+	ID     ObjectID     `json:"id,omitempty"`
 	Type   PropertyType `json:"type"`
 	Format FormatType   `json:"format"`
 }
@@ -85,7 +85,7 @@ func (p NumberProperty) GetType() PropertyType {
 }
 
 type SelectProperty struct {
-	ID     ObjectID     `json:"id"`
+	ID     ObjectID     `json:"id,omitempty"`
 	Type   PropertyType `json:"type"`
 	Select Select       `json:"select"`
 }
@@ -95,7 +95,7 @@ type Select struct {
 }
 
 type MultiSelectProperty struct {
-	ID          ObjectID     `json:"id"`
+	ID          ObjectID     `json:"id,omitempty"`
 	Type        PropertyType `json:"type"`
 	MultiSelect Select       `json:"multi_select"`
 }
@@ -105,7 +105,7 @@ func (p MultiSelectProperty) GetType() PropertyType {
 }
 
 type MultiSelectOptionsProperty struct {
-	ID          ObjectID     `json:"id"`
+	ID          ObjectID     `json:"id,omitempty"`
 	Type        PropertyType `json:"type"`
 	MultiSelect []Option     `json:"multi_select"`
 }
@@ -125,7 +125,7 @@ func (p SelectProperty) GetType() PropertyType {
 }
 
 type DateProperty struct {
-	ID   ObjectID     `json:"id"`
+	ID   ObjectID     `json:"id,omitempty"`
 	Type PropertyType `json:"type"`
 	Date interface{}  `json:"date"`
 }
@@ -135,7 +135,7 @@ func (p DateProperty) GetType() PropertyType {
 }
 
 type PeopleProperty struct {
-	ID     ObjectID     `json:"id"`
+	ID     ObjectID     `json:"id,omitempty"`
 	Type   PropertyType `json:"type"`
 	People interface{}  `json:"people"`
 }
@@ -145,7 +145,7 @@ func (p PeopleProperty) GetType() PropertyType {
 }
 
 type FileProperty struct {
-	ID   ObjectID     `json:"id"`
+	ID   ObjectID     `json:"id,omitempty"`
 	Type PropertyType `json:"type"`
 	File interface{}  `json:"file"`
 }
@@ -155,7 +155,7 @@ func (p FileProperty) GetType() PropertyType {
 }
 
 type CheckboxProperty struct {
-	ID       ObjectID     `json:"id"`
+	ID       ObjectID     `json:"id,omitempty"`
 	Type     PropertyType `json:"type"`
 	Checkbox interface{}  `json:"checkbox"`
 }
@@ -165,7 +165,7 @@ func (p CheckboxProperty) GetType() PropertyType {
 }
 
 type URLProperty struct {
-	ID   ObjectID     `json:"id"`
+	ID   ObjectID     `json:"id,omitempty"`
 	Type PropertyType `json:"type"`
 	URL  interface{}  `json:"url"`
 }
@@ -175,7 +175,7 @@ func (p URLProperty) GetType() PropertyType {
 }
 
 type EmailProperty struct {
-	ID    PropertyID   `json:"id"`
+	ID    PropertyID   `json:"id,omitempty"`
 	Type  PropertyType `json:"type"`
 	Email interface{}  `json:"email"`
 }
@@ -185,7 +185,7 @@ func (p EmailProperty) GetType() PropertyType {
 }
 
 type PhoneNumberProperty struct {
-	ID          ObjectID     `json:"id"`
+	ID          ObjectID     `json:"id,omitempty"`
 	Type        PropertyType `json:"type"`
 	PhoneNumber interface{}  `json:"phone_number"`
 }
@@ -195,7 +195,7 @@ func (p PhoneNumberProperty) GetType() PropertyType {
 }
 
 type FormulaProperty struct {
-	ID         ObjectID     `json:"id"`
+	ID         ObjectID     `json:"id,omitempty"`
 	Type       PropertyType `json:"type"`
 	Expression string       `json:"expression"`
 }
@@ -220,7 +220,7 @@ func (p RelationProperty) GetType() PropertyType {
 }
 
 type RollupProperty struct {
-	ID     ObjectID     `json:"id"`
+	ID     ObjectID     `json:"id,omitempty"`
 	Type   PropertyType `json:"type"`
 	Rollup Rollup       `json:"rollup"`
 }
@@ -238,7 +238,7 @@ func (p RollupProperty) GetType() PropertyType {
 }
 
 type CreatedTimeProperty struct {
-	ID          ObjectID     `json:"id"`
+	ID          ObjectID     `json:"id,omitempty"`
 	Type        PropertyType `json:"type"`
 	CreatedTime interface{}  `json:"created_time"`
 }
