@@ -9,7 +9,6 @@ An API client for the [Notion API](https://developers.notion.com/) implemented i
 It supports all APIs for Notion API version 2021-05-13
 - [x] Databases
 - [x] Pages
-- [x] Pages
 - [x] Blocks
 - [x] Users
 - [x] Search
