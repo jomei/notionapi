@@ -12,7 +12,6 @@ An API client for the [Notion API](https://developers.notion.com/) implemented i
 - [x] Blocks
 - [x] Users
 - [x] Search
-- [ ] Tests and Examples
 
 # Installation
 
@@ -36,7 +35,7 @@ client := notionapi.NewClient("your-integration-token")
 Then, use client's methods to retrieve or update your content
 
 ```go
-page, err := client.PageRetrieve(context.Background(), "your-page-id")
+page, err := client.Page.Get(context.Background(), "your-page-id")
 if err != nil {
 	// do something
 }
