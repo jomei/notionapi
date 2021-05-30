@@ -1,33 +1,5 @@
 package notionapi
 
-const (
-	ObjectTypeTitle       ObjectType = "title"
-	ObjectTypeRichText    ObjectType = "rich_text"
-	ObjectTypeCheckbox    ObjectType = "checkbox"
-	ObjectTypeSelect      ObjectType = "select"
-	ObjectTypeNumber      ObjectType = "number"
-	ObjectTypeFormula     ObjectType = "formula"
-	ObjectTypeDate        ObjectType = "date"
-	ObjectTypeRelation    ObjectType = "relation"
-	ObjectTypeRollup      ObjectType = "rollup"
-	ObjectTypeMultiSelect ObjectType = "multi_select"
-	ObjectTypePeople      ObjectType = "people"
-	ObjectTypeFiles       ObjectType = "files"
-	ObjectTypeHeading1    ObjectType = "heading_1"
-	ObjectTypeHeading2    ObjectType = "heading_2"
-	ObjectTypeHeading3    ObjectType = "heading_3"
-	ObjectTypeParagraph   ObjectType = "paragraph"
-	ObjectTypeToggle      ObjectType = "toggle"
-	ObjectTypeUser        ObjectType = "user"
-
-	ObjectTypeBulletedListItem ObjectType = "bulleted_list_item"
-	ObjectTypeNumberedListItem ObjectType = "numbered_list_item"
-
-	ObjectTypeToDo        ObjectType = "to_do"
-	ObjectTypeChildPage   ObjectType = "child_page"
-	ObjectTypeUnsupported ObjectType = "unsupported"
-)
-
 type ObjectType string
 
 func (ot ObjectType) String() string {

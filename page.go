@@ -77,9 +77,9 @@ type Parent struct {
 }
 
 type PageCreateRequest struct {
-	Parent     Parent        `json:"parent"`
-	Properties Properties    `json:"properties"`
-	Children   []BlockObject `json:"children,omitempty"`
+	Parent     Parent     `json:"parent"`
+	Properties Properties `json:"properties"`
+	Children   []Block    `json:"children,omitempty"`
 }
 
 func handlePageResponse(res *http.Response) (*Page, error) {

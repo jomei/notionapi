@@ -104,11 +104,11 @@ func (c *Client) request(ctx context.Context, method string, urlStr string, quer
 		}
 		u.RawQuery = q.Encode()
 	}
-
 	req, err := http.NewRequest(method, u.String(), buf)
 	if err != nil {
 		return nil, err
 	}
+	fmt.Println(req)
 
 	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", c.Token.String()))
 	req.Header.Add("Notion-Version", c.notionVersion)
