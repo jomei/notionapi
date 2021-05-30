@@ -3,6 +3,7 @@ package notionapi_test
 import (
 	"context"
 	"github.com/jomei/notionapi"
+	"net/http"
 	"reflect"
 	"testing"
 )
@@ -10,17 +11,19 @@ import (
 func TestUserClient(t *testing.T) {
 	t.Run("Get", func(t *testing.T) {
 		tests := []struct {
-			name     string
-			filePath string
-			id       notionapi.UserID
-			want     *notionapi.User
-			wantErr  bool
-			err      error
+			name       string
+			filePath   string
+			statusCode int
+			id         notionapi.UserID
+			want       *notionapi.User
+			wantErr    bool
+			err        error
 		}{
 			{
-				name:     "returns user by id",
-				id:       "some_id",
-				filePath: "testdata/user_get.json",
+				name:       "returns user by id",
+				id:         "some_id",
+				filePath:   "testdata/user_get.json",
+				statusCode: http.StatusOK,
 				want: &notionapi.User{
 					Object:    notionapi.ObjectTypeUser,
 					ID:        "some_id",
@@ -34,7 +37,7 @@ func TestUserClient(t *testing.T) {
 
 		for _, tt := range tests {
 			t.Run(tt.name, func(t *testing.T) {
-				c := newMockedClient(t, tt.filePath)
+				c := newMockedClient(t, tt.filePath, tt.statusCode)
 				client := notionapi.NewClient("some_token", notionapi.WithHTTPClient(c))
 
 				got, err := client.User.Get(context.Background(), tt.id)
@@ -52,15 +55,17 @@ func TestUserClient(t *testing.T) {
 
 	t.Run("List", func(t *testing.T) {
 		tests := []struct {
-			name     string
-			filePath string
-			want     *notionapi.UsersListResponse
-			wantErr  bool
-			err      error
+			name       string
+			filePath   string
+			statusCode int
+			want       *notionapi.UsersListResponse
+			wantErr    bool
+			err        error
 		}{
 			{
-				name:     "returns list of users",
-				filePath: "testdata/user_list.json",
+				name:       "returns list of users",
+				filePath:   "testdata/user_list.json",
+				statusCode: http.StatusOK,
 				want: &notionapi.UsersListResponse{
 					Object: notionapi.ObjectTypeList,
 					Results: []notionapi.User{
@@ -87,7 +92,7 @@ func TestUserClient(t *testing.T) {
 
 		for _, tt := range tests {
 			t.Run(tt.name, func(t *testing.T) {
-				c := newMockedClient(t, tt.filePath)
+				c := newMockedClient(t, tt.filePath, tt.statusCode)
 				client := notionapi.NewClient("some_token", notionapi.WithHTTPClient(c))
 				got, err := client.User.List(context.Background(), nil)
 				if (err != nil) != tt.wantErr {

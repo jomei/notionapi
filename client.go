@@ -5,7 +5,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/pkg/errors"
 	"io"
 	"net/http"
 	"net/url"
@@ -119,7 +118,13 @@ func (c *Client) request(ctx context.Context, method string, urlStr string, quer
 	}
 
 	if res.StatusCode != http.StatusOK {
-		return nil, errors.Errorf("http status: %d", res.StatusCode)
+		var apiErr Error
+		err = json.NewDecoder(res.Body).Decode(&apiErr)
+		if err != nil {
+			return nil, err
+		}
+
+		return nil, &apiErr
 	}
 
 	return res, nil

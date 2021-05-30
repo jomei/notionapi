@@ -7,6 +7,7 @@ const (
 	ObjectTypeList     ObjectType = "list"
 	ObjectTypeText     ObjectType = "text"
 	ObjectTypeUser     ObjectType = "user"
+	ObjectTypeError    ObjectType = "error"
 )
 
 const (

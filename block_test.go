@@ -3,6 +3,7 @@ package notionapi_test
 import (
 	"context"
 	"github.com/jomei/notionapi"
+	"net/http"
 	"reflect"
 	"testing"
 	"time"
@@ -15,24 +16,26 @@ func TestBlockClient(t *testing.T) {
 	}
 	t.Run("GetChildren", func(t *testing.T) {
 		tests := []struct {
-			name     string
-			filePath string
-			id       notionapi.BlockID
-			len      int
-			wantErr  bool
-			err      error
+			name       string
+			filePath   string
+			statusCode int
+			id         notionapi.BlockID
+			len        int
+			wantErr    bool
+			err        error
 		}{
 			{
-				name:     "returns blocks by id of parent block",
-				id:       "some_id",
-				filePath: "testdata/block_get_children.json",
-				len:      2,
+				name:       "returns blocks by id of parent block",
+				id:         "some_id",
+				statusCode: http.StatusOK,
+				filePath:   "testdata/block_get_children.json",
+				len:        2,
 			},
 		}
 
 		for _, tt := range tests {
 			t.Run(tt.name, func(t *testing.T) {
-				c := newMockedClient(t, tt.filePath)
+				c := newMockedClient(t, tt.filePath, tt.statusCode)
 				client := notionapi.NewClient("some_token", notionapi.WithHTTPClient(c))
 				got, err := client.Block.GetChildren(context.Background(), tt.id, nil)
 
@@ -50,18 +53,20 @@ func TestBlockClient(t *testing.T) {
 
 	t.Run("AppendChildren", func(t *testing.T) {
 		tests := []struct {
-			name     string
-			filePath string
-			id       notionapi.BlockID
-			request  *notionapi.AppendBlockChildrenRequest
-			want     *notionapi.ChildPageBlock
-			wantErr  bool
-			err      error
+			name       string
+			filePath   string
+			statusCode int
+			id         notionapi.BlockID
+			request    *notionapi.AppendBlockChildrenRequest
+			want       *notionapi.ChildPageBlock
+			wantErr    bool
+			err        error
 		}{
 			{
-				name:     "returns blocks by id of parent block",
-				id:       "some_id",
-				filePath: "testdata/block_append_children.json",
+				name:       "returns blocks by id of parent block",
+				id:         "some_id",
+				filePath:   "testdata/block_append_children.json",
+				statusCode: http.StatusOK,
 				request: &notionapi.AppendBlockChildrenRequest{
 					Children: []notionapi.Block{
 						&notionapi.Heading2Block{
@@ -96,7 +101,7 @@ func TestBlockClient(t *testing.T) {
 
 		for _, tt := range tests {
 			t.Run(tt.name, func(t *testing.T) {
-				c := newMockedClient(t, tt.filePath)
+				c := newMockedClient(t, tt.filePath, tt.statusCode)
 				client := notionapi.NewClient("some_token", notionapi.WithHTTPClient(c))
 				got, err := client.Block.AppendChildren(context.Background(), tt.id, tt.request)
 

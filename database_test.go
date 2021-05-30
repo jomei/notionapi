@@ -3,6 +3,7 @@ package notionapi_test
 import (
 	"context"
 	"github.com/jomei/notionapi"
+	"net/http"
 	"reflect"
 	"testing"
 	"time"
@@ -16,17 +17,19 @@ func TestDatabaseClient(t *testing.T) {
 
 	t.Run("Get", func(t *testing.T) {
 		tests := []struct {
-			name     string
-			filePath string
-			id       notionapi.DatabaseID
-			want     *notionapi.Database
-			wantErr  bool
-			err      error
+			name       string
+			filePath   string
+			statusCode int
+			id         notionapi.DatabaseID
+			want       *notionapi.Database
+			wantErr    bool
+			err        error
 		}{
 			{
-				name:     "returns database by id",
-				id:       "some_id",
-				filePath: "testdata/database_get.json",
+				name:       "returns database by id",
+				id:         "some_id",
+				filePath:   "testdata/database_get.json",
+				statusCode: http.StatusOK,
 				want: &notionapi.Database{
 					Object:         notionapi.ObjectTypeDatabase,
 					ID:             "some_id",
@@ -69,8 +72,7 @@ func TestDatabaseClient(t *testing.T) {
 		}
 		for _, tt := range tests {
 			t.Run(tt.name, func(t *testing.T) {
-
-				c := newMockedClient(t, tt.filePath)
+				c := newMockedClient(t, tt.filePath, tt.statusCode)
 				client := notionapi.NewClient("some_token", notionapi.WithHTTPClient(c))
 				got, err := client.Database.Get(context.Background(), tt.id)
 
@@ -89,15 +91,17 @@ func TestDatabaseClient(t *testing.T) {
 
 	t.Run("List", func(t *testing.T) {
 		tests := []struct {
-			name     string
-			filePath string
-			want     *notionapi.DatabaseListResponse
-			wantErr  bool
-			err      error
+			name       string
+			filePath   string
+			statusCode int
+			want       *notionapi.DatabaseListResponse
+			wantErr    bool
+			err        error
 		}{
 			{
-				name:     "returns list of databases",
-				filePath: "testdata/database_list.json",
+				name:       "returns list of databases",
+				filePath:   "testdata/database_list.json",
+				statusCode: http.StatusOK,
 				want: &notionapi.DatabaseListResponse{
 					Object: notionapi.ObjectTypeList,
 					Results: []notionapi.Database{
@@ -128,7 +132,7 @@ func TestDatabaseClient(t *testing.T) {
 
 		for _, tt := range tests {
 			t.Run(tt.name, func(t *testing.T) {
-				c := newMockedClient(t, tt.filePath)
+				c := newMockedClient(t, tt.filePath, tt.statusCode)
 				client := notionapi.NewClient("some_token", notionapi.WithHTTPClient(c))
 
 				got, err := client.Database.List(context.Background(), nil)
@@ -147,18 +151,20 @@ func TestDatabaseClient(t *testing.T) {
 
 	t.Run("Query", func(t *testing.T) {
 		tests := []struct {
-			name     string
-			filePath string
-			id       notionapi.DatabaseID
-			request  *notionapi.DatabaseQueryRequest
-			want     *notionapi.DatabaseQueryResponse
-			wantErr  bool
-			err      error
+			name       string
+			filePath   string
+			statusCode int
+			id         notionapi.DatabaseID
+			request    *notionapi.DatabaseQueryRequest
+			want       *notionapi.DatabaseQueryResponse
+			wantErr    bool
+			err        error
 		}{
 			{
-				name:     "returns query results",
-				id:       "some_id",
-				filePath: "testdata/database_query.json",
+				name:       "returns query results",
+				id:         "some_id",
+				filePath:   "testdata/database_query.json",
+				statusCode: http.StatusOK,
 				request: &notionapi.DatabaseQueryRequest{
 					Filter: &notionapi.PropertyFilter{
 						Property: "Name",
@@ -190,7 +196,7 @@ func TestDatabaseClient(t *testing.T) {
 
 		for _, tt := range tests {
 			t.Run(tt.name, func(t *testing.T) {
-				c := newMockedClient(t, tt.filePath)
+				c := newMockedClient(t, tt.filePath, tt.statusCode)
 				client := notionapi.NewClient("some_token", notionapi.WithHTTPClient(c))
 				got, err := client.Database.Query(context.Background(), tt.id, tt.request)
 

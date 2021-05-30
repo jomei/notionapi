@@ -22,7 +22,7 @@ func newTestClient(fn RoundTripFunc) *http.Client {
 }
 
 // newMockedClient returns *http.Client which responds with content from given file
-func newMockedClient(t *testing.T, requestMockFile string) *http.Client {
+func newMockedClient(t *testing.T, requestMockFile string, statusCode int) *http.Client {
 	return newTestClient(func(req *http.Request) *http.Response {
 		b, err := os.Open(requestMockFile)
 		if err != nil {
@@ -30,7 +30,7 @@ func newMockedClient(t *testing.T, requestMockFile string) *http.Client {
 		}
 
 		resp := &http.Response{
-			StatusCode: http.StatusOK,
+			StatusCode: statusCode,
 			Body:       b,
 			Header:     make(http.Header),
 		}
