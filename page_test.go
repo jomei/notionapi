@@ -106,13 +106,13 @@ func TestPageClient(t *testing.T) {
 				client := notionapi.NewClient("some_token", notionapi.WithHTTPClient(c))
 				got, err := client.Page.Create(context.Background(), tt.request)
 				if (err != nil) != tt.wantErr {
-					t.Errorf("Get() error = %v, wantErr %v", err, tt.wantErr)
+					t.Errorf("Create() error = %v, wantErr %v", err, tt.wantErr)
 					return
 				}
 				// TODO: remove properties from comparing for a while. Have to compare with interface somehow
 				got.Properties = nil
 				if !reflect.DeepEqual(got, tt.want) {
-					t.Errorf("Get() got = %v, want %v", got, tt.want)
+					t.Errorf("Create() got = %v, want %v", got, tt.want)
 				}
 			})
 		}

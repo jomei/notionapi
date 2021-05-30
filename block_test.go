@@ -3,10 +3,16 @@ package notionapi_test
 import (
 	"context"
 	"github.com/jomei/notionapi"
+	"reflect"
 	"testing"
+	"time"
 )
 
 func TestBlockClient(t *testing.T) {
+	timestamp, err := time.Parse(time.RFC3339, "2021-05-24T05:06:34.827Z")
+	if err != nil {
+		t.Fatal(err)
+	}
 	t.Run("GetChildren", func(t *testing.T) {
 		tests := []struct {
 			name     string
@@ -31,12 +37,75 @@ func TestBlockClient(t *testing.T) {
 				got, err := client.Block.GetChildren(context.Background(), tt.id, nil)
 
 				if (err != nil) != tt.wantErr {
-					t.Errorf("Get() error = %v, wantErr %v", err, tt.wantErr)
+					t.Errorf("GetChildren() error = %v, wantErr %v", err, tt.wantErr)
 					return
 				}
 
 				if tt.len != len(got.Results) {
 					t.Errorf("GetChildren got %d, want: %d", len(got.Results), tt.len)
+				}
+			})
+		}
+	})
+
+	t.Run("AppendChildren", func(t *testing.T) {
+		tests := []struct {
+			name     string
+			filePath string
+			id       notionapi.BlockID
+			request  *notionapi.AppendBlockChildrenRequest
+			want     *notionapi.ChildPageBlock
+			wantErr  bool
+			err      error
+		}{
+			{
+				name:     "returns blocks by id of parent block",
+				id:       "d1c2fdf4-9f12-46cc-b168-1ed1bcb732d8",
+				filePath: "testdata/block_append_children.json",
+				request: &notionapi.AppendBlockChildrenRequest{
+					Children: []notionapi.Block{
+						&notionapi.Heading2Block{
+							Object: notionapi.ObjectTypeBlock,
+							Type:   notionapi.BlockTypeHeading2,
+							Heading2: struct {
+								Text notionapi.Paragraph `json:"text"`
+							}{notionapi.Paragraph{
+								{
+									Type: notionapi.ObjectTypeText,
+									Text: notionapi.Text{Content: "Hello"},
+								},
+							}},
+						},
+					},
+				},
+				want: &notionapi.ChildPageBlock{
+					Object:         notionapi.ObjectTypeBlock,
+					ID:             "some_id",
+					Type:           notionapi.BlockTypeChildPage,
+					CreatedTime:    &timestamp,
+					LastEditedTime: &timestamp,
+					HasChildren:    true,
+					ChildPage: struct {
+						Title string `json:"title"`
+					}{
+						Title: "Hello",
+					},
+				},
+			},
+		}
+
+		for _, tt := range tests {
+			t.Run(tt.name, func(t *testing.T) {
+				c := newMockedClient(t, tt.filePath)
+				client := notionapi.NewClient("some_token", notionapi.WithHTTPClient(c))
+				got, err := client.Block.AppendChildren(context.Background(), tt.id, tt.request)
+
+				if (err != nil) != tt.wantErr {
+					t.Errorf("AppendChidlren() error = %v, wantErr %v", err, tt.wantErr)
+					return
+				}
+				if !reflect.DeepEqual(got, tt.want) {
+					t.Errorf("AppendChidlren() got = %v, want %v", got, tt.want)
 				}
 			})
 		}

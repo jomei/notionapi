@@ -134,12 +134,12 @@ func TestDatabaseClient(t *testing.T) {
 				got, err := client.Database.List(context.Background(), nil)
 
 				if (err != nil) != tt.wantErr {
-					t.Errorf("Get() error = %v, wantErr %v", err, tt.wantErr)
+					t.Errorf("List() error = %v, wantErr %v", err, tt.wantErr)
 					return
 				}
 				got.Results[0].Properties = nil
 				if !reflect.DeepEqual(got, tt.want) {
-					t.Errorf("Get() got = %v, want %v", got, tt.want)
+					t.Errorf("List() got = %v, want %v", got, tt.want)
 				}
 			})
 		}
@@ -195,12 +195,12 @@ func TestDatabaseClient(t *testing.T) {
 				got, err := client.Database.Query(context.Background(), tt.id, tt.request)
 
 				if (err != nil) != tt.wantErr {
-					t.Errorf("Get() error = %v, wantErr %v", err, tt.wantErr)
+					t.Errorf("Query() error = %v, wantErr %v", err, tt.wantErr)
 					return
 				}
 				got.Results[0].Properties = nil
 				if !reflect.DeepEqual(got, tt.want) {
-					t.Errorf("Get() got = %v, want %v", got, tt.want)
+					t.Errorf("Query() got = %v, want %v", got, tt.want)
 				}
 			})
 		}

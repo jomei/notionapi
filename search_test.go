@@ -32,7 +32,7 @@ func TestSearchClient(t *testing.T) {
 				got, err := client.Search.Do(context.Background(), tt.request)
 
 				if (err != nil) != tt.wantErr {
-					t.Errorf("Get() error = %v, wantErr %v", err, tt.wantErr)
+					t.Errorf("Do() error = %v, wantErr %v", err, tt.wantErr)
 					return
 				}
 
