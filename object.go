@@ -61,22 +61,6 @@ func (ft FunctionType) String() string {
 	return string(ft)
 }
 
-type RollupObject struct {
-	RollupPropertyName   string       `json:"rollup_property_name"`
-	RelationPropertyName string       `json:"relation_property_name"`
-	RollupPropertyID     ObjectID     `json:"rollup_property_id"`
-	RelationPropertyID   ObjectID     `json:"relation_property_id"`
-	Function             FunctionType `json:"function"`
-}
-
-type MultiSelectObject struct {
-	Options []Option `json:"options"`
-}
-
-type Toggle struct {
-	Text RichText `json:"text"`
-}
-
 type Cursor string
 
 func (c Cursor) String() string {

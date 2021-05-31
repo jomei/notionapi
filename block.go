@@ -46,6 +46,7 @@ func (bc *BlockClient) GetChildren(ctx context.Context, id BlockID, pagination *
 		}
 		results[i] = b
 	}
+
 	return &GetChildrenResponse{
 		Object:  response.Object,
 		Results: results,
