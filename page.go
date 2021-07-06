@@ -66,6 +66,7 @@ type Page struct {
 	Archived       bool       `json:"archived"`
 	Properties     Properties `json:"properties"`
 	Parent         Parent     `json:"parent"`
+	Url            Url        `json:"url"`
 }
 
 func (p *Page) GetObject() ObjectType {
@@ -85,6 +86,8 @@ type PageCreateRequest struct {
 	Properties Properties `json:"properties"`
 	Children   []Block    `json:"children,omitempty"`
 }
+
+type Url string
 
 func handlePageResponse(res *http.Response) (*Page, error) {
 	var response Page
