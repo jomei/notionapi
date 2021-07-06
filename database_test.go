@@ -186,7 +186,7 @@ func TestDatabaseClient(t *testing.T) {
 								DatabaseID: "some_id",
 							},
 							Archived: false,
-							Url:      "some_url",
+							URL:      "some_url",
 						},
 					},
 					HasMore:    false,
