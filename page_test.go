@@ -40,7 +40,7 @@ func TestPageClient(t *testing.T) {
 						DatabaseID: "some_id",
 					},
 					Archived: false,
-					Url:      "some_url",
+					URL:      "some_url",
 				},
 			},
 			{
@@ -122,7 +122,7 @@ func TestPageClient(t *testing.T) {
 						DatabaseID: "some_id",
 					},
 					Archived: false,
-					Url:      "some_url",
+					URL:      "some_url",
 				},
 			},
 		}
@@ -184,7 +184,7 @@ func TestPageClient(t *testing.T) {
 						DatabaseID: "some_id",
 					},
 					Archived: false,
-					Url:      "some_url",
+					URL:      "some_url",
 				},
 			},
 		}
