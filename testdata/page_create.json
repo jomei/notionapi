@@ -8,6 +8,7 @@
     "database_id": "some_id"
   },
   "archived": false,
+  "url": "some_url",
   "properties": {
     "Tags": {
       "id": ";s|V",
