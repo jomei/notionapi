@@ -3,6 +3,7 @@ package notionapi
 import (
 	"encoding/json"
 	"fmt"
+
 	"github.com/pkg/errors"
 )
 
@@ -90,6 +91,20 @@ type SelectProperty struct {
 	Select Select       `json:"select"`
 }
 
+func (p SelectProperty) GetType() PropertyType {
+	return p.Type
+}
+
+type SelectOptionProperty struct {
+	ID     ObjectID     `json:"id,omitempty"`
+	Type   PropertyType `json:"type"`
+	Select Option       `json:"select"`
+}
+
+func (p SelectOptionProperty) GetType() PropertyType {
+	return p.Type
+}
+
 type Select struct {
 	Options []Option `json:"options"`
 }
@@ -118,10 +133,6 @@ type Option struct {
 	ID    PropertyID
 	Name  string `json:"name"`
 	Color Color  `json:"color"`
-}
-
-func (p SelectProperty) GetType() PropertyType {
-	return p.Type
 }
 
 type DateProperty struct {
@@ -315,7 +326,16 @@ func parseProperties(raw map[string]interface{}) (map[string]Property, error) {
 					p = &RichTextProperty{}
 				}
 			case PropertyTypeSelect:
-				p = &SelectProperty{}
+				selectMap, ok := v.(map[string]interface{})["select"].(map[string]interface{})
+				if !ok {
+					return nil, errors.Errorf("an error occured while parsing property type: %s", rawProperty)
+				}
+				_, found := selectMap["options"]
+				if found {
+					p = &SelectProperty{}
+				} else {
+					p = &SelectOptionProperty{}
+				}
 			case PropertyTypeMultiSelect:
 				switch v.(map[string]interface{})["multi_select"].(type) {
 				case map[string]interface{}:
@@ -330,6 +350,8 @@ func parseProperties(raw map[string]interface{}) (map[string]Property, error) {
 			case PropertyTypeEmail:
 				p = &EmailProperty{}
 			case PropertyTypeURL:
+				p = &URLProperty{}
+			case PropertyTypeFile:
 				p = &FileProperty{}
 			case PropertyTypePhoneNumber:
 				p = PhoneNumberProperty{}
