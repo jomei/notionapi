@@ -130,9 +130,9 @@ func (p MultiSelectOptionsProperty) GetType() PropertyType {
 }
 
 type Option struct {
-	ID    PropertyID
-	Name  string `json:"name"`
-	Color Color  `json:"color"`
+	ID    PropertyID `json:"id,omitempty"`
+	Name  string     `json:"name"`
+	Color Color      `json:"color,omitempty"`
 }
 
 type DateProperty struct {
