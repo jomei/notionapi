@@ -2,11 +2,12 @@ package notionapi_test
 
 import (
 	"context"
-	"github.com/jomei/notionapi"
 	"net/http"
 	"reflect"
 	"testing"
 	"time"
+
+	"github.com/jomei/notionapi"
 )
 
 func TestDatabaseClient(t *testing.T) {
@@ -38,7 +39,7 @@ func TestDatabaseClient(t *testing.T) {
 					Title: []notionapi.RichText{
 						{
 							Type:        notionapi.ObjectTypeText,
-							Text:        notionapi.Text{Content: "Test Database", Link: ""},
+							Text:        notionapi.Text{Content: "Test Database"},
 							Annotations: &notionapi.Annotations{Color: "default"},
 							PlainText:   "Test Database",
 							Href:        "",

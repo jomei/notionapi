@@ -2,11 +2,12 @@ package notionapi_test
 
 import (
 	"context"
-	"github.com/jomei/notionapi"
 	"net/http"
 	"reflect"
 	"testing"
 	"time"
+
+	"github.com/jomei/notionapi"
 )
 
 func TestPageClient(t *testing.T) {

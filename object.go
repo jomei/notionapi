@@ -32,7 +32,11 @@ type RichText struct {
 
 type Text struct {
 	Content string `json:"content"`
-	Link    string `json:"link,omitempty"`
+	Link    *Link  `json:"link,omitempty"`
+}
+
+type Link struct {
+	URL string `json:"url"`
 }
 
 type Annotations struct {

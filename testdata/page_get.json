@@ -67,8 +67,8 @@
         {
           "type": "text",
           "text": {
-            "content": "Hello",
-            "link": null
+            "content": "http://somelink.org",
+            "link": { "url": "http://somelink.org" }
           },
           "annotations": {
             "bold": false,

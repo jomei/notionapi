@@ -217,7 +217,7 @@ func (p FormulaProperty) GetType() PropertyType {
 
 type RelationProperty struct {
 	Type     PropertyType `json:"type"`
-	Relation Relation     `json:"relation"`
+	Relation []Relation   `json:"relation"`
 }
 
 type Relation struct {
