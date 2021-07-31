@@ -76,7 +76,7 @@ func (p *Page) GetObject() ObjectType {
 type ParentType string
 
 type Parent struct {
-	Type       ParentType `json:"type"`
+	Type       ParentType `json:"type,omitempty"`
 	PageID     PageID     `json:"page_id,omitempty"`
 	DatabaseID DatabaseID `json:"database_id,omitempty"`
 }

@@ -2,6 +2,7 @@ package notionapi_test
 
 import (
 	"context"
+	"encoding/json"
 	"github.com/jomei/notionapi"
 	"net/http"
 	"reflect"
@@ -105,8 +106,8 @@ func TestPageClient(t *testing.T) {
 						DatabaseID: "f830be5eff534859932e5b81542b3c7b",
 					},
 					Properties: notionapi.Properties{
-						"Name": notionapi.PageTitleProperty{
-							Title: notionapi.Paragraph{
+						"Name": notionapi.TitleProperty{
+							Title: []notionapi.RichText{
 								{Text: notionapi.Text{Content: "hello"}},
 							},
 						},
@@ -165,7 +166,7 @@ func TestPageClient(t *testing.T) {
 					Properties: notionapi.Properties{
 						"SomeColumn": notionapi.RichTextProperty{
 							Type: notionapi.PropertyTypeRichText,
-							RichText: notionapi.Paragraph{
+							RichText: []notionapi.RichText{
 								{
 									Type: notionapi.ObjectTypeText,
 									Text: notionapi.Text{Content: "patch"},
@@ -205,4 +206,163 @@ func TestPageClient(t *testing.T) {
 			})
 		}
 	})
+}
+
+func TestPageCreateRequest_MarshallJSON(t *testing.T) {
+	timeObj, err := time.Parse(time.RFC3339, "2020-12-08T12:00:00Z")
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	dateObj := notionapi.Date(timeObj)
+	tests := []struct {
+		name    string
+		req     *notionapi.PageCreateRequest
+		want    []byte
+		wantErr bool
+	}{
+		{
+			name: "create a page",
+			req: &notionapi.PageCreateRequest{
+				Parent: notionapi.Parent{
+					DatabaseID: "some_id",
+				},
+				Properties: notionapi.Properties{
+					"Type": notionapi.SelectProperty{
+						Select: notionapi.Option{
+							ID:    "some_id",
+							Name:  "Article",
+							Color: notionapi.ColorDefault,
+						},
+					},
+					"Name": notionapi.TitleProperty{
+						Title: []notionapi.RichText{
+							{Text: notionapi.Text{Content: "New Media Article"}},
+						},
+					},
+					"Publishing/Release Date": notionapi.DateProperty{
+						Date: notionapi.DateObject{
+							Start: &dateObj,
+						},
+					},
+					"Link": notionapi.URLProperty{
+						URL: "some_url",
+					},
+					"Summary": notionapi.TextProperty{
+						Text: []notionapi.RichText{
+							{
+								Type: notionapi.ObjectTypeText,
+								Text: notionapi.Text{
+									Content: "Some content",
+								},
+								Annotations: &notionapi.Annotations{
+									Bold:  true,
+									Color: notionapi.ColorBlue,
+								},
+								PlainText: "Some content",
+							},
+						},
+					},
+					"Read": notionapi.CheckboxProperty{
+						Checkbox: false,
+					},
+				},
+			},
+			want: []byte(`{"parent":{"database_id":"some_id"},"properties":{"Link":{"url":"some_url"},"Name":{"title":[{"text":{"content":"New Media Article"}}]},"Publishing/Release Date":{"date":{"start":"2020-12-08T12:00:00Z","end":null}},"Read":{"checkbox":false},"Summary":{"text":[{"type":"text","text":{"content":"Some content"},"annotations":{"bold":true,"italic":false,"strikethrough":false,"underline":false,"code":false,"color":"blue"},"plain_text":"Some content"}]},"Type":{"select":{"id":"some_id","name":"Article","color":"default"}}}}`),
+		},
+		{
+			name: "create a page with content",
+			req: &notionapi.PageCreateRequest{
+				Parent: notionapi.Parent{
+					DatabaseID: "some_id",
+				},
+				Properties: notionapi.Properties{
+					"Type": notionapi.SelectProperty{
+						Select: notionapi.Option{
+							ID:    "some_id",
+							Name:  "Article",
+							Color: notionapi.ColorDefault,
+						},
+					},
+					"Name": notionapi.TitleProperty{
+						Title: []notionapi.RichText{
+							{Text: notionapi.Text{Content: "New Media Article"}},
+						},
+					},
+					"Publishing/Release Date": notionapi.DateProperty{
+						Date: notionapi.DateObject{
+							Start: &dateObj,
+						},
+					},
+					"Link": notionapi.URLProperty{
+						URL: "some_url",
+					},
+					"Summary": notionapi.TextProperty{
+						Text: []notionapi.RichText{
+							{
+								Type: notionapi.ObjectTypeText,
+								Text: notionapi.Text{
+									Content: "Some content",
+								},
+								Annotations: &notionapi.Annotations{
+									Bold:  true,
+									Color: notionapi.ColorBlue,
+								},
+								PlainText: "Some content",
+							},
+						},
+					},
+					"Read": notionapi.CheckboxProperty{
+						Checkbox: false,
+					},
+				},
+				Children: []notionapi.Block{
+					notionapi.Heading2Block{
+						Object: notionapi.ObjectTypeBlock,
+						Type:   notionapi.BlockTypeHeading2,
+						Heading2: struct {
+							Text []notionapi.RichText `json:"text"`
+						}{
+							Text: []notionapi.RichText{
+								{
+									Type: notionapi.ObjectTypeText,
+									Text: notionapi.Text{Content: "Lacinato"},
+								},
+							},
+						},
+					},
+					notionapi.ParagraphBlock{
+						Object: notionapi.ObjectTypeBlock,
+						Type:   notionapi.BlockTypeParagraph,
+						Paragraph: notionapi.Paragraph{
+							Text: []notionapi.RichText{
+								{
+									Text: notionapi.Text{
+										Content: "Lacinato",
+										Link:    "some_url",
+									},
+								},
+							},
+							Children: nil,
+						},
+					},
+				},
+			},
+			want: []byte(`{"parent":{"database_id":"some_id"},"properties":{"Link":{"url":"some_url"},"Name":{"title":[{"text":{"content":"New Media Article"}}]},"Publishing/Release Date":{"date":{"start":"2020-12-08T12:00:00Z","end":null}},"Read":{"checkbox":false},"Summary":{"text":[{"type":"text","text":{"content":"Some content"},"annotations":{"bold":true,"italic":false,"strikethrough":false,"underline":false,"code":false,"color":"blue"},"plain_text":"Some content"}]},"Type":{"select":{"id":"some_id","name":"Article","color":"default"}}},"children":[{"object":"block","type":"heading_2","heading_2":{"text":[{"type":"text","text":{"content":"Lacinato"}}]}},{"object":"block","type":"paragraph","paragraph":{"text":[{"text":{"content":"Lacinato","link":"some_url"}}]}}]}`),
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := json.Marshal(tt.req)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("MarshalJSON() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("MarshalJSON() got = %s, want %s", got, tt.want)
+			}
+		})
+	}
 }
