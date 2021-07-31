@@ -73,8 +73,8 @@ func TestBlockClient(t *testing.T) {
 							Object: notionapi.ObjectTypeBlock,
 							Type:   notionapi.BlockTypeHeading2,
 							Heading2: struct {
-								Text notionapi.Paragraph `json:"text"`
-							}{notionapi.Paragraph{
+								Text []notionapi.RichText `json:"text"`
+							}{[]notionapi.RichText{
 								{
 									Type: notionapi.ObjectTypeText,
 									Text: notionapi.Text{Content: "Hello"},

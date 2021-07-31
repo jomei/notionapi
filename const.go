@@ -11,21 +11,44 @@ const (
 )
 
 const (
+	PropertyConfigTypeTitle       PropertyConfigType = "title"
+	PropertyConfigTypeRichText    PropertyConfigType = "rich_text"
+	PropertyConfigTypeNumber      PropertyConfigType = "number"
+	PropertyConfigTypeSelect      PropertyConfigType = "select"
+	PropertyConfigTypeMultiSelect PropertyConfigType = "multi_select"
+	PropertyConfigTypeDate        PropertyConfigType = "date"
+	PropertyConfigTypePeople      PropertyConfigType = "people"
+	PropertyConfigTypeFiles       PropertyConfigType = "files"
+	PropertyConfigTypeCheckbox    PropertyConfigType = "checkbox"
+	PropertyConfigTypeURL         PropertyConfigType = "url"
+	PropertyConfigTypeEmail       PropertyConfigType = "email"
+	PropertyConfigTypePhoneNumber PropertyConfigType = "phone_number"
+	PropertyConfigTypeFormula     PropertyConfigType = "formula"
+	PropertyConfigTypeRelation    PropertyConfigType = "relation"
+	PropertyConfigTypeRollup      PropertyConfigType = "rollup"
+	PropertyConfigCreatedTime     PropertyConfigType = "created_time"
+	PropertyConfigCreatedBy       PropertyConfigType = "created_by"
+	PropertyConfigLastEditedTime  PropertyConfigType = "last_edited_time"
+	PropertyConfigLastEditedBy    PropertyConfigType = "last_edited_by"
+)
+
+const (
 	PropertyTypeTitle          PropertyType = "title"
 	PropertyTypeRichText       PropertyType = "rich_text"
+	PropertyTypeText           PropertyType = "text"
+	PropertyTypeNumber         PropertyType = "number"
 	PropertyTypeSelect         PropertyType = "select"
 	PropertyTypeMultiSelect    PropertyType = "multi_select"
-	PropertyTypeNumber         PropertyType = "number"
-	PropertyTypeCheckbox       PropertyType = "checkbox"
-	PropertyTypeEmail          PropertyType = "email"
-	PropertyTypeURL            PropertyType = "url"
-	PropertyTypeFile           PropertyType = "file"
-	PropertyTypePhoneNumber    PropertyType = "phone_number"
-	PropertyTypeFormula        PropertyType = "formula"
 	PropertyTypeDate           PropertyType = "date"
+	PropertyTypeFormula        PropertyType = "formula"
 	PropertyTypeRelation       PropertyType = "relation"
 	PropertyTypeRollup         PropertyType = "rollup"
 	PropertyTypePeople         PropertyType = "people"
+	PropertyTypeFiles          PropertyType = "files"
+	PropertyTypeCheckbox       PropertyType = "checkbox"
+	PropertyTypeURL            PropertyType = "url"
+	PropertyTypeEmail          PropertyType = "email"
+	PropertyTypePhoneNumber    PropertyType = "phone_number"
 	PropertyTypeCreatedTime    PropertyType = "created_time"
 	PropertyTypeCreatedBy      PropertyType = "created_by"
 	PropertyTypeLastEditedTime PropertyType = "last_edited_time"
@@ -143,6 +166,7 @@ const (
 const (
 	ParentTypeDatabaseID ParentType = "database_id"
 	ParentTypePageID     ParentType = "page_id"
+	ParentTypeWorkspace  ParentType = "workspace"
 )
 
 const (
@@ -163,4 +187,17 @@ const (
 	BlockTypeToggle      BlockType = "toggle"
 	BlockTypeChildPage   BlockType = "child_page"
 	BlockTypeUnsupported BlockType = "unsupported"
+)
+
+const (
+	FormulaTypeString  FormulaType = "string"
+	FormulaTypeNumber  FormulaType = "number"
+	FormulaTypeBoolean FormulaType = "boolean"
+	FormulaTypeDate    FormulaType = "date"
+)
+
+const (
+	RollupTypeNumber RollupType = "number"
+	RollupTypeDate   RollupType = "date"
+	RollupTypeArray  RollupType = "array"
 )

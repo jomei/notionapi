@@ -44,28 +44,23 @@ func TestDatabaseClient(t *testing.T) {
 							Href:        "",
 						},
 					},
-
-					//	Properties: notionapi.Properties{
-					//		"Tags": notionapi.MultiSelectProperty{
-					//			ID:          ";s|V",
-					//			Type:        notionapi.PropertyTypeMultiSelect,
-					//			MultiSelect: notionapi.Select{Options: []notionapi.Option{{ID: "id", Name: "tag", Color: "Blue"}}},
-					//		},
-					//		"Some another column": notionapi.PeopleProperty{
-					//			ID:     "rJt\\",
-					//			Type:   notionapi.PropertyTypePeople,
-					//		},
-					//		"SomeColumn": notionapi.RichTextProperty{
-					//			ID:       "~j_@",
-					//			Type:     notionapi.PropertyTypeRichText,
-					//			RichText: notionapi.RichText{},
-					//		},
-					//		"Name": notionapi.TitleProperty{
-					//			ID:    "title",
-					//			Type:  notionapi.PropertyTypeTitle,
-					//			Title: notionapi.RichText{},
-					//		},
+					//Properties: notionapi.PropertyConfigs{
+					//	"Tags": notionapi.MultiSelectPropertyConfig{
+					//		ID:          ";s|V",
+					//		Type:        notionapi.PropertyConfigTypeMultiSelect,
+					//		MultiSelect: notionapi.Select{Options: []notionapi.Option{{ID: "id", Name: "tag", Color: "Blue"}}},
 					//	},
+					//	"Some another column": notionapi.PeoplePropertyConfig{
+					//		ID:   "rJt\\",
+					//		Type: notionapi.PropertyConfigTypePeople,
+					//	},
+					//
+					//	"Name": notionapi.TitlePropertyConfig{
+					//		ID:    "title",
+					//		Type:  notionapi.PropertyConfigTypeTitle,
+					//		Title: notionapi.RichText{},
+					//	},
+					//},
 				},
 				wantErr: false,
 			},
@@ -110,7 +105,7 @@ func TestDatabaseClient(t *testing.T) {
 							ID:             "some_id",
 							CreatedTime:    timestamp,
 							LastEditedTime: timestamp,
-							Title: notionapi.Paragraph{
+							Title: []notionapi.RichText{
 								{
 									Type: notionapi.ObjectTypeText,
 									Text: notionapi.Text{

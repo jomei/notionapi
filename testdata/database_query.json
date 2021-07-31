@@ -11,45 +11,52 @@
         "database_id": "some_id"
       },
       "archived": false,
-      "url": "some_url",
       "properties": {
         "Tags": {
-          "id": ";s|V",
+          "id": "=QH|",
           "type": "multi_select",
-          "multi_select": {
-            "options": [
-              {
-                "id": "id",
-                "name": "tag",
-                "color": "blue"
-              }
-            ]
-          }
-        },
-        "Some another columg": {
-          "id": "rJt\\",
-          "type": "people",
-          "people": [
+          "multi_select": [
             {
-              "object": "user",
-              "id": "some_id",
-              "name": "some_user",
-              "avatar_url": "some url",
-              "type": "person",
-              "person": {
-                "email": "some@email.com"
-              }
+              "id": "381f7327-f0a2-4e3a-8f54-9e081a981a57",
+              "name": "a",
+              "color": "pink"
             }
           ]
         },
-        "SomeColumn": {
-          "id": "~j_@",
+        "Column 1": {
+          "id": "Iiaa",
+          "type": "multi_select",
+          "multi_select": [
+            {
+              "id": "some_id",
+              "name": "a",
+              "color": "blue"
+            },
+            {
+              "id": "some_id",
+              "name": "v",
+              "color": "red"
+            },
+            {
+              "id": "some_id",
+              "name": "b",
+              "color": "red"
+            }
+          ]
+        },
+        "Column": {
+          "id": "o]ST",
+          "type": "people",
+          "people": []
+        },
+        "some_prop": {
+          "id": "xLy_",
           "type": "rich_text",
           "rich_text": [
             {
               "type": "text",
               "text": {
-                "content": "some text",
+                "content": "a",
                 "link": null
               },
               "annotations": {
@@ -60,7 +67,7 @@
                 "code": false,
                 "color": "default"
               },
-              "plain_text": "some text",
+              "plain_text": "a",
               "href": null
             }
           ]
@@ -72,7 +79,7 @@
             {
               "type": "text",
               "text": {
-                "content": "Hello",
+                "content": "ba",
                 "link": null
               },
               "annotations": {
@@ -83,12 +90,13 @@
                 "code": false,
                 "color": "default"
               },
-              "plain_text": "Hello",
+              "plain_text": "ba",
               "href": null
             }
           ]
         }
-      }
+      },
+      "url": "some_url"
     }
   ],
   "next_cursor": null,

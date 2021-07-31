@@ -46,12 +46,6 @@ type Annotations struct {
 	Color         Color `json:"color"`
 }
 
-type Paragraph []RichText
-
-type FormulaObject struct {
-	Value string `json:"value"`
-}
-
 type RelationObject struct {
 	Database           DatabaseID `json:"database"`
 	SyncedPropertyName string     `json:"synced_property_name"`
@@ -75,6 +69,16 @@ func (d *Date) String() string {
 	return time.Time(*d).Format(time.RFC3339)
 }
 
-func (d *Date) MarshalText() ([]byte, error) {
+func (d Date) MarshalText() ([]byte, error) {
 	return []byte(d.String()), nil
+}
+
+type File struct {
+	Name string `json:"name"`
+}
+
+type PropertyID string
+
+func (pID PropertyID) String() string {
+	return string(pID)
 }
