@@ -95,7 +95,8 @@ type ParagraphBlock struct {
 	LastEditedTime *time.Time `json:"last_edited_time,omitempty"`
 	HasChildren    bool       `json:"has_children,omitempty"`
 	Paragraph      struct {
-		Text Paragraph `json:"text"`
+		Text     Paragraph `json:"text"`
+		Children []Block   `json:"children"`
 	} `json:"paragraph"`
 }
 
