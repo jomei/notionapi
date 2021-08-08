@@ -1,5 +1,7 @@
 package notionapi
 
+import "time"
+
 type ObjectType string
 
 func (ot ObjectType) String() string {
@@ -65,4 +67,14 @@ type Cursor string
 
 func (c Cursor) String() string {
 	return string(c)
+}
+
+type Date time.Time
+
+func (d *Date) String() string {
+	return time.Time(*d).Format(time.RFC3339)
+}
+
+func (d *Date) MarshalText() ([]byte, error) {
+	return []byte(d.String()), nil
 }

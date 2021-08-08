@@ -34,7 +34,7 @@ func (sc *SearchClient) Do(ctx context.Context, request *SearchRequest) (*Search
 type SearchRequest struct {
 	Query       string      `json:"query,omitempty"`
 	Sort        *SortObject `json:"sort,omitempty"`
-	Filter      Filter      `json:"filter,omitempty"`
+	Filter      interface{} `json:"filter,omitempty"`
 	StartCursor Cursor      `json:"start_cursor,omitempty"`
 	PageSize    int         `json:"page_size"`
 }

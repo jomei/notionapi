@@ -93,10 +93,31 @@ type DatabaseListResponse struct {
 }
 
 type DatabaseQueryRequest struct {
-	Filter      Filter       `json:"filter,omitempty"`
-	Sorts       []SortObject `json:"sorts"`
-	StartCursor Cursor       `json:"start_cursor,omitempty"`
-	PageSize    int          `json:"page_size,omitempty"`
+	PropertyFilter *PropertyFilter
+	CompoundFilter *CompoundFilter
+	Sorts          []SortObject `json:"sorts,omitempty"`
+	StartCursor    Cursor       `json:"start_cursor,omitempty"`
+	PageSize       int          `json:"page_size,omitempty"`
+}
+
+func (qr *DatabaseQueryRequest) MarshalJSON() ([]byte, error) {
+	var filter interface{}
+	if qr.PropertyFilter != nil {
+		filter = qr.PropertyFilter
+	} else {
+		filter = qr.CompoundFilter
+	}
+	return json.Marshal(struct {
+		Sorts       []SortObject `json:"sorts,omitempty"`
+		StartCursor Cursor       `json:"start_cursor,omitempty"`
+		PageSize    int          `json:"page_size,omitempty"`
+		Filter      interface{}  `json:"filter"`
+	}{
+		Sorts:       qr.Sorts,
+		StartCursor: qr.StartCursor,
+		PageSize:    qr.PageSize,
+		Filter:      filter,
+	})
 }
 
 type DatabaseQueryResponse struct {
