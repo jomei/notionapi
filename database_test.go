@@ -166,10 +166,10 @@ func TestDatabaseClient(t *testing.T) {
 				filePath:   "testdata/database_query.json",
 				statusCode: http.StatusOK,
 				request: &notionapi.DatabaseQueryRequest{
-					Filter: &notionapi.PropertyFilter{
+					PropertyFilter: &notionapi.PropertyFilter{
 						Property: "Name",
-						Text: map[notionapi.Condition]string{
-							notionapi.ConditionContains: "Hel",
+						Text: &notionapi.TextFilterCondition{
+							Contains: "Hel",
 						},
 					},
 				},
@@ -212,4 +212,97 @@ func TestDatabaseClient(t *testing.T) {
 			})
 		}
 	})
+}
+
+func TestDatabaseQueryRequest_MarshalJSON(t *testing.T) {
+	timeObj, err := time.Parse(time.RFC3339, "2021-05-10T02:43:42Z")
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	dateObj := notionapi.Date(timeObj)
+	tests := []struct {
+		name    string
+		req     *notionapi.DatabaseQueryRequest
+		want    []byte
+		wantErr bool
+	}{
+		{
+			name: "with property filter without sort",
+			req: &notionapi.DatabaseQueryRequest{
+				PropertyFilter: &notionapi.PropertyFilter{
+					Property: "Status",
+					Select: &notionapi.SelectFilterCondition{
+						Equals: "Reading",
+					},
+				},
+			},
+			want: []byte(`{"filter":{"property":"Status","select":{"equals":"Reading"}}}`),
+		},
+		{
+			name: "with property filter with sort",
+			req: &notionapi.DatabaseQueryRequest{
+				PropertyFilter: &notionapi.PropertyFilter{
+					Property: "Status",
+					Select: &notionapi.SelectFilterCondition{
+						Equals: "Reading",
+					},
+				},
+				Sorts: []notionapi.SortObject{
+					{
+						Property:  "Score /5",
+						Direction: notionapi.SortOrderASC,
+					},
+				},
+			},
+			want: []byte(`{"sorts":[{"property":"Score /5","direction":"ascending"}],"filter":{"property":"Status","select":{"equals":"Reading"}}}`),
+		},
+		{
+			name: "compound filter",
+			req: &notionapi.DatabaseQueryRequest{
+				CompoundFilter: &notionapi.CompoundFilter{
+					notionapi.FilterOperatorOR: []notionapi.PropertyFilter{
+						{
+							Property: "Status",
+							Select: &notionapi.SelectFilterCondition{
+								Equals: "Reading",
+							},
+						},
+						{
+							Property: "Publisher",
+							Select: &notionapi.SelectFilterCondition{
+								Equals: "NYT",
+							},
+						},
+					},
+				},
+			},
+			want: []byte(`{"filter":{"or":[{"property":"Status","select":{"equals":"Reading"}},{"property":"Publisher","select":{"equals":"NYT"}}]}}`),
+		},
+		{
+			name: "date filter",
+			req: &notionapi.DatabaseQueryRequest{
+				PropertyFilter: &notionapi.PropertyFilter{
+					Property: "created_at",
+					Date: &notionapi.DateFilterCondition{
+						Equals:   &dateObj,
+						PastWeek: &struct{}{},
+					},
+				},
+			},
+			want: []byte(`{"filter":{"property":"created_at","date":{"equals":"2021-05-10T02:43:42Z","past_week":{}}}}`),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := tt.req.MarshalJSON()
+			if (err != nil) != tt.wantErr {
+				t.Errorf("MarshalJSON() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("MarshalJSON() got = %s, want %s", got, tt.want)
+			}
+		})
+	}
 }

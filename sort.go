@@ -6,6 +6,6 @@ type TimestampType string
 
 type SortObject struct {
 	Property  string        `json:"property,omitempty"`
-	Timestamp TimestampType `json:"timestamp"`
-	Direction SortOrder     `json:"direction"`
+	Timestamp TimestampType `json:"timestamp,omitempty"`
+	Direction SortOrder     `json:"direction,omitempty"`
 }
