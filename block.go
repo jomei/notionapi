@@ -96,7 +96,7 @@ type ParagraphBlock struct {
 	HasChildren    bool       `json:"has_children,omitempty"`
 	Paragraph      struct {
 		Text     Paragraph `json:"text"`
-		Children []Block   `json:"children"`
+		Children []Block   `json:"children,omitempty"`
 	} `json:"paragraph"`
 }
 
@@ -161,7 +161,7 @@ type BulletedListItemBlock struct {
 	HasChildren      bool       `json:"has_children,omitempty"`
 	BulletedListItem struct {
 		Text     Paragraph `json:"text"`
-		Children []Block   `json:"children"`
+		Children []Block   `json:"children,omitempty"`
 	} `json:"bulleted_list_item"`
 }
 
@@ -178,7 +178,7 @@ type NumberedListItemBlock struct {
 	HasChildren      bool       `json:"has_children,omitempty"`
 	NumberedListItem struct {
 		Text     Paragraph `json:"text"`
-		Children []Block   `json:"children"`
+		Children []Block   `json:"children,omitempty"`
 	} `json:"numbered_list_item"`
 }
 
@@ -195,7 +195,7 @@ type ToDoBlock struct {
 	HasChildren    bool       `json:"has_children"`
 	ToDo           struct {
 		Text     Paragraph `json:"text"`
-		Children []Block   `json:"children"`
+		Children []Block   `json:"children,omitempty"`
 		Checked  bool      `json:"checked"`
 	} `json:"to_do"`
 }
@@ -212,10 +212,10 @@ type ToggleBlock struct {
 	LastEditedTime *time.Time `json:"last_edited_time,omitempty"`
 	HasChildren    bool       `json:"has_children,omitempty"`
 	Text           Paragraph  `json:"text"`
-	Children       []Block    `json:"children"`
+	Children       []Block    `json:"children,omitempty"`
 	Toggle         struct {
 		Text     Paragraph `json:"text"`
-		Children []Block   `json:"children"`
+		Children []Block   `json:"children,omitempty"`
 	} `json:"toggle"`
 }
 
