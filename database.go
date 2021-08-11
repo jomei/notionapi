@@ -104,14 +104,14 @@ func (qr *DatabaseQueryRequest) MarshalJSON() ([]byte, error) {
 	var filter interface{}
 	if qr.PropertyFilter != nil {
 		filter = qr.PropertyFilter
-	} else {
+	} else if qr.CompoundFilter != nil{
 		filter = qr.CompoundFilter
 	}
 	return json.Marshal(struct {
 		Sorts       []SortObject `json:"sorts,omitempty"`
 		StartCursor Cursor       `json:"start_cursor,omitempty"`
 		PageSize    int          `json:"page_size,omitempty"`
-		Filter      interface{}  `json:"filter"`
+		Filter      interface{}  `json:"filter,omitempty"`
 	}{
 		Sorts:       qr.Sorts,
 		StartCursor: qr.StartCursor,

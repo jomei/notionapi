@@ -36,7 +36,7 @@ type SearchRequest struct {
 	Sort        *SortObject `json:"sort,omitempty"`
 	Filter      interface{} `json:"filter,omitempty"`
 	StartCursor Cursor      `json:"start_cursor,omitempty"`
-	PageSize    int         `json:"page_size"`
+	PageSize    int         `json:"page_size,omitempty"`
 }
 
 type SearchResponse struct {
