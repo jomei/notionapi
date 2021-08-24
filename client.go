@@ -8,6 +8,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"reflect"
 	"strconv"
 )
 
@@ -88,7 +89,7 @@ func (c *Client) request(ctx context.Context, method string, urlStr string, quer
 	}
 
 	var buf io.ReadWriter
-	if requestBody != nil {
+	if requestBody != nil && !reflect.ValueOf(requestBody).IsNil() {
 		body, err := json.Marshal(requestBody)
 		if err != nil {
 			return nil, err
