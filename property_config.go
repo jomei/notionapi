@@ -14,7 +14,7 @@ type PropertyConfig interface {
 type TitlePropertyConfig struct {
 	ID    PropertyID         `json:"id,omitempty"`
 	Type  PropertyConfigType `json:"type"`
-	Title RichText           `json:"title"`
+	Title struct{}           `json:"title"`
 }
 
 func (p TitlePropertyConfig) GetType() PropertyConfigType {

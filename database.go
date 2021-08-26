@@ -19,6 +19,7 @@ type DatabaseService interface {
 	List(context.Context, *Pagination) (*DatabaseListResponse, error)
 	Query(context.Context, DatabaseID, *DatabaseQueryRequest) (*DatabaseQueryResponse, error)
 	Update(context.Context, DatabaseID, *DatabaseUpdateRequest) (*Database, error)
+	Create(ctx context.Context, request *DatabaseCreateRequest) (*Database, error)
 }
 
 type DatabaseClient struct {
@@ -87,6 +88,22 @@ func (dc *DatabaseClient) Update(ctx context.Context, id DatabaseID, requestBody
 	return &response, nil
 }
 
+// Create https://developers.notion.com/reference/create-a-database
+func (dc *DatabaseClient) Create(ctx context.Context, requestBody *DatabaseCreateRequest) (*Database, error) {
+	res, err := dc.apiClient.request(ctx, http.MethodPost, "databases", nil, requestBody)
+	if err != nil {
+		return nil, err
+	}
+
+	var response Database
+	err = json.NewDecoder(res.Body).Decode(&response)
+	if err != nil {
+		return nil, err
+	}
+
+	return &response, nil
+}
+
 type Database struct {
 	Object         ObjectType `json:"object"`
 	ID             ObjectID   `json:"id"`
@@ -146,4 +163,10 @@ type DatabaseQueryResponse struct {
 type DatabaseUpdateRequest struct {
 	Title      []RichText      `json:"title,omitempty"`
 	Properties PropertyConfigs `json:"properties,omitempty"`
+}
+
+type DatabaseCreateRequest struct {
+	Parent     Parent          `json:"parent"`
+	Title      []RichText      `json:"title"`
+	Properties PropertyConfigs `json:"properties"`
 }
