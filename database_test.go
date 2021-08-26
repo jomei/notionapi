@@ -235,10 +235,6 @@ func TestDatabaseClient(t *testing.T) {
 					Properties: notionapi.PropertyConfigs{
 						"patch": notionapi.TitlePropertyConfig{
 							Type: notionapi.PropertyConfigTypeRichText,
-							Title: notionapi.RichText{
-								Type: notionapi.ObjectTypeText,
-								Text: notionapi.Text{Content: "patch"},
-							},
 						},
 					},
 				},
@@ -270,6 +266,73 @@ func TestDatabaseClient(t *testing.T) {
 				got.Properties = nil
 				if !reflect.DeepEqual(got, tt.want) {
 					t.Errorf("Update() got = %v, want %v", got, tt.want)
+				}
+			})
+		}
+	})
+
+	t.Run("Create", func(t *testing.T) {
+		tests := []struct {
+			name       string
+			filePath   string
+			statusCode int
+			request    *notionapi.DatabaseCreateRequest
+			want       *notionapi.Database
+			wantErr    bool
+			err        error
+		}{
+			{
+				name:       "returns created db",
+				filePath:   "testdata/database_create.json",
+				statusCode: http.StatusOK,
+				request: &notionapi.DatabaseCreateRequest{
+					Parent: notionapi.Parent{
+						Type:   notionapi.ParentTypePageID,
+						PageID: "some_id",
+					},
+					Title: []notionapi.RichText{
+						{
+							Type: notionapi.ObjectTypeText,
+							Text: notionapi.Text{Content: "Grocery List"},
+						},
+					},
+					Properties: notionapi.PropertyConfigs{
+						"create": notionapi.TitlePropertyConfig{
+							Type: notionapi.PropertyConfigTypeTitle,
+						},
+					},
+				},
+				want: &notionapi.Database{
+					Object:         notionapi.ObjectTypeDatabase,
+					ID:             "some_id",
+					CreatedTime:    timestamp,
+					LastEditedTime: timestamp,
+					Title: []notionapi.RichText{
+						{
+							Type:        notionapi.ObjectTypeText,
+							Text:        notionapi.Text{Content: "Grocery List"},
+							PlainText:   "Grocery List",
+							Annotations: &notionapi.Annotations{Color: notionapi.ColorDefault},
+						},
+					},
+				},
+			},
+		}
+
+		for _, tt := range tests {
+			t.Run(tt.name, func(t *testing.T) {
+				c := newMockedClient(t, tt.filePath, tt.statusCode)
+				client := notionapi.NewClient("some_token", notionapi.WithHTTPClient(c))
+
+				got, err := client.Database.Create(context.Background(), tt.request)
+
+				if (err != nil) != tt.wantErr {
+					t.Errorf("Create() error = %v, wantErr %v", err, tt.wantErr)
+					return
+				}
+				got.Properties = nil
+				if !reflect.DeepEqual(got, tt.want) {
+					t.Errorf("Create() got = %v, want %v", got, tt.want)
 				}
 			})
 		}
