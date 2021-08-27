@@ -1,0 +1,137 @@
+{
+  "object": "database",
+  "id": "some_id",
+  "created_time": "2021-05-24T05:06:34.827Z",
+  "last_edited_time": "2021-05-24T05:06:34.827Z",
+  "parent": {
+    "type": "page_id",
+    "page_id": "48f8fee9-cd79-4180-bc2f-ec0398253067"
+  },  
+  "icon": {
+    "type": "emoji",
+    "emoji": "🎉"
+  },
+  "cover": {
+    "type": "external",
+    "external": {
+      "url": "https://website.domain/images/image.png"
+    }
+  },
+  "title": [
+    {
+      "type": "text",
+      "text": {
+        "content": "patch"
+      }
+    }
+  ],
+  "properties": {
+    "Name": {
+      "id": "title",
+      "type": "title",
+      "title": {}
+    },
+    "Description": {
+      "id": "J@cS",
+      "type": "rich_text",
+      "rich_text": {}
+    },
+    "In stock": {
+      "id": "xY`",
+        "type": "checkbox",
+        "checkbox": {}
+    },
+    "Food group": {
+      "id": "TJmr",
+      "type": "select",
+      "multi_select": {
+        "options": [
+          {
+            "id": "96eb622f-4b88-4283-919d-ece2fbed3841",
+            "name": "Vegetable",
+            "color": "green"
+          },
+          {
+            "id": "bb443819-81dc-46fb-882d-ebee6e22c432",
+            "name": "Fruit",
+            "color": "red"
+          },
+          {
+            "id": "7da9d1b9-8685-472e-9da3-3af57bdb221e",
+            "name": "Protein",
+            "color": "yellow"
+          }
+        ]
+      }
+    },
+    "Price": {
+      "id": "cU^N",
+      "type": "number",
+      "number": {
+        "format": "dollar"
+      }
+    },
+    "Cost of next trip": {
+      "id": "p:sC",
+      "type": "formula",
+      "formula": {
+        "value": "if(prop(\"In stock\"), 0, prop(\"Price\"))"
+      }
+    },
+    "Last ordered": {
+      "id": "]\\R[",
+      "type": "date",
+      "date": {}
+    },
+    "Meals": {
+      "type": "relation",
+      "relation": {
+        "database": "668d797c-76fa-4934-9b05-ad288df2d136",
+        "synced_property_name": null
+      }
+    },
+    "Number of meals": {
+      "id": "Z\\Eh",
+      "type": "rollup",
+      "rollup": {
+        "rollup_property_name": "Name",
+        "relation_property_name": "Meals",
+        "rollup_property_id": "title",
+        "relation_property_id": "mxp^",
+        "function": "count"
+      }
+    },
+    "Store availability": {
+      "type": "multi_select",
+      "multi_select": {
+        "options": [
+          {
+            "id": "d209b920-212c-4040-9d4a-bdf349dd8b2a",
+            "name": "Duc Loi Market",
+            "color": "blue"
+          },
+          {
+            "id": "70104074-0f91-467b-9787-00d59e6e1e41",
+            "name": "Rainbow Grocery",
+            "color": "gray"
+          },
+          {
+            "id": "6c3867c5-d542-4f84-b6e9-a420c43094e7",
+            "name": "Gus's Community Market",
+            "color": "yellow"
+          },
+          {
+            "id": "a62fbb5f-fed4-44a4-8cac-cba5f518c1a1",
+            "name": "Good life grocery",
+            "color": "orange"
+          }
+        ]
+      }
+    },
+    "Photo": {
+      "id": "aTIT",
+      "type": "url",
+      "url": {}
+    }
+  }
+}

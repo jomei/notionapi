@@ -18,6 +18,7 @@ type DatabaseService interface {
 	Get(context.Context, DatabaseID) (*Database, error)
 	List(context.Context, *Pagination) (*DatabaseListResponse, error)
 	Query(context.Context, DatabaseID, *DatabaseQueryRequest) (*DatabaseQueryResponse, error)
+	Update(context.Context, DatabaseID, *DatabaseUpdateRequest) (*Database, error)
 }
 
 type DatabaseClient struct {
@@ -72,6 +73,20 @@ func (dc *DatabaseClient) Query(ctx context.Context, id DatabaseID, requestBody 
 	return &response, nil
 }
 
+// Update https://developers.notion.com/reference/update-a-database
+func (dc *DatabaseClient) Update(ctx context.Context, id DatabaseID, requestBody *DatabaseUpdateRequest) (*Database, error) {
+	res, err := dc.apiClient.request(ctx, http.MethodPatch, fmt.Sprintf("databases/%s", id.String()), nil, requestBody)
+	if err != nil {
+		return nil, err
+	}
+
+	var response Database
+	if err := json.NewDecoder(res.Body).Decode(&response); err != nil {
+		return nil, err
+	}
+	return &response, nil
+}
+
 type Database struct {
 	Object         ObjectType `json:"object"`
 	ID             ObjectID   `json:"id"`
@@ -105,7 +120,7 @@ func (qr *DatabaseQueryRequest) MarshalJSON() ([]byte, error) {
 	var filter interface{}
 	if qr.PropertyFilter != nil {
 		filter = qr.PropertyFilter
-	} else if qr.CompoundFilter != nil{
+	} else if qr.CompoundFilter != nil {
 		filter = qr.CompoundFilter
 	}
 	return json.Marshal(struct {
@@ -126,4 +141,9 @@ type DatabaseQueryResponse struct {
 	Results    []Page     `json:"results"`
 	HasMore    bool       `json:"has_more"`
 	NextCursor Cursor     `json:"next_cursor"`
+}
+
+type DatabaseUpdateRequest struct {
+	Title      []RichText      `json:"title,omitempty"`
+	Properties PropertyConfigs `json:"properties,omitempty"`
 }
