@@ -2,11 +2,12 @@ package notionapi_test
 
 import (
 	"context"
-	"github.com/jomei/notionapi"
 	"net/http"
 	"reflect"
 	"testing"
 	"time"
+
+	"github.com/jomei/notionapi"
 )
 
 func TestDatabaseClient(t *testing.T) {
@@ -203,6 +204,72 @@ func TestDatabaseClient(t *testing.T) {
 				got.Results[0].Properties = nil
 				if !reflect.DeepEqual(got, tt.want) {
 					t.Errorf("Query() got = %v, want %v", got, tt.want)
+				}
+			})
+		}
+	})
+
+	t.Run("Update", func(t *testing.T) {
+		tests := []struct {
+			name       string
+			filePath   string
+			statusCode int
+			id         notionapi.DatabaseID
+			request    *notionapi.DatabaseUpdateRequest
+			want       *notionapi.Database
+			wantErr    bool
+			err        error
+		}{
+			{
+				name:       "returns update results",
+				filePath:   "testdata/database_update.json",
+				statusCode: http.StatusOK,
+				id:         "some_id",
+				request: &notionapi.DatabaseUpdateRequest{
+					Title: []notionapi.RichText{
+						{
+							Type: notionapi.ObjectTypeText,
+							Text: notionapi.Text{Content: "patch"},
+						},
+					},
+					Properties: notionapi.PropertyConfigs{
+						"patch": notionapi.TitlePropertyConfig{
+							Type: notionapi.PropertyConfigTypeRichText,
+							Title: notionapi.RichText{
+								Type: notionapi.ObjectTypeText,
+								Text: notionapi.Text{Content: "patch"},
+							},
+						},
+					},
+				},
+				want: &notionapi.Database{
+					Object:         notionapi.ObjectTypeDatabase,
+					ID:             "some_id",
+					CreatedTime:    timestamp,
+					LastEditedTime: timestamp,
+					Title: []notionapi.RichText{
+						{
+							Type: notionapi.ObjectTypeText,
+							Text: notionapi.Text{Content: "patch"},
+						},
+					},
+				},
+			},
+		}
+
+		for _, tt := range tests {
+			t.Run(tt.name, func(t *testing.T) {
+				c := newMockedClient(t, tt.filePath, tt.statusCode)
+				client := notionapi.NewClient("some_token", notionapi.WithHTTPClient(c))
+				got, err := client.Database.Update(context.Background(), tt.id, tt.request)
+
+				if (err != nil) != tt.wantErr {
+					t.Errorf("Update() error = %v, wantErr %v", err, tt.wantErr)
+					return
+				}
+				got.Properties = nil
+				if !reflect.DeepEqual(got, tt.want) {
+					t.Errorf("Update() got = %v, want %v", got, tt.want)
 				}
 			})
 		}
