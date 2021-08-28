@@ -46,6 +46,7 @@ func (pc *PageClient) Create(ctx context.Context, requestBody *PageCreateRequest
 
 type PageUpdateRequest struct {
 	Properties Properties `json:"properties"`
+	Archived   bool       `json:"archived"`
 }
 
 // Update https://developers.notion.com/reference/patch-page
