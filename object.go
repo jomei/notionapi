@@ -26,6 +26,14 @@ func (c Color) String() string {
 	return string(c)
 }
 
+func (c Color) MarshalText() ([]byte, error) {
+	if c == "" {
+		return []byte(ColorDefault), nil
+	}
+
+	return []byte(c), nil
+}
+
 type RichText struct {
 	Type        ObjectType   `json:"type,omitempty"`
 	Text        Text         `json:"text"`
