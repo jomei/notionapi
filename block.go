@@ -18,6 +18,7 @@ type BlockService interface {
 	GetChildren(context.Context, BlockID, *Pagination) (*GetChildrenResponse, error)
 	AppendChildren(context.Context, BlockID, *AppendBlockChildrenRequest) (Block, error)
 	Get(context.Context, BlockID) (Block, error)
+	Update(ctx context.Context, id BlockID, request *BlockUpdateRequest) (Block, error)
 }
 
 type BlockClient struct {
@@ -89,6 +90,20 @@ func (bc *BlockClient) Get(ctx context.Context, id BlockID) (Block, error) {
 	return decodeBlock(response)
 }
 
+func (bc *BlockClient) Update(ctx context.Context, id BlockID, requestBody *BlockUpdateRequest) (Block, error) {
+	res, err := bc.apiClient.request(ctx, http.MethodPatch, fmt.Sprintf("blocks/%s", id.String()), nil, requestBody)
+	if err != nil {
+		return nil, err
+	}
+
+	var response map[string]interface{}
+	err = json.NewDecoder(res.Body).Decode(&response)
+	if err != nil {
+		return nil, err
+	}
+	return decodeBlock(response)
+}
+
 type BlockType string
 
 func (bt BlockType) String() string {
@@ -129,9 +144,11 @@ type Heading1Block struct {
 	CreatedTime    *time.Time `json:"created_time,omitempty"`
 	LastEditedTime *time.Time `json:"last_edited_time,omitempty"`
 	HasChildren    bool       `json:"has_children,omitempty"`
-	Heading1       struct {
-		Text []RichText `json:"text"`
-	} `json:"heading_1"`
+	Heading1       Heading    `json:"heading_1"`
+}
+
+type Heading struct {
+	Text []RichText `json:"text"`
 }
 
 func (b Heading1Block) GetType() BlockType {
@@ -145,9 +162,7 @@ type Heading2Block struct {
 	CreatedTime    *time.Time `json:"created_time,omitempty"`
 	LastEditedTime *time.Time `json:"last_edited_time,omitempty"`
 	HasChildren    bool       `json:"has_children,omitempty"`
-	Heading2       struct {
-		Text []RichText `json:"text"`
-	} `json:"heading_2"`
+	Heading2       Heading    `json:"heading_2"`
 }
 
 func (b Heading2Block) GetType() BlockType {
@@ -161,9 +176,7 @@ type Heading3Block struct {
 	CreatedTime    *time.Time `json:"created_time,omitempty"`
 	LastEditedTime *time.Time `json:"last_edited_time,omitempty"`
 	HasChildren    bool       `json:"has_children,omitempty"`
-	Heading3       struct {
-		Text []RichText `json:"text"`
-	} `json:"heading_3"`
+	Heading3       Heading    `json:"heading_3"`
 }
 
 func (b Heading3Block) GetType() BlockType {
@@ -177,10 +190,12 @@ type BulletedListItemBlock struct {
 	CreatedTime      *time.Time `json:"created_time,omitempty"`
 	LastEditedTime   *time.Time `json:"last_edited_time,omitempty"`
 	HasChildren      bool       `json:"has_children,omitempty"`
-	BulletedListItem struct {
-		Text     []RichText `json:"text"`
-		Children []Block    `json:"children,omitempty"`
-	} `json:"bulleted_list_item"`
+	BulletedListItem ListItem   `json:"bulleted_list_item"`
+}
+
+type ListItem struct {
+	Text     []RichText `json:"text"`
+	Children []Block    `json:"children,omitempty"`
 }
 
 func (b BulletedListItemBlock) GetType() BlockType {
@@ -194,10 +209,7 @@ type NumberedListItemBlock struct {
 	CreatedTime      *time.Time `json:"created_time,omitempty"`
 	LastEditedTime   *time.Time `json:"last_edited_time,omitempty"`
 	HasChildren      bool       `json:"has_children,omitempty"`
-	NumberedListItem struct {
-		Text     []RichText `json:"text"`
-		Children []Block    `json:"children,omitempty"`
-	} `json:"numbered_list_item"`
+	NumberedListItem ListItem   `json:"numbered_list_item"`
 }
 
 func (b NumberedListItemBlock) GetType() BlockType {
@@ -211,11 +223,13 @@ type ToDoBlock struct {
 	CreatedTime    *time.Time `json:"created_time,omitempty"`
 	LastEditedTime *time.Time `json:"last_edited_time,omitempty"`
 	HasChildren    bool       `json:"has_children"`
-	ToDo           struct {
-		Text     []RichText `json:"text"`
-		Children []Block    `json:"children,omitempty"`
-		Checked  bool       `json:"checked"`
-	} `json:"to_do"`
+	ToDo           ToDo       `json:"to_do"`
+}
+
+type ToDo struct {
+	Text     []RichText `json:"text"`
+	Children []Block    `json:"children,omitempty"`
+	Checked  bool       `json:"checked,omitempty"`
 }
 
 func (b ToDoBlock) GetType() BlockType {
@@ -231,10 +245,12 @@ type ToggleBlock struct {
 	HasChildren    bool       `json:"has_children,omitempty"`
 	Text           []RichText `json:"text"`
 	Children       []Block    `json:"children,omitempty"`
-	Toggle         struct {
-		Text     []RichText `json:"text"`
-		Children []Block    `json:"children,omitempty"`
-	} `json:"toggle"`
+	Toggle         Toggle     `json:"toggle"`
+}
+
+type Toggle struct {
+	Text     []RichText `json:"text"`
+	Children []Block    `json:"children,omitempty"`
 }
 
 func (b ToggleBlock) GetType() BlockType {
@@ -288,4 +304,15 @@ func decodeBlock(raw map[string]interface{}) (Block, error) {
 
 	err = json.Unmarshal(j, b)
 	return b, err
+}
+
+type BlockUpdateRequest struct {
+	Paragraph        *Paragraph `json:"paragraph,omitempty"`
+	Heading1         *Heading   `json:"heading_1,omitempty"`
+	Heading2         *Heading   `json:"heading_2,omitempty"`
+	Heading3         *Heading   `json:"heading_3,omitempty"`
+	BulletedListItem *ListItem  `json:"bulleted_list_item,omitempty"`
+	NumberedListItem *ListItem  `json:"numbered_list_item,omitempty"`
+	ToDo             *ToDo      `json:"to_do,omitempty"`
+	Toggle           *Toggle    `json:"toggle,omtiempty"`
 }

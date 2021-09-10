@@ -165,4 +165,70 @@ func TestBlockClient(t *testing.T) {
 			})
 		}
 	})
+
+	t.Run("Update", func(t *testing.T) {
+		tests := []struct {
+			name       string
+			filePath   string
+			statusCode int
+			id         notionapi.BlockID
+			req        *notionapi.BlockUpdateRequest
+			want       notionapi.Block
+			wantErr    bool
+			err        error
+		}{
+			{
+				name:       "updates block and returns it",
+				filePath:   "testdata/block_update.json",
+				statusCode: http.StatusOK,
+				id:         "some_id",
+				req: &notionapi.BlockUpdateRequest{
+					Paragraph: &notionapi.Paragraph{
+						Text: []notionapi.RichText{
+							{
+								Text: notionapi.Text{Content: "Hello"},
+							},
+						},
+					},
+				},
+				want: &notionapi.ParagraphBlock{
+					Object:         notionapi.ObjectTypeBlock,
+					ID:             "some_id",
+					Type:           notionapi.BlockTypeParagraph,
+					CreatedTime:    &timestamp,
+					LastEditedTime: &timestamp,
+					Paragraph: notionapi.Paragraph{
+						Text: []notionapi.RichText{
+							{
+								Type: notionapi.ObjectTypeText,
+								Text: notionapi.Text{
+									Content: "Hello",
+								},
+								Annotations: &notionapi.Annotations{Color: notionapi.ColorDefault},
+								PlainText:   "Hello",
+							},
+						},
+					},
+				},
+				wantErr: false,
+				err:     nil,
+			},
+		}
+
+		for _, tt := range tests {
+			t.Run(tt.name, func(t *testing.T) {
+				c := newMockedClient(t, tt.filePath, tt.statusCode)
+				client := notionapi.NewClient("some_token", notionapi.WithHTTPClient(c))
+				got, err := client.Block.Update(context.Background(), tt.id, tt.req)
+
+				if (err != nil) != tt.wantErr {
+					t.Errorf("Get() error = %v, wantErr %v", err, tt.wantErr)
+					return
+				}
+				if !reflect.DeepEqual(got, tt.want) {
+					t.Errorf("Get() got = %v, want %v", got, tt.want)
+				}
+			})
+		}
+	})
 }
