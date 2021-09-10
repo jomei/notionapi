@@ -17,6 +17,7 @@ func (bID BlockID) String() string {
 type BlockService interface {
 	GetChildren(context.Context, BlockID, *Pagination) (*GetChildrenResponse, error)
 	AppendChildren(context.Context, BlockID, *AppendBlockChildrenRequest) (Block, error)
+	Get(context.Context, BlockID) (Block, error)
 }
 
 type BlockClient struct {
@@ -61,6 +62,21 @@ type GetChildrenResponse struct {
 // AppendChildren https://developers.notion.com/reference/patch-block-children
 func (bc *BlockClient) AppendChildren(ctx context.Context, id BlockID, requestBody *AppendBlockChildrenRequest) (Block, error) {
 	res, err := bc.apiClient.request(ctx, http.MethodPatch, fmt.Sprintf("blocks/%s/children", id.String()), nil, requestBody)
+	if err != nil {
+		return nil, err
+	}
+
+	var response map[string]interface{}
+	err = json.NewDecoder(res.Body).Decode(&response)
+	if err != nil {
+		return nil, err
+	}
+	return decodeBlock(response)
+}
+
+// Get https://developers.notion.com/reference/retrieve-a-block
+func (bc *BlockClient) Get(ctx context.Context, id BlockID) (Block, error) {
+	res, err := bc.apiClient.request(ctx, http.MethodGet, fmt.Sprintf("blocks/%s", id.String()), nil, nil)
 	if err != nil {
 		return nil, err
 	}
