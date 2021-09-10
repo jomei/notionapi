@@ -11,14 +11,14 @@ Notion-Version: 2021-08-16
 POST https://api.notion.com/v1/databases/b382c100-1fea-48b3-a503-72e86583ee4c/query
 Content-Type: application/json
 Authorization: Bearer {{token}}
-Notion-Version: 2021-08-16
+Notion-Version: {{api_version}}
 
 ###
 # Create
 POST https://api.notion.com/v1/databases/
 Content-Type: application/json
 Authorization: Bearer {{token}}
-Notion-Version: 2021-08-16
+Notion-Version: {{api_version}}
 
 {
   "parent": {
@@ -50,7 +50,7 @@ Notion-Version: 2021-08-16
 GET https://api.notion.com/v1/pages/{{page_id}}
 Content-Type: application/json
 Authorization: Bearer {{token}}
-Notion-Version: 2021-08-16
+Notion-Version: {{api_version}}
 
 
 ### Block
@@ -58,7 +58,7 @@ Notion-Version: 2021-08-16
 GET https://api.notion.com/v1/blocks/a7bde50e-23ca-4317-b71c-35a2daff9a2d
 Content-Type: application/json
 Authorization: Bearer {{token}}
-Notion-Version: 2021-08-16
+Notion-Version: {{api_version}}
 
 
 ###
@@ -66,7 +66,7 @@ Notion-Version: 2021-08-16
 GET https://api.notion.com/v1/blocks/{{block_id}}/children
 Content-Type: application/json
 Authorization: Bearer {{token}}
-Notion-Version: 2021-08-16
+Notion-Version: {{api_version}}
 
 
 ###
@@ -74,7 +74,7 @@ Notion-Version: 2021-08-16
 PATCH  https://api.notion.com/v1/blocks/{{block_id}}
 Content-Type: application/json
 Authorization: Bearer {{token}}
-Notion-Version: 2021-08-16
+Notion-Version: {{api_version}}
 
 {
   "paragraph": {
