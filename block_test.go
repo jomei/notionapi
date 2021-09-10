@@ -115,4 +115,54 @@ func TestBlockClient(t *testing.T) {
 			})
 		}
 	})
+
+	t.Run("Get", func(t *testing.T) {
+		tests := []struct {
+			name       string
+			filePath   string
+			statusCode int
+			id         notionapi.BlockID
+			want       notionapi.Block
+			wantErr    bool
+			err        error
+		}{
+			{
+				name:       "returns block object",
+				filePath:   "testdata/block_get.json",
+				statusCode: http.StatusOK,
+				id:         "some_id",
+				want: &notionapi.ChildPageBlock{
+					Object:         notionapi.ObjectTypeBlock,
+					ID:             "some_id",
+					Type:           notionapi.BlockTypeChildPage,
+					CreatedTime:    &timestamp,
+					LastEditedTime: &timestamp,
+					HasChildren:    true,
+					ChildPage: struct {
+						Title string `json:"title"`
+					}{
+						Title: "Hello",
+					},
+				},
+				wantErr: false,
+				err:     nil,
+			},
+		}
+
+		for _, tt := range tests {
+			t.Run(tt.name, func(t *testing.T) {
+				c := newMockedClient(t, tt.filePath, tt.statusCode)
+				client := notionapi.NewClient("some_token", notionapi.WithHTTPClient(c))
+				got, err := client.Block.Get(context.Background(), tt.id)
+
+				if (err != nil) != tt.wantErr {
+					t.Errorf("Get() error = %v, wantErr %v", err, tt.wantErr)
+					return
+				}
+				if !reflect.DeepEqual(got, tt.want) {
+					t.Errorf("Get() got = %v, want %v", got, tt.want)
+				}
+			})
+		}
+	})
 }
