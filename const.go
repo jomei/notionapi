@@ -183,10 +183,22 @@ const (
 	BlockTypeBulletedListItem BlockType = "bulleted_list_item"
 	BlockTypeNumberedListItem BlockType = "numbered_list_item"
 
-	BlockTypeToDo        BlockType = "to_do"
-	BlockTypeToggle      BlockType = "toggle"
-	BlockTypeChildPage   BlockType = "child_page"
+	BlockTypeToDo      BlockType = "to_do"
+	BlockTypeToggle    BlockType = "toggle"
+	BlockTypeChildPage BlockType = "child_page"
+
+	BlockTypeEmbed       BlockType = "embed"
+	BlockTypeImage       BlockType = "image"
+	BlockTypeVideo       BlockType = "video"
+	BlockTypeFile        BlockType = "file"
+	BlockTypePdf         BlockType = "pdf"
+	BlockTypeBookmark    BlockType = "bookmark"
 	BlockTypeUnsupported BlockType = "unsupported"
+)
+
+const (
+	FileTypeFile     FileType = "file"
+	FileTypeExternal FileType = "external"
 )
 
 const (

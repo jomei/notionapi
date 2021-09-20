@@ -104,8 +104,15 @@ func (d *Date) UnmarshalText(data []byte) error {
 	return nil
 }
 
+type FileType string
+
 type File struct {
 	Name string `json:"name"`
+}
+
+type FileObject struct {
+	URL string `json:"url,omitempty"`
+	ExpiryTime *time.Time `json:"expiry_time,omitempty"`
 }
 
 type PropertyID string

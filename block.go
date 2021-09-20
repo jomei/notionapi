@@ -273,6 +273,128 @@ func (b ChildPageBlock) GetType() BlockType {
 	return b.Type
 }
 
+type EmbedBlock struct {
+	Object         ObjectType `json:"object"`
+	ID             BlockID    `json:"id,omitempty"`
+	Type           BlockType  `json:"type"`
+	CreatedTime    *time.Time `json:"created_time,omitempty"`
+	LastEditedTime *time.Time `json:"last_edited_time,omitempty"`
+	HasChildren    bool       `json:"has_children,omitempty"`
+	Embed          Embed      `json:"embed,omitempty"`
+}
+
+func (b EmbedBlock) GetType() BlockType {
+	return b.Type
+}
+
+type Embed struct {
+	Caption []RichText `json:"caption,omitempty"`
+	URL     string     `json:"url"`
+}
+
+type ImageBlock struct {
+	Object         ObjectType `json:"object"`
+	ID             BlockID    `json:"id,omitempty"`
+	Type           BlockType  `json:"type"`
+	CreatedTime    *time.Time `json:"created_time,omitempty"`
+	LastEditedTime *time.Time `json:"last_edited_time,omitempty"`
+	HasChildren    bool       `json:"has_children,omitempty"`
+	Image          Image      `json:"image,omitempty"`
+}
+
+func (b ImageBlock) GetType() BlockType {
+	return b.Type
+}
+
+type Image struct {
+	Caption  []RichText `json:"caption,omitempty"`
+	Type     FileType   `json:"type,omitempty"`
+	File     FileObject `json:"file,omitempty"`
+	External FileObject `json:"external,omitempty"`
+}
+
+type VideoBlock struct {
+	Object         ObjectType `json:"object"`
+	ID             BlockID    `json:"id,omitempty"`
+	Type           BlockType  `json:"type"`
+	CreatedTime    *time.Time `json:"created_time,omitempty"`
+	LastEditedTime *time.Time `json:"last_edited_time,omitempty"`
+	HasChildren    bool       `json:"has_children,omitempty"`
+	Video          Video      `json:"video,omitempty"`
+}
+
+func (b VideoBlock) GetType() BlockType {
+	return b.Type
+}
+
+type Video struct {
+	Caption  []RichText `json:"caption,omitempty"`
+	Type     FileType   `json:"type,omitempty"`
+	File     FileObject `json:"file,omitempty"`
+	External FileObject `json:"external,omitempty"`
+}
+
+type FileBlock struct {
+	Object         ObjectType `json:"object"`
+	ID             BlockID    `json:"id,omitempty"`
+	Type           BlockType  `json:"type"`
+	CreatedTime    *time.Time `json:"created_time,omitempty"`
+	LastEditedTime *time.Time `json:"last_edited_time,omitempty"`
+	HasChildren    bool       `json:"has_children,omitempty"`
+	File           BlockFile  `json:"file,omitempty"`
+}
+
+func (b FileBlock) GetType() BlockType {
+	return b.Type
+}
+
+type BlockFile struct {
+	Caption  []RichText `json:"caption,omitempty"`
+	Type     FileType   `json:"type,omitempty"`
+	File     FileObject `json:"file,omitempty"`
+	External FileObject `json:"external,omitempty"`
+}
+
+type PdfBlock struct {
+	Object         ObjectType `json:"object"`
+	ID             BlockID    `json:"id,omitempty"`
+	Type           BlockType  `json:"type"`
+	CreatedTime    *time.Time `json:"created_time,omitempty"`
+	LastEditedTime *time.Time `json:"last_edited_time,omitempty"`
+	HasChildren    bool       `json:"has_children,omitempty"`
+	Pdf            Pdf        `json:"pdf,omitempty"`
+}
+
+func (b PdfBlock) GetType() BlockType {
+	return b.Type
+}
+
+type Pdf struct {
+	Caption  []RichText `json:"caption,omitempty"`
+	Type     FileType   `json:"type,omitempty"`
+	File     FileObject `json:"file,omitempty"`
+	External FileObject `json:"external,omitempty"`
+}
+
+type BookmarkBlock struct {
+	Object         ObjectType `json:"object"`
+	ID             BlockID    `json:"id,omitempty"`
+	Type           BlockType  `json:"type"`
+	CreatedTime    *time.Time `json:"created_time,omitempty"`
+	LastEditedTime *time.Time `json:"last_edited_time,omitempty"`
+	HasChildren    bool       `json:"has_children,omitempty"`
+	Bookmark       Bookmark   `json:"bookmark,omitempty"`
+}
+
+func (b BookmarkBlock) GetType() BlockType {
+	return b.Type
+}
+
+type Bookmark struct {
+	Caption []RichText `json:"caption,omitempty"`
+	URL     string     `json:"url,omitempty"`
+}
+
 func decodeBlock(raw map[string]interface{}) (Block, error) {
 	var b Block
 	switch BlockType(raw["type"].(string)) {
@@ -294,6 +416,18 @@ func decodeBlock(raw map[string]interface{}) (Block, error) {
 		b = &ToggleBlock{}
 	case BlockTypeChildPage:
 		b = &ChildPageBlock{}
+	case BlockTypeEmbed:
+		b = &EmbedBlock{}
+	case BlockTypeImage:
+		b = &ImageBlock{}
+	case BlockTypeVideo:
+		b = &VideoBlock{}
+	case BlockTypeFile:
+		b = &FileBlock{}
+	case BlockTypePdf:
+		b = &PdfBlock{}
+	case BlockTypeBookmark:
+		b = &BookmarkBlock{}
 	default:
 		return nil, fmt.Errorf("unsupported block type: %s", raw["type"].(string))
 	}
@@ -315,4 +449,10 @@ type BlockUpdateRequest struct {
 	NumberedListItem *ListItem  `json:"numbered_list_item,omitempty"`
 	ToDo             *ToDo      `json:"to_do,omitempty"`
 	Toggle           *Toggle    `json:"toggle,omtiempty"`
+	Embed            *Embed     `json:"embed,omitempty"`
+	Image            *Image     `json:"image,omitempty"`
+	Video            *Video     `json:"video,omitempty"`
+	File             *BlockFile `json:"file,omitempty"`
+	Pdf              *Pdf       `json:"pdf,omitempty"`
+	Bookmark         *Bookmark  `json:"bookmark,omitempty"`
 }
