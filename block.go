@@ -280,7 +280,7 @@ type EmbedBlock struct {
 	CreatedTime    *time.Time `json:"created_time,omitempty"`
 	LastEditedTime *time.Time `json:"last_edited_time,omitempty"`
 	HasChildren    bool       `json:"has_children,omitempty"`
-	Embed          Embed      `json:"embed,omitempty"`
+	Embed          Embed      `json:"embed"`
 }
 
 func (b EmbedBlock) GetType() BlockType {
@@ -299,7 +299,7 @@ type ImageBlock struct {
 	CreatedTime    *time.Time `json:"created_time,omitempty"`
 	LastEditedTime *time.Time `json:"last_edited_time,omitempty"`
 	HasChildren    bool       `json:"has_children,omitempty"`
-	Image          Image      `json:"image,omitempty"`
+	Image          Image      `json:"image"`
 }
 
 func (b ImageBlock) GetType() BlockType {
@@ -308,9 +308,9 @@ func (b ImageBlock) GetType() BlockType {
 
 type Image struct {
 	Caption  []RichText `json:"caption,omitempty"`
-	Type     FileType   `json:"type,omitempty"`
-	File     FileObject `json:"file,omitempty"`
-	External FileObject `json:"external,omitempty"`
+	Type     FileType   `json:"type"`
+	File     *FileObject `json:"file,omitempty"`
+	External *FileObject `json:"external,omitempty"`
 }
 
 type VideoBlock struct {
@@ -320,7 +320,7 @@ type VideoBlock struct {
 	CreatedTime    *time.Time `json:"created_time,omitempty"`
 	LastEditedTime *time.Time `json:"last_edited_time,omitempty"`
 	HasChildren    bool       `json:"has_children,omitempty"`
-	Video          Video      `json:"video,omitempty"`
+	Video          Video      `json:"video"`
 }
 
 func (b VideoBlock) GetType() BlockType {
@@ -329,9 +329,9 @@ func (b VideoBlock) GetType() BlockType {
 
 type Video struct {
 	Caption  []RichText `json:"caption,omitempty"`
-	Type     FileType   `json:"type,omitempty"`
-	File     FileObject `json:"file,omitempty"`
-	External FileObject `json:"external,omitempty"`
+	Type     FileType   `json:"type"`
+	File     *FileObject `json:"file,omitempty"`
+	External *FileObject `json:"external,omitempty"`
 }
 
 type FileBlock struct {
@@ -341,7 +341,7 @@ type FileBlock struct {
 	CreatedTime    *time.Time `json:"created_time,omitempty"`
 	LastEditedTime *time.Time `json:"last_edited_time,omitempty"`
 	HasChildren    bool       `json:"has_children,omitempty"`
-	File           BlockFile  `json:"file,omitempty"`
+	File           BlockFile  `json:"file"`
 }
 
 func (b FileBlock) GetType() BlockType {
@@ -350,9 +350,9 @@ func (b FileBlock) GetType() BlockType {
 
 type BlockFile struct {
 	Caption  []RichText `json:"caption,omitempty"`
-	Type     FileType   `json:"type,omitempty"`
-	File     FileObject `json:"file,omitempty"`
-	External FileObject `json:"external,omitempty"`
+	Type     FileType   `json:"type"`
+	File     *FileObject `json:"file,omitempty"`
+	External *FileObject `json:"external,omitempty"`
 }
 
 type PdfBlock struct {
@@ -362,7 +362,7 @@ type PdfBlock struct {
 	CreatedTime    *time.Time `json:"created_time,omitempty"`
 	LastEditedTime *time.Time `json:"last_edited_time,omitempty"`
 	HasChildren    bool       `json:"has_children,omitempty"`
-	Pdf            Pdf        `json:"pdf,omitempty"`
+	Pdf            Pdf        `json:"pdf"`
 }
 
 func (b PdfBlock) GetType() BlockType {
@@ -371,9 +371,9 @@ func (b PdfBlock) GetType() BlockType {
 
 type Pdf struct {
 	Caption  []RichText `json:"caption,omitempty"`
-	Type     FileType   `json:"type,omitempty"`
-	File     FileObject `json:"file,omitempty"`
-	External FileObject `json:"external,omitempty"`
+	Type     FileType   `json:"type"`
+	File     *FileObject `json:"file,omitempty"`
+	External *FileObject `json:"external,omitempty"`
 }
 
 type BookmarkBlock struct {
@@ -383,7 +383,7 @@ type BookmarkBlock struct {
 	CreatedTime    *time.Time `json:"created_time,omitempty"`
 	LastEditedTime *time.Time `json:"last_edited_time,omitempty"`
 	HasChildren    bool       `json:"has_children,omitempty"`
-	Bookmark       Bookmark   `json:"bookmark,omitempty"`
+	Bookmark       Bookmark   `json:"bookmark"`
 }
 
 func (b BookmarkBlock) GetType() BlockType {
@@ -392,7 +392,7 @@ func (b BookmarkBlock) GetType() BlockType {
 
 type Bookmark struct {
 	Caption []RichText `json:"caption,omitempty"`
-	URL     string     `json:"url,omitempty"`
+	URL     string     `json:"url"`
 }
 
 func decodeBlock(raw map[string]interface{}) (Block, error) {
