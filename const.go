@@ -193,6 +193,7 @@ const (
 	BlockTypeFile        BlockType = "file"
 	BlockTypePdf         BlockType = "pdf"
 	BlockTypeBookmark    BlockType = "bookmark"
+	BlockTypeCode        BlockType = "code"
 	BlockTypeUnsupported BlockType = "unsupported"
 )
 

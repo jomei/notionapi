@@ -313,6 +313,24 @@ type Image struct {
 	External *FileObject `json:"external,omitempty"`
 }
 
+type CodeBlock struct {
+	Object         ObjectType `json:"object"`
+	ID             BlockID    `json:"id,omitempty"`
+	Type           BlockType  `json:"type"`
+	CreatedTime    *time.Time `json:"created_time,omitempty"`
+	LastEditedTime *time.Time `json:"last_edited_time,omitempty"`
+	Code           Code       `json:"code"`
+}
+
+func (b CodeBlock) GetType() BlockType {
+	return b.Type
+}
+
+type Code struct {
+	Text     []RichText `json:"text"`
+	Language string     `json:"language"`
+}
+
 type VideoBlock struct {
 	Object         ObjectType `json:"object"`
 	ID             BlockID    `json:"id,omitempty"`
@@ -412,6 +430,8 @@ func decodeBlock(raw map[string]interface{}) (Block, error) {
 		b = &NumberedListItemBlock{}
 	case BlockTypeToDo:
 		b = &ToDoBlock{}
+	case BlockTypeCode:
+		b = &CodeBlock{}
 	case BlockTypeToggle:
 		b = &ToggleBlock{}
 	case BlockTypeChildPage:
