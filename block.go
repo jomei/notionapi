@@ -430,6 +430,8 @@ func decodeBlock(raw map[string]interface{}) (Block, error) {
 		b = &NumberedListItemBlock{}
 	case BlockTypeToDo:
 		b = &ToDoBlock{}
+	case BlockTypeCode:
+		b = &CodeBlock{}
 	case BlockTypeToggle:
 		b = &ToggleBlock{}
 	case BlockTypeChildPage:
