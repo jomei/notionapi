@@ -101,8 +101,7 @@ func TestPageClient(t *testing.T) {
 				filePath:   "testdata/page_create.json",
 				statusCode: http.StatusOK,
 				request: &notionapi.PageCreateRequest{
-					Parent: notionapi.Parent{
-						Type:       notionapi.ParentTypeDatabaseID,
+					Parent: notionapi.PageCreateDatabaseParent{
 						DatabaseID: "f830be5eff534859932e5b81542b3c7b",
 					},
 					Properties: notionapi.Properties{
@@ -225,7 +224,7 @@ func TestPageCreateRequest_MarshallJSON(t *testing.T) {
 		{
 			name: "create a page",
 			req: &notionapi.PageCreateRequest{
-				Parent: notionapi.Parent{
+				Parent: notionapi.PageCreateDatabaseParent{
 					DatabaseID: "some_id",
 				},
 				Properties: notionapi.Properties{
@@ -274,7 +273,7 @@ func TestPageCreateRequest_MarshallJSON(t *testing.T) {
 		{
 			name: "create a page with content",
 			req: &notionapi.PageCreateRequest{
-				Parent: notionapi.Parent{
+				Parent: notionapi.PageCreateDatabaseParent{
 					DatabaseID: "some_id",
 				},
 				Properties: notionapi.Properties{

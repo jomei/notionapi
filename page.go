@@ -82,10 +82,34 @@ type Parent struct {
 	DatabaseID DatabaseID `json:"database_id,omitempty"`
 }
 
+type PageCreateParentType map[string]string
+
+type PageCreateParent interface {
+	GetType() PageCreateParentType
+}
+
+type PageCreateDatabaseParent struct {
+	Type       PageCreateParentType `json:"type,omitempty"`
+	DatabaseID string               `json:"database_id"`
+}
+
+func (p PageCreateDatabaseParent) GetType() PageCreateParentType {
+	return p.Type
+}
+
+type PageCreatePageParent struct {
+	Type   PageCreateParentType `json:"type,omitempty"`
+	PageID string               `json:"page_id"`
+}
+
+func (p PageCreatePageParent) GetType() PageCreateParentType {
+	return p.Type
+}
+
 type PageCreateRequest struct {
-	Parent     Parent     `json:"parent"`
-	Properties Properties `json:"properties"`
-	Children   []Block    `json:"children,omitempty"`
+	Parent     PageCreateParent `json:"parent"`
+	Properties Properties       `json:"properties"`
+	Children   []Block          `json:"children,omitempty"`
 }
 
 func handlePageResponse(res *http.Response) (*Page, error) {
