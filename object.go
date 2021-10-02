@@ -44,7 +44,11 @@ type RichText struct {
 
 type Text struct {
 	Content string `json:"content"`
-	Link    string `json:"link,omitempty"`
+	Link    Link   `json:"link,omitempty"`
+}
+
+type Link struct {
+	Url string `json:"url,omitempty"`
 }
 
 type Annotations struct {
@@ -111,7 +115,7 @@ type File struct {
 }
 
 type FileObject struct {
-	URL string `json:"url,omitempty"`
+	URL        string     `json:"url,omitempty"`
 	ExpiryTime *time.Time `json:"expiry_time,omitempty"`
 }
 
