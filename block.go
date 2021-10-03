@@ -419,6 +419,21 @@ type Bookmark struct {
 	URL     string     `json:"url"`
 }
 
+type ChildDatabaseBlock struct {
+	Object         ObjectType `json:"object"`
+	ID             BlockID    `json:"id,omitempty"`
+	Type           BlockType  `json:"type"`
+	CreatedTime    *time.Time `json:"created_time,omitempty"`
+	LastEditedTime *time.Time `json:"last_edited_time,omitempty"`
+	ChildDatabase  struct {
+		Title string `json:"title"`
+	} `json:"child_database"`
+}
+
+func (b ChildDatabaseBlock) GetType() BlockType {
+	return b.Type
+}
+
 func decodeBlock(raw map[string]interface{}) (Block, error) {
 	var b Block
 	switch BlockType(raw["type"].(string)) {
@@ -454,6 +469,8 @@ func decodeBlock(raw map[string]interface{}) (Block, error) {
 		b = &PdfBlock{}
 	case BlockTypeBookmark:
 		b = &BookmarkBlock{}
+	case BlockTypeChildDatabase:
+		b = &ChildDatabaseBlock{}
 	default:
 		return nil, fmt.Errorf("unsupported block type: %s", raw["type"].(string))
 	}
