@@ -44,7 +44,7 @@ type RichText struct {
 
 type Text struct {
 	Content string `json:"content"`
-	Link    Link   `json:"link,omitempty"`
+	Link    *Link  `json:"link,omitempty"`
 }
 
 type Link struct {
