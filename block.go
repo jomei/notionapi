@@ -33,8 +33,10 @@ func (bc *BlockClient) GetChildren(ctx context.Context, id BlockID, pagination *
 	}
 
 	var response struct {
-		Object  ObjectType `json:"object"`
-		Results []map[string]interface{}
+		Object     ObjectType `json:"object"`
+		NextCursor string     `json:"next_cursor"`
+		HasMore    bool       `json:"has_more"`
+		Results    []map[string]interface{}
 	}
 	err = json.NewDecoder(res.Body).Decode(&response)
 	if err != nil {
@@ -50,14 +52,18 @@ func (bc *BlockClient) GetChildren(ctx context.Context, id BlockID, pagination *
 	}
 
 	return &GetChildrenResponse{
-		Object:  response.Object,
-		Results: results,
+		Object:     response.Object,
+		Results:    results,
+		NextCursor: response.NextCursor,
+		HasMore:    response.HasMore,
 	}, nil
 }
 
 type GetChildrenResponse struct {
-	Object  ObjectType `json:"object"`
-	Results []Block    `json:"results"`
+	Object     ObjectType `json:"object"`
+	Results    []Block    `json:"results"`
+	NextCursor string     `json:"next_cursor"`
+	HasMore    bool       `json:"has_more"`
 }
 
 // AppendChildren https://developers.notion.com/reference/patch-block-children
@@ -307,8 +313,8 @@ func (b ImageBlock) GetType() BlockType {
 }
 
 type Image struct {
-	Caption  []RichText `json:"caption,omitempty"`
-	Type     FileType   `json:"type"`
+	Caption  []RichText  `json:"caption,omitempty"`
+	Type     FileType    `json:"type"`
 	File     *FileObject `json:"file,omitempty"`
 	External *FileObject `json:"external,omitempty"`
 }
@@ -346,8 +352,8 @@ func (b VideoBlock) GetType() BlockType {
 }
 
 type Video struct {
-	Caption  []RichText `json:"caption,omitempty"`
-	Type     FileType   `json:"type"`
+	Caption  []RichText  `json:"caption,omitempty"`
+	Type     FileType    `json:"type"`
 	File     *FileObject `json:"file,omitempty"`
 	External *FileObject `json:"external,omitempty"`
 }
@@ -367,8 +373,8 @@ func (b FileBlock) GetType() BlockType {
 }
 
 type BlockFile struct {
-	Caption  []RichText `json:"caption,omitempty"`
-	Type     FileType   `json:"type"`
+	Caption  []RichText  `json:"caption,omitempty"`
+	Type     FileType    `json:"type"`
 	File     *FileObject `json:"file,omitempty"`
 	External *FileObject `json:"external,omitempty"`
 }
@@ -388,8 +394,8 @@ func (b PdfBlock) GetType() BlockType {
 }
 
 type Pdf struct {
-	Caption  []RichText `json:"caption,omitempty"`
-	Type     FileType   `json:"type"`
+	Caption  []RichText  `json:"caption,omitempty"`
+	Type     FileType    `json:"type"`
 	File     *FileObject `json:"file,omitempty"`
 	External *FileObject `json:"external,omitempty"`
 }
@@ -468,7 +474,7 @@ type BlockUpdateRequest struct {
 	BulletedListItem *ListItem  `json:"bulleted_list_item,omitempty"`
 	NumberedListItem *ListItem  `json:"numbered_list_item,omitempty"`
 	ToDo             *ToDo      `json:"to_do,omitempty"`
-	Toggle           *Toggle    `json:"toggle,omtiempty"`
+	Toggle           *Toggle    `json:"toggle,omitempty"`
 	Embed            *Embed     `json:"embed,omitempty"`
 	Image            *Image     `json:"image,omitempty"`
 	Video            *Video     `json:"video,omitempty"`
