@@ -307,8 +307,8 @@ func (b ImageBlock) GetType() BlockType {
 }
 
 type Image struct {
-	Caption  []RichText `json:"caption,omitempty"`
-	Type     FileType   `json:"type"`
+	Caption  []RichText  `json:"caption,omitempty"`
+	Type     FileType    `json:"type"`
 	File     *FileObject `json:"file,omitempty"`
 	External *FileObject `json:"external,omitempty"`
 }
@@ -346,8 +346,8 @@ func (b VideoBlock) GetType() BlockType {
 }
 
 type Video struct {
-	Caption  []RichText `json:"caption,omitempty"`
-	Type     FileType   `json:"type"`
+	Caption  []RichText  `json:"caption,omitempty"`
+	Type     FileType    `json:"type"`
 	File     *FileObject `json:"file,omitempty"`
 	External *FileObject `json:"external,omitempty"`
 }
@@ -367,8 +367,8 @@ func (b FileBlock) GetType() BlockType {
 }
 
 type BlockFile struct {
-	Caption  []RichText `json:"caption,omitempty"`
-	Type     FileType   `json:"type"`
+	Caption  []RichText  `json:"caption,omitempty"`
+	Type     FileType    `json:"type"`
 	File     *FileObject `json:"file,omitempty"`
 	External *FileObject `json:"external,omitempty"`
 }
@@ -388,8 +388,8 @@ func (b PdfBlock) GetType() BlockType {
 }
 
 type Pdf struct {
-	Caption  []RichText `json:"caption,omitempty"`
-	Type     FileType   `json:"type"`
+	Caption  []RichText  `json:"caption,omitempty"`
+	Type     FileType    `json:"type"`
 	File     *FileObject `json:"file,omitempty"`
 	External *FileObject `json:"external,omitempty"`
 }
@@ -411,6 +411,21 @@ func (b BookmarkBlock) GetType() BlockType {
 type Bookmark struct {
 	Caption []RichText `json:"caption,omitempty"`
 	URL     string     `json:"url"`
+}
+
+type ChildDatabaseBlock struct {
+	Object         ObjectType `json:"object"`
+	ID             BlockID    `json:"id,omitempty"`
+	Type           BlockType  `json:"type"`
+	CreatedTime    *time.Time `json:"created_time,omitempty"`
+	LastEditedTime *time.Time `json:"last_edited_time,omitempty"`
+	ChildDatabase  struct {
+		Title string `json:"title"`
+	} `json:"child_database"`
+}
+
+func (b ChildDatabaseBlock) GetType() BlockType {
+	return b.Type
 }
 
 func decodeBlock(raw map[string]interface{}) (Block, error) {
@@ -448,6 +463,8 @@ func decodeBlock(raw map[string]interface{}) (Block, error) {
 		b = &PdfBlock{}
 	case BlockTypeBookmark:
 		b = &BookmarkBlock{}
+	case BlockTypeChildDatabase:
+		b = &ChildDatabaseBlock{}
 	default:
 		return nil, fmt.Errorf("unsupported block type: %s", raw["type"].(string))
 	}
@@ -468,7 +485,7 @@ type BlockUpdateRequest struct {
 	BulletedListItem *ListItem  `json:"bulleted_list_item,omitempty"`
 	NumberedListItem *ListItem  `json:"numbered_list_item,omitempty"`
 	ToDo             *ToDo      `json:"to_do,omitempty"`
-	Toggle           *Toggle    `json:"toggle,omtiempty"`
+	Toggle           *Toggle    `json:"toggle,omitempty"`
 	Embed            *Embed     `json:"embed,omitempty"`
 	Image            *Image     `json:"image,omitempty"`
 	Video            *Video     `json:"video,omitempty"`

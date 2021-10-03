@@ -183,9 +183,10 @@ const (
 	BlockTypeBulletedListItem BlockType = "bulleted_list_item"
 	BlockTypeNumberedListItem BlockType = "numbered_list_item"
 
-	BlockTypeToDo      BlockType = "to_do"
-	BlockTypeToggle    BlockType = "toggle"
-	BlockTypeChildPage BlockType = "child_page"
+	BlockTypeToDo          BlockType = "to_do"
+	BlockTypeToggle        BlockType = "toggle"
+	BlockTypeChildPage     BlockType = "child_page"
+	BlockTypeChildDatabase BlockType = "child_database"
 
 	BlockTypeEmbed       BlockType = "embed"
 	BlockTypeImage       BlockType = "image"
