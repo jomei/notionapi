@@ -107,7 +107,9 @@ func (d *Date) UnmarshalText(data []byte) error {
 type FileType string
 
 type File struct {
-	Name string `json:"name"`
+	Name string 	 `json:"name"`
+	Type FileType    `json:"type"`
+	File *FileObject `json:"file,omitempty"`
 }
 
 type FileObject struct {
