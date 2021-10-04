@@ -3,11 +3,12 @@ package notionapi_test
 import (
 	"context"
 	"encoding/json"
-	"github.com/jomei/notionapi"
 	"net/http"
 	"reflect"
 	"testing"
 	"time"
+
+	"github.com/jomei/notionapi"
 )
 
 func TestPageClient(t *testing.T) {
@@ -340,7 +341,9 @@ func TestPageCreateRequest_MarshallJSON(t *testing.T) {
 								{
 									Text: notionapi.Text{
 										Content: "Lacinato",
-										Link:    "some_url",
+										Link: &notionapi.Link{
+											Url: "some_url",
+										},
 									},
 								},
 							},
@@ -349,7 +352,7 @@ func TestPageCreateRequest_MarshallJSON(t *testing.T) {
 					},
 				},
 			},
-			want: []byte(`{"parent":{"database_id":"some_id"},"properties":{"Link":{"url":"some_url"},"Name":{"title":[{"text":{"content":"New Media Article"}}]},"Publishing/Release Date":{"date":{"start":"2020-12-08T12:00:00Z","end":null}},"Read":{"checkbox":false},"Summary":{"text":[{"type":"text","text":{"content":"Some content"},"annotations":{"bold":true,"italic":false,"strikethrough":false,"underline":false,"code":false,"color":"blue"},"plain_text":"Some content"}]},"Type":{"select":{"id":"some_id","name":"Article","color":"default"}}},"children":[{"object":"block","type":"heading_2","heading_2":{"text":[{"type":"text","text":{"content":"Lacinato"}}]}},{"object":"block","type":"paragraph","paragraph":{"text":[{"text":{"content":"Lacinato","link":"some_url"}}]}}]}`),
+			want: []byte(`{"parent":{"database_id":"some_id"},"properties":{"Link":{"url":"some_url"},"Name":{"title":[{"text":{"content":"New Media Article"}}]},"Publishing/Release Date":{"date":{"start":"2020-12-08T12:00:00Z","end":null}},"Read":{"checkbox":false},"Summary":{"text":[{"type":"text","text":{"content":"Some content"},"annotations":{"bold":true,"italic":false,"strikethrough":false,"underline":false,"code":false,"color":"blue"},"plain_text":"Some content"}]},"Type":{"select":{"id":"some_id","name":"Article","color":"default"}}},"children":[{"object":"block","type":"heading_2","heading_2":{"text":[{"type":"text","text":{"content":"Lacinato"}}]}},{"object":"block","type":"paragraph","paragraph":{"text":[{"text":{"content":"Lacinato","link":{"url":"some_url"}}}]}}]}`),
 		},
 	}
 

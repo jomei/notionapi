@@ -39,7 +39,7 @@ func TestDatabaseClient(t *testing.T) {
 					Title: []notionapi.RichText{
 						{
 							Type:        notionapi.ObjectTypeText,
-							Text:        notionapi.Text{Content: "Test Database", Link: ""},
+							Text:        notionapi.Text{Content: "Test Database"},
 							Annotations: &notionapi.Annotations{Color: "default"},
 							PlainText:   "Test Database",
 							Href:        "",
