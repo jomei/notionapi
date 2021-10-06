@@ -11,7 +11,7 @@ It supports all APIs for Notion API version `2021-08-16`
 # Installation
 
 ```
-$ go get github.com/jomei/notionapi
+$ go get github.com/cryingcheems/notionapi
 ```
 
 # Getting started
