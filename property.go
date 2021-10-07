@@ -302,7 +302,7 @@ func parsePageProperties(raw map[string]interface{}) (map[string]Property, error
 			case PropertyTypeEmail:
 				p = &EmailProperty{}
 			case PropertyTypePhoneNumber:
-				p = PhoneNumberProperty{}
+				p = &PhoneNumberProperty{}
 			case PropertyTypeCreatedTime:
 				p = &CreatedTimeProperty{}
 			case PropertyTypeCreatedBy:
