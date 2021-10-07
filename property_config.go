@@ -274,7 +274,7 @@ func parsePropertyConfigs(raw map[string]interface{}) (PropertyConfigs, error) {
 			case PropertyConfigTypeEmail:
 				p = &EmailPropertyConfig{}
 			case PropertyConfigTypePhoneNumber:
-				p = PhoneNumberPropertyConfig{}
+				p = &PhoneNumberPropertyConfig{}
 			case PropertyConfigTypeFormula:
 				p = &FormulaPropertyConfig{}
 			case PropertyConfigTypeRelation:
