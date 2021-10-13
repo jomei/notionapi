@@ -434,7 +434,7 @@ func (b ChildDatabaseBlock) GetType() BlockType {
 	return b.Type
 }
 
-type ChildUnsupported struct {
+type UnsupportedBlock struct {
 	Object         ObjectType `json:"object"`
 	ID             BlockID    `json:"id,omitempty"`
 	Type           BlockType  `json:"type"`
@@ -442,7 +442,7 @@ type ChildUnsupported struct {
 	LastEditedTime *time.Time `json:"last_edited_time,omitempty"`
 }
 
-func (b ChildUnsupported) GetType() BlockType {
+func (b UnsupportedBlock) GetType() BlockType {
 	return b.Type
 }
 
@@ -484,9 +484,9 @@ func decodeBlock(raw map[string]interface{}) (Block, error) {
 	case BlockTypeChildDatabase:
 		b = &ChildDatabaseBlock{}
 	case BlockTypeUnsupported:
-		b = &ChildUnsupported{}
+		b = &UnsupportedBlock{}
 	default:
-		return nil, fmt.Errorf("unsupported block type: %s", raw["type"].(string))
+		return &UnsupportedBlock{}, nil
 	}
 	j, err := json.Marshal(raw)
 	if err != nil {
