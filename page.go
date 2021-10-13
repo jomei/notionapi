@@ -68,6 +68,7 @@ type Page struct {
 	Properties     Properties `json:"properties"`
 	Parent         Parent     `json:"parent"`
 	URL            string     `json:"url"`
+	Cover          *Image     `json:"cover,omitempty"`
 }
 
 func (p *Page) GetObject() ObjectType {
