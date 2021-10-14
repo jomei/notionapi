@@ -467,7 +467,7 @@ func decodeBlock(raw map[string]interface{}) (Block, error) {
 	case BlockTypeHeading2:
 		b = &Heading2Block{}
 	case BlockTypeHeading3:
-		b = &Heading2Block{}
+		b = &Heading3Block{}
 	case BlockTypeBulletedListItem:
 		b = &BulletedListItemBlock{}
 	case BlockTypeNumberedListItem:
