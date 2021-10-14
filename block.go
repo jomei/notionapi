@@ -319,6 +319,17 @@ type Image struct {
 	External *FileObject `json:"external,omitempty"`
 }
 
+// GetURL returns the external or internal URL depending on the image type.
+func (i Image) GetURL() string {
+	if i.File != nil {
+		return i.File.URL
+	}
+	if i.External != nil {
+		return i.External.URL
+	}
+	return ""
+}
+
 type CodeBlock struct {
 	Object         ObjectType `json:"object"`
 	ID             BlockID    `json:"id,omitempty"`
