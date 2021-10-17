@@ -445,6 +445,24 @@ func (b ChildDatabaseBlock) GetType() BlockType {
 	return b.Type
 }
 
+type TableOfContentsBlock struct {
+	Object         ObjectType     `json:"object"`
+	ID             BlockID        `json:"id,omitempty"`
+	Type           BlockType      `json:"type"`
+	CreatedTime    *time.Time     `json:"created_time,omitempty"`
+	LastEditedTime *time.Time     `json:"last_edited_time,omitempty"`
+	HasChildren    bool           `json:"has_children,omitempty"`
+	TableOfContent TableOfContent `json:"table_of_contents"`
+}
+
+func (b TableOfContentsBlock) GetType() BlockType {
+	return b.Type
+}
+
+type TableOfContent struct {
+	// empty
+}
+
 type UnsupportedBlock struct {
 	Object         ObjectType `json:"object"`
 	ID             BlockID    `json:"id,omitempty"`
@@ -494,6 +512,8 @@ func decodeBlock(raw map[string]interface{}) (Block, error) {
 		b = &BookmarkBlock{}
 	case BlockTypeChildDatabase:
 		b = &ChildDatabaseBlock{}
+	case BlockTypeTableOfContents:
+		b = &TableOfContentsBlock{}
 	case BlockTypeUnsupported:
 		b = &UnsupportedBlock{}
 	default:
