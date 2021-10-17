@@ -68,6 +68,7 @@ type Page struct {
 	Properties     Properties `json:"properties"`
 	Parent         Parent     `json:"parent"`
 	URL            string     `json:"url"`
+	Icon           *Icon      `json:"icon,omitempty"`
 	Cover          *Image     `json:"cover,omitempty"`
 }
 
