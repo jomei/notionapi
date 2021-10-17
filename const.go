@@ -188,14 +188,15 @@ const (
 	BlockTypeChildPage     BlockType = "child_page"
 	BlockTypeChildDatabase BlockType = "child_database"
 
-	BlockTypeEmbed       BlockType = "embed"
-	BlockTypeImage       BlockType = "image"
-	BlockTypeVideo       BlockType = "video"
-	BlockTypeFile        BlockType = "file"
-	BlockTypePdf         BlockType = "pdf"
-	BlockTypeBookmark    BlockType = "bookmark"
-	BlockTypeCode        BlockType = "code"
-	BlockTypeUnsupported BlockType = "unsupported"
+	BlockTypeEmbed           BlockType = "embed"
+	BlockTypeImage           BlockType = "image"
+	BlockTypeVideo           BlockType = "video"
+	BlockTypeFile            BlockType = "file"
+	BlockTypePdf             BlockType = "pdf"
+	BlockTypeBookmark        BlockType = "bookmark"
+	BlockTypeCode            BlockType = "code"
+	BlockTypeTableOfContents BlockType = "table_of_contents"
+	BlockTypeUnsupported     BlockType = "unsupported"
 )
 
 const (
