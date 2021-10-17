@@ -195,6 +195,7 @@ const (
 	BlockTypePdf         BlockType = "pdf"
 	BlockTypeBookmark    BlockType = "bookmark"
 	BlockTypeCode        BlockType = "code"
+	BlockCallout         BlockType = "callout"
 	BlockTypeUnsupported BlockType = "unsupported"
 )
 
