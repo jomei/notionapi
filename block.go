@@ -189,6 +189,26 @@ func (b Heading3Block) GetType() BlockType {
 	return b.Type
 }
 
+type CalloutBlock struct {
+	Object         ObjectType `json:"object"`
+	ID             BlockID    `json:"id,omitempty"`
+	Type           BlockType  `json:"type"`
+	CreatedTime    *time.Time `json:"created_time,omitempty"`
+	LastEditedTime *time.Time `json:"last_edited_time,omitempty"`
+	HasChildren    bool       `json:"has_children,omitempty"`
+	Callout        Callout    `json:"callout"`
+}
+
+func (b CalloutBlock) GetType() BlockType {
+	return b.Type
+}
+
+type Callout struct {
+	Text     []RichText `json:"text"`
+	Icon     *Icon      `json:"icon,omitempty"`
+	Children []Block    `json:"children,omitempty"`
+}
+
 type BulletedListItemBlock struct {
 	Object           ObjectType `json:"object"`
 	ID               BlockID    `json:"id,omitempty"`
@@ -504,6 +524,8 @@ func decodeBlock(raw map[string]interface{}) (Block, error) {
 		b = &Heading2Block{}
 	case BlockTypeHeading3:
 		b = &Heading3Block{}
+	case BlockCallout:
+		b = &CalloutBlock{}
 	case BlockTypeBulletedListItem:
 		b = &BulletedListItemBlock{}
 	case BlockTypeNumberedListItem:

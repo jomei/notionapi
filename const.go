@@ -197,6 +197,7 @@ const (
 	BlockTypeCode            BlockType = "code"
 	BlockTypeTableOfContents BlockType = "table_of_contents"
 	BlockTypeDivider         BlockType = "divider"
+	BlockCallout             BlockType = "callout"
 	BlockTypeUnsupported     BlockType = "unsupported"
 )
 
