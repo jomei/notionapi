@@ -119,6 +119,15 @@ type FileObject struct {
 	ExpiryTime *time.Time `json:"expiry_time,omitempty"`
 }
 
+type Icon struct {
+	Type     FileType    `json:"type"`
+	Emoji    *Emoji      `json:"emoji,omitempty"`
+	File     *FileObject `json:"file,omitempty"`
+	External *FileObject `json:"external,omitempty"`
+}
+
+type Emoji string
+
 type PropertyID string
 
 func (pID PropertyID) String() string {
