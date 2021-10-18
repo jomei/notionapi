@@ -198,6 +198,7 @@ const (
 	BlockTypeTableOfContents BlockType = "table_of_contents"
 	BlockTypeDivider         BlockType = "divider"
 	BlockCallout             BlockType = "callout"
+	BlockQuote               BlockType = "quote"
 	BlockTypeUnsupported     BlockType = "unsupported"
 )
 
