@@ -196,6 +196,7 @@ const (
 	BlockTypeBookmark    BlockType = "bookmark"
 	BlockTypeCode        BlockType = "code"
 	BlockCallout         BlockType = "callout"
+	BlockQuote           BlockType = "quote"
 	BlockTypeUnsupported BlockType = "unsupported"
 )
 
