@@ -196,6 +196,7 @@ const (
 	BlockTypeBookmark        BlockType = "bookmark"
 	BlockTypeCode            BlockType = "code"
 	BlockTypeTableOfContents BlockType = "table_of_contents"
+	BlockTypeDivider         BlockType = "divider"
 	BlockTypeUnsupported     BlockType = "unsupported"
 )
 
