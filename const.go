@@ -195,8 +195,10 @@ const (
 	BlockTypePdf             BlockType = "pdf"
 	BlockTypeBookmark        BlockType = "bookmark"
 	BlockTypeCode            BlockType = "code"
-	BlockTypeTableOfContents BlockType = "table_of_contents"
 	BlockTypeDivider         BlockType = "divider"
+	BlockCallout             BlockType = "callout"
+	BlockQuote               BlockType = "quote"
+	BlockTypeTableOfContents BlockType = "table_of_contents"
 	BlockTypeUnsupported     BlockType = "unsupported"
 )
 
