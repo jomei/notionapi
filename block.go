@@ -16,7 +16,7 @@ func (bID BlockID) String() string {
 
 type BlockService interface {
 	GetChildren(context.Context, BlockID, *Pagination) (*GetChildrenResponse, error)
-	AppendChildren(context.Context, BlockID, *AppendBlockChildrenRequest) (Block, error)
+	AppendChildren(context.Context, BlockID, *AppendBlockChildrenRequest) (*AppendBlockChildrenResponse, error)
 	Get(context.Context, BlockID) (Block, error)
 	Update(ctx context.Context, id BlockID, request *BlockUpdateRequest) (Block, error)
 }
@@ -67,18 +67,18 @@ type GetChildrenResponse struct {
 }
 
 // AppendChildren https://developers.notion.com/reference/patch-block-children
-func (bc *BlockClient) AppendChildren(ctx context.Context, id BlockID, requestBody *AppendBlockChildrenRequest) (Block, error) {
+func (bc *BlockClient) AppendChildren(ctx context.Context, id BlockID, requestBody *AppendBlockChildrenRequest) (*AppendBlockChildrenResponse, error) {
 	res, err := bc.apiClient.request(ctx, http.MethodPatch, fmt.Sprintf("blocks/%s/children", id.String()), nil, requestBody)
 	if err != nil {
 		return nil, err
 	}
 
-	var response map[string]interface{}
+	var response AppendBlockChildrenResponse
 	err = json.NewDecoder(res.Body).Decode(&response)
 	if err != nil {
 		return nil, err
 	}
-	return decodeBlock(response)
+	return &response, nil
 }
 
 // Get https://developers.notion.com/reference/retrieve-a-block
@@ -530,6 +530,37 @@ type UnsupportedBlock struct {
 
 func (b UnsupportedBlock) GetType() BlockType {
 	return b.Type
+}
+
+type AppendBlockChildrenResponse struct {
+	Object  ObjectType `json:"object"`
+	Results []Block    `json:"results"`
+}
+
+type appendBlockResponse struct {
+	Object  ObjectType               `json:"object"`
+	Results []map[string]interface{} `json:"results"`
+}
+
+func (r *AppendBlockChildrenResponse) UnmarshalJSON(data []byte) error {
+	var raw appendBlockResponse
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+	blocks := make([]Block, 0)
+	for _, b := range raw.Results {
+		block, err := decodeBlock(b)
+		if err != nil {
+			return err
+		}
+		blocks = append(blocks, block)
+	}
+
+	*r = AppendBlockChildrenResponse{
+		Object:  raw.Object,
+		Results: blocks,
+	}
+	return nil
 }
 
 func decodeBlock(raw map[string]interface{}) (Block, error) {

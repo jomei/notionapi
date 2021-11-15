@@ -2,6 +2,7 @@ package notionapi_test
 
 import (
 	"context"
+	"encoding/json"
 	"github.com/jomei/notionapi"
 	"net/http"
 	"reflect"
@@ -58,12 +59,12 @@ func TestBlockClient(t *testing.T) {
 			statusCode int
 			id         notionapi.BlockID
 			request    *notionapi.AppendBlockChildrenRequest
-			want       *notionapi.ChildPageBlock
+			want       *notionapi.AppendBlockChildrenResponse
 			wantErr    bool
 			err        error
 		}{
 			{
-				name:       "returns blocks by id of parent block",
+				name:       "return list object",
 				id:         "some_id",
 				filePath:   "testdata/block_append_children.json",
 				statusCode: http.StatusOK,
@@ -83,17 +84,29 @@ func TestBlockClient(t *testing.T) {
 						},
 					},
 				},
-				want: &notionapi.ChildPageBlock{
-					Object:         notionapi.ObjectTypeBlock,
-					ID:             "some_id",
-					Type:           notionapi.BlockTypeChildPage,
-					CreatedTime:    &timestamp,
-					LastEditedTime: &timestamp,
-					HasChildren:    true,
-					ChildPage: struct {
-						Title string `json:"title"`
-					}{
-						Title: "Hello",
+				want: &notionapi.AppendBlockChildrenResponse{
+					Object: notionapi.ObjectTypeList,
+					Results: []notionapi.Block{
+						notionapi.ParagraphBlock{
+							Object:         notionapi.ObjectTypeBlock,
+							ID:             "some_id",
+							CreatedTime:    &timestamp,
+							LastEditedTime: &timestamp,
+							Type:           notionapi.BlockTypeParagraph,
+							Paragraph: notionapi.Paragraph{
+								Text: []notionapi.RichText{
+									{
+										Type: notionapi.ObjectTypeText,
+										Text: notionapi.Text{Content: "AAAAAA"},
+										Annotations: &notionapi.Annotations{
+											Bold:  true,
+											Color: notionapi.ColorDefault,
+										},
+										PlainText: "AAAAAA",
+									},
+								},
+							},
+						},
 					},
 				},
 			},
@@ -104,12 +117,22 @@ func TestBlockClient(t *testing.T) {
 				c := newMockedClient(t, tt.filePath, tt.statusCode)
 				client := notionapi.NewClient("some_token", notionapi.WithHTTPClient(c))
 				got, err := client.Block.AppendChildren(context.Background(), tt.id, tt.request)
-
 				if (err != nil) != tt.wantErr {
 					t.Errorf("AppendChidlren() error = %v, wantErr %v", err, tt.wantErr)
 					return
 				}
-				if !reflect.DeepEqual(got, tt.want) {
+				a, err := json.Marshal(got)
+				if err != nil {
+					t.Errorf("AppendChidlren() marhall error = %v", err)
+					return
+				}
+				b, err := json.Marshal(tt.want)
+				if err != nil {
+					t.Errorf("AppendChidlren() marhall error = %v", err)
+					return
+				}
+
+				if !(string(a) == string(b)) {
 					t.Errorf("AppendChidlren() got = %v, want %v", got, tt.want)
 				}
 			})
