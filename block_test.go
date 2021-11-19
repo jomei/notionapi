@@ -3,11 +3,12 @@ package notionapi_test
 import (
 	"context"
 	"encoding/json"
-	"github.com/jomei/notionapi"
 	"net/http"
 	"reflect"
 	"testing"
 	"time"
+
+	"github.com/jomei/notionapi"
 )
 
 func TestBlockClient(t *testing.T) {
@@ -71,8 +72,10 @@ func TestBlockClient(t *testing.T) {
 				request: &notionapi.AppendBlockChildrenRequest{
 					Children: []notionapi.Block{
 						&notionapi.Heading2Block{
-							Object: notionapi.ObjectTypeBlock,
-							Type:   notionapi.BlockTypeHeading2,
+							BasicBlock: notionapi.BasicBlock{
+								Object: notionapi.ObjectTypeBlock,
+								Type:   notionapi.BlockTypeHeading2,
+							},
 							Heading2: struct {
 								Text []notionapi.RichText `json:"text"`
 							}{[]notionapi.RichText{
@@ -88,11 +91,13 @@ func TestBlockClient(t *testing.T) {
 					Object: notionapi.ObjectTypeList,
 					Results: []notionapi.Block{
 						notionapi.ParagraphBlock{
-							Object:         notionapi.ObjectTypeBlock,
-							ID:             "some_id",
-							CreatedTime:    &timestamp,
-							LastEditedTime: &timestamp,
-							Type:           notionapi.BlockTypeParagraph,
+							BasicBlock: notionapi.BasicBlock{
+								Object:         notionapi.ObjectTypeBlock,
+								ID:             "some_id",
+								CreatedTime:    &timestamp,
+								LastEditedTime: &timestamp,
+								Type:           notionapi.BlockTypeParagraph,
+							},
 							Paragraph: notionapi.Paragraph{
 								Text: []notionapi.RichText{
 									{
@@ -155,12 +160,14 @@ func TestBlockClient(t *testing.T) {
 				statusCode: http.StatusOK,
 				id:         "some_id",
 				want: &notionapi.ChildPageBlock{
-					Object:         notionapi.ObjectTypeBlock,
-					ID:             "some_id",
-					Type:           notionapi.BlockTypeChildPage,
-					CreatedTime:    &timestamp,
-					LastEditedTime: &timestamp,
-					HasChildren:    true,
+					BasicBlock: notionapi.BasicBlock{
+						Object:         notionapi.ObjectTypeBlock,
+						ID:             "some_id",
+						Type:           notionapi.BlockTypeChildPage,
+						CreatedTime:    &timestamp,
+						LastEditedTime: &timestamp,
+						HasChildren:    true,
+					},
 					ChildPage: struct {
 						Title string `json:"title"`
 					}{
@@ -215,11 +222,13 @@ func TestBlockClient(t *testing.T) {
 					},
 				},
 				want: &notionapi.ParagraphBlock{
-					Object:         notionapi.ObjectTypeBlock,
-					ID:             "some_id",
-					Type:           notionapi.BlockTypeParagraph,
-					CreatedTime:    &timestamp,
-					LastEditedTime: &timestamp,
+					BasicBlock: notionapi.BasicBlock{
+						Object:         notionapi.ObjectTypeBlock,
+						ID:             "some_id",
+						Type:           notionapi.BlockTypeParagraph,
+						CreatedTime:    &timestamp,
+						LastEditedTime: &timestamp,
+					},
 					Paragraph: notionapi.Paragraph{
 						Text: []notionapi.RichText{
 							{

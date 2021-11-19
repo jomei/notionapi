@@ -320,8 +320,10 @@ func TestPageCreateRequest_MarshallJSON(t *testing.T) {
 				},
 				Children: []notionapi.Block{
 					notionapi.Heading2Block{
-						Object: notionapi.ObjectTypeBlock,
-						Type:   notionapi.BlockTypeHeading2,
+						BasicBlock: notionapi.BasicBlock{
+							Object: notionapi.ObjectTypeBlock,
+							Type:   notionapi.BlockTypeHeading2,
+						},
 						Heading2: struct {
 							Text []notionapi.RichText `json:"text"`
 						}{
@@ -334,8 +336,10 @@ func TestPageCreateRequest_MarshallJSON(t *testing.T) {
 						},
 					},
 					notionapi.ParagraphBlock{
-						Object: notionapi.ObjectTypeBlock,
-						Type:   notionapi.BlockTypeParagraph,
+						BasicBlock: notionapi.BasicBlock{
+							Object: notionapi.ObjectTypeBlock,
+							Type:   notionapi.BlockTypeParagraph,
+						},
 						Paragraph: notionapi.Paragraph{
 							Text: []notionapi.RichText{
 								{
