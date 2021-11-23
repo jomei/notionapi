@@ -174,6 +174,7 @@ const (
 	UserTypeBot    UserType = "bot"
 )
 
+// See https://developers.notion.com/reference/block
 const (
 	BlockTypeParagraph BlockType = "paragraph"
 	BlockTypeHeading1  BlockType = "heading_1"
@@ -199,6 +200,14 @@ const (
 	BlockCallout             BlockType = "callout"
 	BlockQuote               BlockType = "quote"
 	BlockTypeTableOfContents BlockType = "table_of_contents"
+	BlockTypeEquation        BlockType = "equation"
+	BlockTypeBreadcrumb      BlockType = "breadcrumb"
+	BlockTypeColumn          BlockType = "column"
+	BlockTypeColumnList      BlockType = "column_list"
+	BlockTypeLinkPreview     BlockType = "link_preview"
+	BlockTypeLinkToPage      BlockType = "link_to_page"
+	BlockTypeTemplate        BlockType = "template"
+	BlockTypeSyncedBlock     BlockType = "synced_block"
 	BlockTypeUnsupported     BlockType = "unsupported"
 )
 

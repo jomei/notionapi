@@ -26,6 +26,8 @@ type BlockClient struct {
 }
 
 // GetChildren https://developers.notion.com/reference/get-block-children
+// NOTE: For blocks with their own children, the Children slice will not be
+// populated, instead the HasChildren flag will be true.
 func (bc *BlockClient) GetChildren(ctx context.Context, id BlockID, pagination *Pagination) (*GetChildrenResponse, error) {
 	res, err := bc.apiClient.request(ctx, http.MethodGet, fmt.Sprintf("blocks/%s/children", id.String()), pagination.ToQuery(), nil)
 	if err != nil {
@@ -82,6 +84,7 @@ func (bc *BlockClient) AppendChildren(ctx context.Context, id BlockID, requestBo
 }
 
 // Get https://developers.notion.com/reference/retrieve-a-block
+// NOTE: If the block has children, it will not retrieve those children.
 func (bc *BlockClient) Get(ctx context.Context, id BlockID) (Block, error) {
 	res, err := bc.apiClient.request(ctx, http.MethodGet, fmt.Sprintf("blocks/%s", id.String()), nil, nil)
 	if err != nil {
@@ -334,10 +337,10 @@ type ChildDatabaseBlock struct {
 
 type TableOfContentsBlock struct {
 	BasicBlock
-	TableOfContent TableOfContent `json:"table_of_contents"`
+	TableOfContents TableOfContents `json:"table_of_contents"`
 }
 
-type TableOfContent struct {
+type TableOfContents struct {
 	// empty
 }
 
@@ -348,6 +351,89 @@ type DividerBlock struct {
 
 type Divider struct {
 	// empty
+}
+
+type EquationBlock struct {
+	BasicBlock
+	Equation Equation `json:"equation"`
+}
+
+type Equation struct {
+	Expression string `json:"expression"`
+}
+
+type BreadcrumbBlock struct {
+	BasicBlock
+	Breadcrumb Breadcrumb `json:"breadcrumb"`
+}
+
+type Breadcrumb struct {
+	// empty
+}
+
+type ColumnBlock struct {
+	BasicBlock
+	Column Column `json:"column"`
+}
+
+type Column struct {
+	// Children should at least have 1 block when appending.
+	Children []Block `json:"children"`
+}
+
+type ColumnListBlock struct {
+	BasicBlock
+	ColumnList ColumnList `json:"column_list"`
+}
+
+type ColumnList struct {
+	// Children can only contain column blocks
+	// Children should have at least 2 blocks when appending.
+	Children []Block `json:"children"`
+}
+
+// NOTE: will only be returned by the API. Cannot be created by the API.
+// https://developers.notion.com/reference/block#link-preview-blocks
+type LinkPreviewBlock struct {
+	BasicBlock
+	LinkPreview LinkPreview `json:"link_preview"`
+}
+
+type LinkPreview struct {
+	URL string `json:"url"`
+}
+
+type LinkToPageBlock struct {
+	BasicBlock
+	LinkToPage LinkToPage `json:"link_to_page"`
+}
+
+type LinkToPage struct {
+	Type   string `json:"type"`
+	PageID string `json:"page_id"`
+}
+
+type TemplateBlock struct {
+	BasicBlock
+	Template Template `json:"template"`
+}
+
+type Template struct {
+	Text     []RichText `json:"text"`
+	Children []Block    `json:"children,omitempty"`
+}
+
+type SyncedBlock struct {
+	BasicBlock
+	Synced Synced `json:"synced_block"`
+}
+
+type Synced struct {
+	// SyncedFrom is nil for the original block.
+	SyncedFrom *struct {
+		BlockID string `json:"original_synced_block_id"`
+	} `json:"synced_from"`
+	Children []Block `json:"children,omitempty"`
 }
 
 type UnsupportedBlock struct {
@@ -430,6 +516,23 @@ func decodeBlock(raw map[string]interface{}) (Block, error) {
 		b = &TableOfContentsBlock{}
 	case BlockTypeDivider:
 		b = &DividerBlock{}
+	case BlockTypeEquation:
+		b = &EquationBlock{}
+	case BlockTypeBreadcrumb:
+		b = &BreadcrumbBlock{}
+	case BlockTypeColumn:
+		b = &ColumnBlock{}
+	case BlockTypeColumnList:
+		b = &ColumnListBlock{}
+	case BlockTypeLinkPreview:
+		b = &LinkPreviewBlock{}
+	case BlockTypeLinkToPage:
+		b = &LinkToPageBlock{}
+	case BlockTypeTemplate:
+		b = &TemplateBlock{}
+	case BlockTypeSyncedBlock:
+		b = &SyncedBlock{}
+
 	case BlockTypeUnsupported:
 		b = &UnsupportedBlock{}
 	default:
@@ -459,4 +562,5 @@ type BlockUpdateRequest struct {
 	File             *BlockFile `json:"file,omitempty"`
 	Pdf              *Pdf       `json:"pdf,omitempty"`
 	Bookmark         *Bookmark  `json:"bookmark,omitempty"`
+	Template         *Template  `json:"template,omitempty"`
 }
