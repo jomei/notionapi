@@ -409,8 +409,8 @@ type LinkToPageBlock struct {
 }
 
 type LinkToPage struct {
-	Type   string `json:"type"`
-	PageID string `json:"page_id"`
+	Type   BlockType `json:"type"`
+	PageID PageID    `json:"page_id"`
 }
 
 type TemplateBlock struct {
@@ -425,15 +425,17 @@ type Template struct {
 
 type SyncedBlock struct {
 	BasicBlock
-	Synced Synced `json:"synced_block"`
+	SyncedBlock Synced `json:"synced_block"`
 }
 
 type Synced struct {
 	// SyncedFrom is nil for the original block.
-	SyncedFrom *struct {
-		BlockID string `json:"original_synced_block_id"`
-	} `json:"synced_from"`
-	Children []Block `json:"children,omitempty"`
+	SyncedFrom *SyncedFrom `json:"synced_from"`
+	Children   []Block     `json:"children,omitempty"`
+}
+
+type SyncedFrom struct {
+	BlockID BlockID `json:"original_synced_block_id"`
 }
 
 type UnsupportedBlock struct {
