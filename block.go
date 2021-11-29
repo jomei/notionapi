@@ -18,6 +18,7 @@ type BlockService interface {
 	GetChildren(context.Context, BlockID, *Pagination) (*GetChildrenResponse, error)
 	AppendChildren(context.Context, BlockID, *AppendBlockChildrenRequest) (*AppendBlockChildrenResponse, error)
 	Get(context.Context, BlockID) (Block, error)
+	Delete(context.Context, BlockID) (Block, error)
 	Update(ctx context.Context, id BlockID, request *BlockUpdateRequest) (Block, error)
 }
 
@@ -87,6 +88,21 @@ func (bc *BlockClient) AppendChildren(ctx context.Context, id BlockID, requestBo
 // NOTE: If the block has children, it will not retrieve those children.
 func (bc *BlockClient) Get(ctx context.Context, id BlockID) (Block, error) {
 	res, err := bc.apiClient.request(ctx, http.MethodGet, fmt.Sprintf("blocks/%s", id.String()), nil, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	var response map[string]interface{}
+	err = json.NewDecoder(res.Body).Decode(&response)
+	if err != nil {
+		return nil, err
+	}
+	return decodeBlock(response)
+}
+
+// Delete https://developers.notion.com/reference/delete-a-block
+func (bc *BlockClient) Delete(ctx context.Context, id BlockID) (Block, error) {
+	res, err := bc.apiClient.request(ctx, http.MethodDelete, fmt.Sprintf("blocks/%s", id.String()), nil, nil)
 	if err != nil {
 		return nil, err
 	}
