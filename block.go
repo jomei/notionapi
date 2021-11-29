@@ -97,7 +97,7 @@ func (bc *BlockClient) Get(ctx context.Context, id BlockID) (Block, error) {
 	return decodeBlock(response)
 }
 
-// Delete https://developers.notion.com/reference/retrieve-a-block
+// Delete https://developers.notion.com/reference/delete-a-block
 func (bc *BlockClient) Delete(ctx context.Context, id BlockID) (Block, error) {
 	res, err := bc.apiClient.request(ctx, http.MethodDelete, fmt.Sprintf("blocks/%s", id.String()), nil, nil)
 	if err != nil {

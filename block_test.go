@@ -3,11 +3,12 @@ package notionapi_test
 import (
 	"context"
 	"encoding/json"
-	"github.com/jomei/notionapi"
 	"net/http"
 	"reflect"
 	"testing"
 	"time"
+
+	"github.com/jomei/notionapi"
 )
 
 func TestBlockClient(t *testing.T) {
