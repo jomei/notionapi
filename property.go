@@ -14,6 +14,30 @@ type Property interface {
 	GetType() PropertyType
 }
 
+type PropertyArray []Property
+
+func (arr *PropertyArray) UnmarshalJSON(data []byte) error {
+	var err error
+	mapArr := make([]map[string]interface{}, 0)
+	if err = json.Unmarshal(data, &mapArr); err != nil {
+		return err
+	}
+
+	result := make([]Property, len(mapArr))
+	for i, prop := range mapArr {
+		if result[i], err = decodeProperty(prop); err != nil {
+			return err
+		}
+	}
+
+	if err = json.Unmarshal(data, &result); err != nil {
+		return err
+	}
+
+	*arr = result
+	return nil
+}
+
 type TitleProperty struct {
 	ID    PropertyID   `json:"id,omitempty"`
 	Type  PropertyType `json:"type,omitempty"`
@@ -138,10 +162,10 @@ type RollupProperty struct {
 type RollupType string
 
 type Rollup struct {
-	Type   RollupType  `json:"type,omitempty"`
-	Number float64     `json:"number,omitempty"`
-	Date   *DateObject `json:"date,omitempty"`
-	Array  []Property  `json:"array,omitempty"` //todo: unmarshal
+	Type   RollupType    `json:"type,omitempty"`
+	Number float64       `json:"number,omitempty"`
+	Date   *DateObject   `json:"date,omitempty"`
+	Array  PropertyArray `json:"array,omitempty"`
 }
 
 func (p RollupProperty) GetType() PropertyType {
@@ -267,52 +291,11 @@ func (p *Properties) UnmarshalJSON(data []byte) error {
 func parsePageProperties(raw map[string]interface{}) (map[string]Property, error) {
 	result := make(map[string]Property)
 	for k, v := range raw {
-		var p Property
 		switch rawProperty := v.(type) {
 		case map[string]interface{}:
-			switch PropertyType(rawProperty["type"].(string)) {
-			case PropertyTypeTitle:
-				p = &TitleProperty{}
-			case PropertyTypeRichText:
-				p = &RichTextProperty{}
-			case PropertyTypeText:
-				p = &RichTextProperty{}
-			case PropertyTypeNumber:
-				p = &NumberProperty{}
-			case PropertyTypeSelect:
-				p = &SelectProperty{}
-			case PropertyTypeMultiSelect:
-				p = &MultiSelectProperty{}
-			case PropertyTypeDate:
-				p = &DateProperty{}
-			case PropertyTypeFormula:
-				p = &FormulaProperty{}
-			case PropertyTypeRelation:
-				p = &RelationProperty{}
-			case PropertyTypeRollup:
-				p = &RollupProperty{}
-			case PropertyTypePeople:
-				p = &PeopleProperty{}
-			case PropertyTypeFiles:
-				p = &FilesProperty{}
-			case PropertyTypeCheckbox:
-				p = &CheckboxProperty{}
-			case PropertyTypeURL:
-				p = &URLProperty{}
-			case PropertyTypeEmail:
-				p = &EmailProperty{}
-			case PropertyTypePhoneNumber:
-				p = &PhoneNumberProperty{}
-			case PropertyTypeCreatedTime:
-				p = &CreatedTimeProperty{}
-			case PropertyTypeCreatedBy:
-				p = &CreatedByProperty{}
-			case PropertyTypeLastEditedTime:
-				p = &LastEditedTimeProperty{}
-			case PropertyTypeLastEditedBy:
-				p = &LastEditedByProperty{}
-			default:
-				return nil, errors.New(fmt.Sprintf("unsupported property type: %s", rawProperty["type"].(string)))
+			p, err := decodeProperty(rawProperty)
+			if err != nil {
+				return nil, err
 			}
 			b, err := json.Marshal(rawProperty)
 			if err != nil {
@@ -330,4 +313,54 @@ func parsePageProperties(raw map[string]interface{}) (map[string]Property, error
 	}
 
 	return result, nil
+}
+
+func decodeProperty(raw map[string]interface{}) (Property, error) {
+	var p Property
+	switch PropertyType(raw["type"].(string)) {
+	case PropertyTypeTitle:
+		p = &TitleProperty{}
+	case PropertyTypeRichText:
+		p = &RichTextProperty{}
+	case PropertyTypeText:
+		p = &RichTextProperty{}
+	case PropertyTypeNumber:
+		p = &NumberProperty{}
+	case PropertyTypeSelect:
+		p = &SelectProperty{}
+	case PropertyTypeMultiSelect:
+		p = &MultiSelectProperty{}
+	case PropertyTypeDate:
+		p = &DateProperty{}
+	case PropertyTypeFormula:
+		p = &FormulaProperty{}
+	case PropertyTypeRelation:
+		p = &RelationProperty{}
+	case PropertyTypeRollup:
+		p = &RollupProperty{}
+	case PropertyTypePeople:
+		p = &PeopleProperty{}
+	case PropertyTypeFiles:
+		p = &FilesProperty{}
+	case PropertyTypeCheckbox:
+		p = &CheckboxProperty{}
+	case PropertyTypeURL:
+		p = &URLProperty{}
+	case PropertyTypeEmail:
+		p = &EmailProperty{}
+	case PropertyTypePhoneNumber:
+		p = &PhoneNumberProperty{}
+	case PropertyTypeCreatedTime:
+		p = &CreatedTimeProperty{}
+	case PropertyTypeCreatedBy:
+		p = &CreatedByProperty{}
+	case PropertyTypeLastEditedTime:
+		p = &LastEditedTimeProperty{}
+	case PropertyTypeLastEditedBy:
+		p = &LastEditedByProperty{}
+	default:
+		return nil, errors.New(fmt.Sprintf("unsupported property type: %s", raw["type"].(string)))
+	}
+
+	return p, nil
 }
