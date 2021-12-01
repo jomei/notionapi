@@ -141,6 +141,12 @@ type AppendBlockChildrenRequest struct {
 
 type Block interface {
 	GetType() BlockType
+	GetID() BlockID
+	GetObject() ObjectType
+	GetCreatedTime() *time.Time
+	GetLastEditedTime() *time.Time
+	GetHasChildren() bool
+	GetArchived() bool
 }
 
 // BasicBlock defines the common fields of all Notion block types.
@@ -158,6 +164,30 @@ type BasicBlock struct {
 
 func (b BasicBlock) GetType() BlockType {
 	return b.Type
+}
+
+func (b BasicBlock) GetID() BlockID {
+	return b.ID
+}
+
+func (b BasicBlock) GetObject() ObjectType {
+	return b.Object
+}
+
+func (b BasicBlock) GetCreatedTime() *time.Time {
+	return b.CreatedTime
+}
+
+func (b BasicBlock) GetLastEditedTime() *time.Time {
+	return b.LastEditedTime
+}
+
+func (b BasicBlock) GetHasChildren() bool {
+	return b.HasChildren
+}
+
+func (b BasicBlock) GetArchived() bool {
+	return b.Archived
 }
 
 type ParagraphBlock struct {
