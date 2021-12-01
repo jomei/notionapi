@@ -243,6 +243,10 @@ func TestDatabaseClient(t *testing.T) {
 					ID:             "some_id",
 					CreatedTime:    timestamp,
 					LastEditedTime: timestamp,
+					Parent: notionapi.Parent{
+						Type:   "page_id",
+						PageID: "48f8fee9-cd79-4180-bc2f-ec0398253067",
+					},
 					Title: []notionapi.RichText{
 						{
 							Type: notionapi.ObjectTypeText,
@@ -307,6 +311,10 @@ func TestDatabaseClient(t *testing.T) {
 					ID:             "some_id",
 					CreatedTime:    timestamp,
 					LastEditedTime: timestamp,
+					Parent: notionapi.Parent{
+						Type:   "page_id",
+						PageID: "a7744006-9233-4cd0-bf44-3a49de2c01b5",
+					},
 					Title: []notionapi.RichText{
 						{
 							Type:        notionapi.ObjectTypeText,
