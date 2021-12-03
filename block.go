@@ -35,28 +35,18 @@ func (bc *BlockClient) GetChildren(ctx context.Context, id BlockID, pagination *
 		return nil, err
 	}
 
-	var response struct {
-		Object     ObjectType `json:"object"`
-		NextCursor string     `json:"next_cursor"`
-		HasMore    bool       `json:"has_more"`
-		Results    Blocks     `json:"results"`
-	}
-	err = json.NewDecoder(res.Body).Decode(&response)
+	response := &GetChildrenResponse{}
+	err = json.NewDecoder(res.Body).Decode(response)
 	if err != nil {
 		return nil, err
 	}
 
-	return &GetChildrenResponse{
-		Object:     response.Object,
-		Results:    []Block(response.Results),
-		NextCursor: response.NextCursor,
-		HasMore:    response.HasMore,
-	}, nil
+	return response, nil
 }
 
 type GetChildrenResponse struct {
 	Object     ObjectType `json:"object"`
-	Results    []Block    `json:"results"`
+	Results    Blocks     `json:"results"`
 	NextCursor string     `json:"next_cursor"`
 	HasMore    bool       `json:"has_more"`
 }
