@@ -43,6 +43,84 @@ func TestPageClient(t *testing.T) {
 					},
 					Archived: false,
 					URL:      "some_url",
+					Properties: notionapi.Properties{
+						"Tags": &notionapi.MultiSelectProperty{
+							ID:   ";s|V",
+							Type: "multi_select",
+							MultiSelect: []notionapi.Option{
+								{
+									ID:    "some_id",
+									Name:  "tag",
+									Color: "blue",
+								},
+							},
+						},
+						"Some another column": &notionapi.PeopleProperty{
+							ID:   "rJt\\",
+							Type: "people",
+							People: []notionapi.User{
+								{
+									Object:    "user",
+									ID:        "some_id",
+									Name:      "some name",
+									AvatarURL: "some.url",
+									Type:      "person",
+									Person: &notionapi.Person{
+										Email: "some@email.com",
+									},
+								},
+							},
+						},
+						"SomeColumn": &notionapi.RichTextProperty{
+							ID:   "~j_@",
+							Type: "rich_text",
+							RichText: []notionapi.RichText{
+								{
+									Type: "text",
+									Text: notionapi.Text{
+										Content: "some text",
+									},
+									Annotations: &notionapi.Annotations{
+										Color: "default",
+									},
+									PlainText: "some text",
+								},
+							},
+						},
+						"Name": &notionapi.TitleProperty{
+							ID:   "title",
+							Type: "title",
+							Title: []notionapi.RichText{
+								{
+									Type: "text",
+									Text: notionapi.Text{
+										Content: "Hello",
+									},
+									Annotations: &notionapi.Annotations{
+										Color: "default",
+									},
+									PlainText: "Hello",
+								},
+							},
+						},
+						"RollupArray": &notionapi.RollupProperty{
+							ID:   "abcd",
+							Type: "rollup",
+							Rollup: notionapi.Rollup{
+								Type: "array",
+								Array: notionapi.PropertyArray{
+									&notionapi.NumberProperty{
+										Type:   "number",
+										Number: 42.2,
+									},
+									&notionapi.NumberProperty{
+										Type:   "number",
+										Number: 56,
+									},
+								},
+							},
+						},
+					},
 				},
 			},
 			{
@@ -77,8 +155,7 @@ func TestPageClient(t *testing.T) {
 					}
 					return
 				}
-				// TODO: remove properties from comparing for a while. Have to compare with interface somehow
-				got.Properties = nil
+
 				if !reflect.DeepEqual(got, tt.want) {
 					t.Errorf("Get() got = %v, want %v", got, tt.want)
 				}
