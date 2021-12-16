@@ -3,6 +3,7 @@ package notionapi_test
 import (
 	"context"
 	"encoding/json"
+	"io/ioutil"
 	"net/http"
 	"reflect"
 	"testing"
@@ -257,6 +258,180 @@ func TestBlockClient(t *testing.T) {
 					t.Errorf("Get() error = %v, wantErr %v", err, tt.wantErr)
 					return
 				}
+				if !reflect.DeepEqual(got, tt.want) {
+					t.Errorf("Get() got = %v, want %v", got, tt.want)
+				}
+			})
+		}
+	})
+}
+
+func TestBlockArrayUnmarshal(t *testing.T) {
+	timestamp, err := time.Parse(time.RFC3339, "2021-11-04T02:09:00Z")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	var emoji notionapi.Emoji = "📌"
+	t.Run("BlockArray", func(t *testing.T) {
+		tests := []struct {
+			name     string
+			filePath string
+			want     notionapi.Blocks
+			wantErr  bool
+			err      error
+		}{
+			{
+				name:     "unmarshal",
+				filePath: "testdata/block_array_unmarshal.json",
+				want: notionapi.Blocks{
+					&notionapi.CalloutBlock{
+						BasicBlock: notionapi.BasicBlock{
+							Object:         "block",
+							ID:             "block1",
+							Type:           "callout",
+							CreatedTime:    &timestamp,
+							LastEditedTime: &timestamp,
+						},
+						Callout: notionapi.Callout{
+							Text: []notionapi.RichText{
+								{
+									Type: "text",
+									Text: notionapi.Text{
+										Content: "This page is designed to be shared with students on the web. Click ",
+									},
+									Annotations: &notionapi.Annotations{
+										Color: "default",
+									},
+									PlainText: "This page is designed to be shared with students on the web. Click ",
+								}, {
+									Type: "text",
+									Text: notionapi.Text{
+										Content: "Share",
+									},
+									Annotations: &notionapi.Annotations{
+										Code:  true,
+										Color: "default",
+									},
+									PlainText: "Share",
+								},
+							},
+							Icon: &notionapi.Icon{
+								Type:  "emoji",
+								Emoji: &emoji,
+							},
+						},
+					},
+					&notionapi.Heading1Block{
+						BasicBlock: notionapi.BasicBlock{
+							Object:         "block",
+							ID:             "block2",
+							Type:           "heading_1",
+							CreatedTime:    &timestamp,
+							LastEditedTime: &timestamp,
+						},
+						Heading1: notionapi.Heading{
+							Text: []notionapi.RichText{
+								{
+									Type: "text",
+									Text: notionapi.Text{
+										Content: "History 340",
+									},
+									Annotations: &notionapi.Annotations{
+										Color: "default",
+									},
+									PlainText: "History 340",
+								},
+							},
+						},
+					},
+					&notionapi.ChildDatabaseBlock{
+						BasicBlock: notionapi.BasicBlock{
+							Object:         "block",
+							ID:             "block3",
+							Type:           "child_database",
+							CreatedTime:    &timestamp,
+							LastEditedTime: &timestamp,
+						},
+						ChildDatabase: struct {
+							Title string "json:\"title\""
+						}{
+							Title: "Required Texts",
+						},
+					},
+					&notionapi.ColumnListBlock{
+						BasicBlock: notionapi.BasicBlock{
+							Object:         "block",
+							ID:             "block4",
+							Type:           "column_list",
+							CreatedTime:    &timestamp,
+							LastEditedTime: &timestamp,
+							HasChildren:    true,
+						},
+					},
+					&notionapi.Heading3Block{
+						BasicBlock: notionapi.BasicBlock{
+							Object:         "block",
+							ID:             "block5",
+							Type:           "heading_3",
+							CreatedTime:    &timestamp,
+							LastEditedTime: &timestamp,
+						},
+						Heading3: notionapi.Heading{
+							Text: []notionapi.RichText{
+								{
+									Type: "text",
+									Text: notionapi.Text{
+										Content: "Assignment Submission",
+									},
+									Annotations: &notionapi.Annotations{
+										Bold:  true,
+										Color: "default",
+									},
+									PlainText: "Assignment Submission",
+								},
+							},
+						},
+					},
+					&notionapi.ParagraphBlock{
+						BasicBlock: notionapi.BasicBlock{
+							Object:         "block",
+							ID:             "block6",
+							Type:           "paragraph",
+							CreatedTime:    &timestamp,
+							LastEditedTime: &timestamp,
+						},
+						Paragraph: notionapi.Paragraph{
+							Text: []notionapi.RichText{
+								{
+									Type: "text",
+									Text: notionapi.Text{
+										Content: "All essays and papers are due in lecture (due dates are listed on the schedule). No electronic copies will be accepted!",
+									},
+									Annotations: &notionapi.Annotations{
+										Color: "default",
+									},
+									PlainText: "All essays and papers are due in lecture (due dates are listed on the schedule). No electronic copies will be accepted!",
+								},
+							},
+						},
+					},
+				},
+			},
+		}
+
+		for _, tt := range tests {
+			t.Run(tt.name, func(t *testing.T) {
+				data, err := ioutil.ReadFile(tt.filePath)
+				if err != nil {
+					t.Fatal(err)
+				}
+				got := make(notionapi.Blocks, 0)
+				err = json.Unmarshal(data, &got)
+				if err != nil {
+					t.Fatal(err)
+				}
+
 				if !reflect.DeepEqual(got, tt.want) {
 					t.Errorf("Get() got = %v, want %v", got, tt.want)
 				}

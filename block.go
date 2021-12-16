@@ -35,36 +35,18 @@ func (bc *BlockClient) GetChildren(ctx context.Context, id BlockID, pagination *
 		return nil, err
 	}
 
-	var response struct {
-		Object     ObjectType `json:"object"`
-		NextCursor string     `json:"next_cursor"`
-		HasMore    bool       `json:"has_more"`
-		Results    []map[string]interface{}
-	}
-	err = json.NewDecoder(res.Body).Decode(&response)
+	response := &GetChildrenResponse{}
+	err = json.NewDecoder(res.Body).Decode(response)
 	if err != nil {
 		return nil, err
 	}
-	results := make([]Block, len(response.Results))
-	for i, r := range response.Results {
-		b, err := decodeBlock(r)
-		if err != nil {
-			return nil, err
-		}
-		results[i] = b
-	}
 
-	return &GetChildrenResponse{
-		Object:     response.Object,
-		Results:    results,
-		NextCursor: response.NextCursor,
-		HasMore:    response.HasMore,
-	}, nil
+	return response, nil
 }
 
 type GetChildrenResponse struct {
 	Object     ObjectType `json:"object"`
-	Results    []Block    `json:"results"`
+	Results    Blocks     `json:"results"`
 	NextCursor string     `json:"next_cursor"`
 	HasMore    bool       `json:"has_more"`
 }
@@ -149,6 +131,26 @@ type Block interface {
 	GetArchived() bool
 }
 
+type Blocks []Block
+
+func (b *Blocks) UnmarshalJSON(data []byte) error {
+	var err error
+	mapArr := make([]map[string]interface{}, 0)
+	if err = json.Unmarshal(data, &mapArr); err != nil {
+		return err
+	}
+
+	result := make([]Block, len(mapArr))
+	for i, prop := range mapArr {
+		if result[i], err = decodeBlock(prop); err != nil {
+			return err
+		}
+	}
+
+	*b = result
+	return nil
+}
+
 // BasicBlock defines the common fields of all Notion block types.
 // See https://developers.notion.com/reference/block for the list.
 // BasicBlock implements the Block interface.
@@ -197,7 +199,7 @@ type ParagraphBlock struct {
 
 type Paragraph struct {
 	Text     []RichText `json:"text"`
-	Children []Block    `json:"children,omitempty"`
+	Children Blocks     `json:"children,omitempty"`
 }
 
 type Heading1Block struct {
@@ -227,7 +229,7 @@ type CalloutBlock struct {
 type Callout struct {
 	Text     []RichText `json:"text"`
 	Icon     *Icon      `json:"icon,omitempty"`
-	Children []Block    `json:"children,omitempty"`
+	Children Blocks     `json:"children,omitempty"`
 }
 
 type QuoteBlock struct {
@@ -237,7 +239,7 @@ type QuoteBlock struct {
 
 type Quote struct {
 	Text     []RichText `json:"text"`
-	Children []Block    `json:"children,omitempty"`
+	Children Blocks     `json:"children,omitempty"`
 }
 
 type BulletedListItemBlock struct {
@@ -247,7 +249,7 @@ type BulletedListItemBlock struct {
 
 type ListItem struct {
 	Text     []RichText `json:"text"`
-	Children []Block    `json:"children,omitempty"`
+	Children Blocks     `json:"children,omitempty"`
 }
 
 type NumberedListItemBlock struct {
@@ -262,20 +264,20 @@ type ToDoBlock struct {
 
 type ToDo struct {
 	Text     []RichText `json:"text"`
-	Children []Block    `json:"children,omitempty"`
+	Children Blocks     `json:"children,omitempty"`
 	Checked  bool       `json:"checked,omitempty"`
 }
 
 type ToggleBlock struct {
 	BasicBlock
 	Text     []RichText `json:"text"`
-	Children []Block    `json:"children,omitempty"`
+	Children Blocks     `json:"children,omitempty"`
 	Toggle   Toggle     `json:"toggle"`
 }
 
 type Toggle struct {
 	Text     []RichText `json:"text"`
-	Children []Block    `json:"children,omitempty"`
+	Children Blocks     `json:"children,omitempty"`
 }
 
 type ChildPageBlock struct {
@@ -424,7 +426,7 @@ type ColumnBlock struct {
 
 type Column struct {
 	// Children should at least have 1 block when appending.
-	Children []Block `json:"children"`
+	Children Blocks `json:"children"`
 }
 
 type ColumnListBlock struct {
@@ -435,7 +437,7 @@ type ColumnListBlock struct {
 type ColumnList struct {
 	// Children can only contain column blocks
 	// Children should have at least 2 blocks when appending.
-	Children []Block `json:"children"`
+	Children Blocks `json:"children"`
 }
 
 // NOTE: will only be returned by the API. Cannot be created by the API.
@@ -466,7 +468,7 @@ type TemplateBlock struct {
 
 type Template struct {
 	Text     []RichText `json:"text"`
-	Children []Block    `json:"children,omitempty"`
+	Children Blocks     `json:"children,omitempty"`
 }
 
 type SyncedBlock struct {
@@ -477,7 +479,7 @@ type SyncedBlock struct {
 type Synced struct {
 	// SyncedFrom is nil for the original block.
 	SyncedFrom *SyncedFrom `json:"synced_from"`
-	Children   []Block     `json:"children,omitempty"`
+	Children   Blocks      `json:"children,omitempty"`
 }
 
 type SyncedFrom struct {
