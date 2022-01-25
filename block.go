@@ -242,6 +242,27 @@ type Quote struct {
 	Children Blocks     `json:"children,omitempty"`
 }
 
+type TableBlock struct {
+	BasicBlock
+	Table Table `json:"table"`
+}
+
+type Table struct {
+	TableWidth      int    `json:"table_width"`
+	HasColumnHeader bool   `json:"has_column_header"`
+	HasRowHeader    bool   `json:"has_row_header"`
+	Children        Blocks `json:"children,omitempty"`
+}
+
+type TableRowBlock struct {
+	BasicBlock
+	TableRow TableRow `json:"table_row"`
+}
+
+type TableRow struct {
+	Cells [][]RichText `json:"cells"`
+}
+
 type BulletedListItemBlock struct {
 	BasicBlock
 	BulletedListItem ListItem `json:"bulleted_list_item"`
@@ -582,6 +603,10 @@ func decodeBlock(raw map[string]interface{}) (Block, error) {
 		b = &TemplateBlock{}
 	case BlockTypeSyncedBlock:
 		b = &SyncedBlock{}
+	case BlockTypeTableBlock:
+		b = &TableBlock{}
+	case BlockTypeTableRowBlock:
+		b = &TableRowBlock{}
 
 	case BlockTypeUnsupported:
 		b = &UnsupportedBlock{}
