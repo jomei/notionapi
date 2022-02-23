@@ -402,7 +402,8 @@ func TestPageCreateRequest_MarshallJSON(t *testing.T) {
 							Type:   notionapi.BlockTypeHeading2,
 						},
 						Heading2: struct {
-							Text []notionapi.RichText `json:"text"`
+							Text     []notionapi.RichText `json:"text"`
+							Children notionapi.Blocks     `json:"children,omitempty"`
 						}{
 							Text: []notionapi.RichText{
 								{

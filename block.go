@@ -208,7 +208,8 @@ type Heading1Block struct {
 }
 
 type Heading struct {
-	Text []RichText `json:"text"`
+	Text     []RichText `json:"text"`
+	Children Blocks     `json:"children,omitempty"`
 }
 
 type Heading2Block struct {
