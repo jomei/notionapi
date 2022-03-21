@@ -36,8 +36,8 @@ type NumberFilterCondition struct {
 	DoesNotEqual         float64 `json:"does_not_equal,omitempty"`
 	GreaterThan          float64 `json:"greater_than,omitempty"`
 	LessThan             float64 `json:"less_than,omitempty"`
-	GreaterThanOrEqualTo float64 `json:"greater_than_or_equal_to"`
-	LessThanOrEqualTo    float64 `json:"less_than_or_equal_to"`
+	GreaterThanOrEqualTo float64 `json:"greater_than_or_equal_to,omitempty"`
+	LessThanOrEqualTo    float64 `json:"less_than_or_equal_to,omitempty"`
 	IsEmpty              bool    `json:"is_empty,omitempty"`
 	IsNotEmpty           bool    `json:"is_not_empty,omitempty"`
 }
