@@ -15,7 +15,7 @@ import (
 const (
 	apiURL        = "https://api.notion.com"
 	apiVersion    = "v1"
-	notionVersion = "2021-08-16"
+	notionVersion = "2022-02-22"
 )
 
 type Token string
