@@ -4,6 +4,14 @@
     "type": "callout",
     "created_time": "2021-11-04T02:09:00Z",
     "last_edited_time": "2021-11-04T02:09:00Z",
+    "created_by":{
+        "object": "user",
+        "id": "some_id"
+      },
+      "last_edited_by":{
+        "object": "user",
+        "id": "some_id"
+      },
     "callout": {
         "text": [{
             "type": "text",
@@ -45,6 +53,14 @@
     "type": "heading_1",
     "created_time": "2021-11-04T02:09:00Z",
     "last_edited_time": "2021-11-04T02:09:00Z",
+    "created_by":{
+        "object": "user",
+        "id": "some_id"
+      },
+      "last_edited_by":{
+        "object": "user",
+        "id": "some_id"
+      },
     "heading_1": {
         "text": [{
             "type": "text",
@@ -68,6 +84,14 @@
     "type": "child_database",
     "created_time": "2021-11-04T02:09:00Z",
     "last_edited_time": "2021-11-04T02:09:00Z",
+    "created_by":{
+        "object": "user",
+        "id": "some_id"
+      },
+      "last_edited_by":{
+        "object": "user",
+        "id": "some_id"
+      },
     "child_database": {
         "title": "Required Texts"
     }
@@ -77,6 +101,14 @@
     "type": "column_list",
     "created_time": "2021-11-04T02:09:00Z",
     "last_edited_time": "2021-11-04T02:09:00Z",
+    "created_by":{
+        "object": "user",
+        "id": "some_id"
+      },
+      "last_edited_by":{
+        "object": "user",
+        "id": "some_id"
+      },
     "has_children": true,
     "column_list": {}
 }, {
@@ -85,6 +117,14 @@
     "type": "heading_3",
     "created_time": "2021-11-04T02:09:00Z",
     "last_edited_time": "2021-11-04T02:09:00Z",
+    "created_by":{
+        "object": "user",
+        "id": "some_id"
+      },
+      "last_edited_by":{
+        "object": "user",
+        "id": "some_id"
+      },
     "heading_3": {
         "text": [{
             "type": "text",
@@ -108,6 +148,14 @@
     "type": "paragraph",
     "created_time": "2021-11-04T02:09:00Z",
     "last_edited_time": "2021-11-04T02:09:00Z",
+    "created_by":{
+        "object": "user",
+        "id": "some_id"
+      },
+      "last_edited_by":{
+        "object": "user",
+        "id": "some_id"
+      },
     "paragraph": {
         "text": [{
             "type": "text",

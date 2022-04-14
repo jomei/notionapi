@@ -100,6 +100,14 @@ func TestBlockClient(t *testing.T) {
 								CreatedTime:    &timestamp,
 								LastEditedTime: &timestamp,
 								Type:           notionapi.BlockTypeParagraph,
+								CreatedBy: notionapi.User{
+									Object: "user",
+									ID:     "some_id",
+								},
+								LastEditedBy: notionapi.User{
+									Object: "user",
+									ID:     "some_id",
+								},
 							},
 							Paragraph: notionapi.Paragraph{
 								Text: []notionapi.RichText{
@@ -126,22 +134,22 @@ func TestBlockClient(t *testing.T) {
 				client := notionapi.NewClient("some_token", notionapi.WithHTTPClient(c))
 				got, err := client.Block.AppendChildren(context.Background(), tt.id, tt.request)
 				if (err != nil) != tt.wantErr {
-					t.Errorf("AppendChidlren() error = %v, wantErr %v", err, tt.wantErr)
+					t.Errorf("AppendChildren() error = %v, wantErr %v", err, tt.wantErr)
 					return
 				}
 				a, err := json.Marshal(got)
 				if err != nil {
-					t.Errorf("AppendChidlren() marhall error = %v", err)
+					t.Errorf("AppendChildren() marhall error = %v", err)
 					return
 				}
 				b, err := json.Marshal(tt.want)
 				if err != nil {
-					t.Errorf("AppendChidlren() marhall error = %v", err)
+					t.Errorf("AppendChildren() marshal error = %v", err)
 					return
 				}
 
 				if !(string(a) == string(b)) {
-					t.Errorf("AppendChidlren() got = %v, want %v", got, tt.want)
+					t.Errorf("AppendChildren() got = %v, want %v", got, tt.want)
 				}
 			})
 		}
@@ -169,7 +177,15 @@ func TestBlockClient(t *testing.T) {
 						Type:           notionapi.BlockTypeChildPage,
 						CreatedTime:    &timestamp,
 						LastEditedTime: &timestamp,
-						HasChildren:    true,
+						CreatedBy: notionapi.User{
+							Object: "user",
+							ID:     "some_id",
+						},
+						LastEditedBy: notionapi.User{
+							Object: "user",
+							ID:     "some_id",
+						},
+						HasChildren: true,
 					},
 					ChildPage: struct {
 						Title string `json:"title"`
@@ -275,6 +291,10 @@ func TestBlockArrayUnmarshal(t *testing.T) {
 	}
 
 	var emoji notionapi.Emoji = "📌"
+	var user notionapi.User = notionapi.User{
+		Object: "user",
+		ID:     "some_id",
+	}
 	t.Run("BlockArray", func(t *testing.T) {
 		tests := []struct {
 			name     string
@@ -294,6 +314,8 @@ func TestBlockArrayUnmarshal(t *testing.T) {
 							Type:           "callout",
 							CreatedTime:    &timestamp,
 							LastEditedTime: &timestamp,
+							CreatedBy:      user,
+							LastEditedBy:   user,
 						},
 						Callout: notionapi.Callout{
 							Text: []notionapi.RichText{
@@ -331,6 +353,8 @@ func TestBlockArrayUnmarshal(t *testing.T) {
 							Type:           "heading_1",
 							CreatedTime:    &timestamp,
 							LastEditedTime: &timestamp,
+							CreatedBy:      user,
+							LastEditedBy:   user,
 						},
 						Heading1: notionapi.Heading{
 							Text: []notionapi.RichText{
@@ -354,6 +378,8 @@ func TestBlockArrayUnmarshal(t *testing.T) {
 							Type:           "child_database",
 							CreatedTime:    &timestamp,
 							LastEditedTime: &timestamp,
+							CreatedBy:      user,
+							LastEditedBy:   user,
 						},
 						ChildDatabase: struct {
 							Title string "json:\"title\""
@@ -368,6 +394,8 @@ func TestBlockArrayUnmarshal(t *testing.T) {
 							Type:           "column_list",
 							CreatedTime:    &timestamp,
 							LastEditedTime: &timestamp,
+							CreatedBy:      user,
+							LastEditedBy:   user,
 							HasChildren:    true,
 						},
 					},
@@ -378,6 +406,8 @@ func TestBlockArrayUnmarshal(t *testing.T) {
 							Type:           "heading_3",
 							CreatedTime:    &timestamp,
 							LastEditedTime: &timestamp,
+							CreatedBy:      user,
+							LastEditedBy:   user,
 						},
 						Heading3: notionapi.Heading{
 							Text: []notionapi.RichText{
@@ -402,6 +432,8 @@ func TestBlockArrayUnmarshal(t *testing.T) {
 							Type:           "paragraph",
 							CreatedTime:    &timestamp,
 							LastEditedTime: &timestamp,
+							CreatedBy:      user,
+							LastEditedBy:   user,
 						},
 						Paragraph: notionapi.Paragraph{
 							Text: []notionapi.RichText{

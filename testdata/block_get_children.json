@@ -6,6 +6,14 @@
       "id": "some_id",
       "created_time": "2021-05-30T09:46:51.232Z",
       "last_edited_time": "2021-05-30T09:46:00.000Z",
+      "created_by":{
+        "object": "user",
+        "id": "some_id"
+      },
+      "last_edited_by":{
+        "object": "user",
+        "id": "some_id2"
+      },
       "has_children": false,
       "type": "heading_1",
       "heading_1": {
@@ -35,6 +43,14 @@
       "id": "some_id",
       "created_time": "2021-05-30T09:47:03.727Z",
       "last_edited_time": "2021-05-30T09:47:00.000Z",
+      "created_by":{
+        "object": "user",
+        "id": "some_id2"
+      },
+      "last_edited_by":{
+        "object": "user",
+        "id": "some_id"
+      },
       "has_children": false,
       "type": "to_do",
       "to_do": {
