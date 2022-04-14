@@ -37,6 +37,14 @@ func TestPageClient(t *testing.T) {
 					ID:             "some_id",
 					CreatedTime:    timestamp,
 					LastEditedTime: timestamp,
+					CreatedBy: notionapi.User{
+						Object: "user",
+						ID:     "some_id",
+					},
+					LastEditedBy: notionapi.User{
+						Object: "user",
+						ID:     "some_id",
+					},
 					Parent: notionapi.Parent{
 						Type:       notionapi.ParentTypeDatabaseID,
 						DatabaseID: "some_id",
@@ -196,6 +204,14 @@ func TestPageClient(t *testing.T) {
 					ID:             "some_id",
 					CreatedTime:    timestamp,
 					LastEditedTime: timestamp,
+					CreatedBy: notionapi.User{
+						Object: "user",
+						ID:     "some_id",
+					},
+					LastEditedBy: notionapi.User{
+						Object: "user",
+						ID:     "some_id",
+					},
 					Parent: notionapi.Parent{
 						Type:       notionapi.ParentTypeDatabaseID,
 						DatabaseID: "some_id",
@@ -258,6 +274,14 @@ func TestPageClient(t *testing.T) {
 					ID:             "some_id",
 					CreatedTime:    timestamp,
 					LastEditedTime: timestamp,
+					CreatedBy: notionapi.User{
+						Object: "user",
+						ID:     "some_id",
+					},
+					LastEditedBy: notionapi.User{
+						Object: "user",
+						ID:     "some_id",
+					},
 					Parent: notionapi.Parent{
 						Type:       notionapi.ParentTypeDatabaseID,
 						DatabaseID: "some_id",

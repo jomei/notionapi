@@ -6,6 +6,14 @@
       "id": "some_id",
       "created_time": "2021-05-29T08:51:07.831Z",
       "last_edited_time": "2021-05-29T08:51:07.831Z",
+      "created_by": {
+        "object": "user",
+        "id": "some_id"
+      },
+      "last_edited_by": {
+        "object": "user",
+        "id": "some_id"
+      },
       "parent": {
         "type": "database_id",
         "database_id": "some_id"

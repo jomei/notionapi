@@ -109,6 +109,8 @@ type Database struct {
 	ID             ObjectID   `json:"id"`
 	CreatedTime    time.Time  `json:"created_time"`
 	LastEditedTime time.Time  `json:"last_edited_time"`
+	CreatedBy      User       `json:"created_by,omitempty"`
+	LastEditedBy   User       `json:"last_edited_by,omitempty"`
 	Title          []RichText `json:"title"`
 	Parent         Parent     `json:"parent"`
 	URL            string     `json:"url"`
