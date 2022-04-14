@@ -100,11 +100,11 @@ func TestBlockClient(t *testing.T) {
 								CreatedTime:    &timestamp,
 								LastEditedTime: &timestamp,
 								Type:           notionapi.BlockTypeParagraph,
-								CreatedBy: notionapi.User{
+								CreatedBy: &notionapi.User{
 									Object: "user",
 									ID:     "some_id",
 								},
-								LastEditedBy: notionapi.User{
+								LastEditedBy: &notionapi.User{
 									Object: "user",
 									ID:     "some_id",
 								},
@@ -177,11 +177,11 @@ func TestBlockClient(t *testing.T) {
 						Type:           notionapi.BlockTypeChildPage,
 						CreatedTime:    &timestamp,
 						LastEditedTime: &timestamp,
-						CreatedBy: notionapi.User{
+						CreatedBy: &notionapi.User{
 							Object: "user",
 							ID:     "some_id",
 						},
-						LastEditedBy: notionapi.User{
+						LastEditedBy: &notionapi.User{
 							Object: "user",
 							ID:     "some_id",
 						},
@@ -291,7 +291,7 @@ func TestBlockArrayUnmarshal(t *testing.T) {
 	}
 
 	var emoji notionapi.Emoji = "📌"
-	var user notionapi.User = notionapi.User{
+	var user *notionapi.User = &notionapi.User{
 		Object: "user",
 		ID:     "some_id",
 	}

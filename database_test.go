@@ -16,6 +16,11 @@ func TestDatabaseClient(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	var user = notionapi.User{
+		Object: "user",
+		ID:     "some_id",
+	}
+
 	t.Run("Get", func(t *testing.T) {
 		tests := []struct {
 			name       string
@@ -36,6 +41,8 @@ func TestDatabaseClient(t *testing.T) {
 					ID:             "some_id",
 					CreatedTime:    timestamp,
 					LastEditedTime: timestamp,
+					CreatedBy:      user,
+					LastEditedBy:   user,
 					Title: []notionapi.RichText{
 						{
 							Type:        notionapi.ObjectTypeText,
@@ -106,6 +113,8 @@ func TestDatabaseClient(t *testing.T) {
 							ID:             "some_id",
 							CreatedTime:    timestamp,
 							LastEditedTime: timestamp,
+							CreatedBy:      user,
+							LastEditedBy:   user,
 							Title: []notionapi.RichText{
 								{
 									Type: notionapi.ObjectTypeText,
@@ -177,6 +186,8 @@ func TestDatabaseClient(t *testing.T) {
 							ID:             "some_id",
 							CreatedTime:    timestamp,
 							LastEditedTime: timestamp,
+							CreatedBy:      user,
+							LastEditedBy:   user,
 							Parent: notionapi.Parent{
 								Type:       notionapi.ParentTypeDatabaseID,
 								DatabaseID: "some_id",
@@ -243,6 +254,8 @@ func TestDatabaseClient(t *testing.T) {
 					ID:             "some_id",
 					CreatedTime:    timestamp,
 					LastEditedTime: timestamp,
+					CreatedBy:      user,
+					LastEditedBy:   user,
 					Parent: notionapi.Parent{
 						Type:   "page_id",
 						PageID: "48f8fee9-cd79-4180-bc2f-ec0398253067",
@@ -311,6 +324,8 @@ func TestDatabaseClient(t *testing.T) {
 					ID:             "some_id",
 					CreatedTime:    timestamp,
 					LastEditedTime: timestamp,
+					CreatedBy:      user,
+					LastEditedBy:   user,
 					Parent: notionapi.Parent{
 						Type:   "page_id",
 						PageID: "a7744006-9233-4cd0-bf44-3a49de2c01b5",
