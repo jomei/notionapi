@@ -160,6 +160,8 @@ type BasicBlock struct {
 	Type           BlockType  `json:"type"`
 	CreatedTime    *time.Time `json:"created_time,omitempty"`
 	LastEditedTime *time.Time `json:"last_edited_time,omitempty"`
+	CreatedBy      User       `json:"created_by"`
+	LastEditedBy   User       `json:"last_edited_by"`
 	HasChildren    bool       `json:"has_children,omitempty"`
 	Archived       bool       `json:"archived,omitempty"`
 }
