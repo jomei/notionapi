@@ -92,6 +92,7 @@ type PageCreateRequest struct {
 	Parent     Parent     `json:"parent"`
 	Properties Properties `json:"properties"`
 	Children   []Block    `json:"children,omitempty"`
+	Icon       *Icon      `json:"icon,omitempty"`
 }
 
 func handlePageResponse(res *http.Response) (*Page, error) {
