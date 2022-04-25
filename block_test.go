@@ -110,7 +110,7 @@ func TestBlockClient(t *testing.T) {
 								},
 							},
 							Paragraph: notionapi.Paragraph{
-								Text: []notionapi.RichText{
+								RichText: []notionapi.RichText{
 									{
 										Type: notionapi.ObjectTypeText,
 										Text: notionapi.Text{Content: "AAAAAA"},
@@ -233,7 +233,7 @@ func TestBlockClient(t *testing.T) {
 				id:         "some_id",
 				req: &notionapi.BlockUpdateRequest{
 					Paragraph: &notionapi.Paragraph{
-						Text: []notionapi.RichText{
+						RichText: []notionapi.RichText{
 							{
 								Text: notionapi.Text{Content: "Hello"},
 							},
@@ -249,7 +249,7 @@ func TestBlockClient(t *testing.T) {
 						LastEditedTime: &timestamp,
 					},
 					Paragraph: notionapi.Paragraph{
-						Text: []notionapi.RichText{
+						RichText: []notionapi.RichText{
 							{
 								Type: notionapi.ObjectTypeText,
 								Text: notionapi.Text{
@@ -436,7 +436,7 @@ func TestBlockArrayUnmarshal(t *testing.T) {
 							LastEditedBy:   user,
 						},
 						Paragraph: notionapi.Paragraph{
-							Text: []notionapi.RichText{
+							RichText: []notionapi.RichText{
 								{
 									Type: "text",
 									Text: notionapi.Text{
