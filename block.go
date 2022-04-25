@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"time"
 )
@@ -35,6 +36,12 @@ func (bc *BlockClient) GetChildren(ctx context.Context, id BlockID, pagination *
 		return nil, err
 	}
 
+	defer func() {
+		if errClose := res.Body.Close(); errClose != nil {
+			log.Println("failed to close body, should never happen")
+		}
+	}()
+
 	response := &GetChildrenResponse{}
 	err = json.NewDecoder(res.Body).Decode(response)
 	if err != nil {
@@ -58,6 +65,12 @@ func (bc *BlockClient) AppendChildren(ctx context.Context, id BlockID, requestBo
 		return nil, err
 	}
 
+	defer func() {
+		if errClose := res.Body.Close(); errClose != nil {
+			log.Println("failed to close body, should never happen")
+		}
+	}()
+
 	var response AppendBlockChildrenResponse
 	err = json.NewDecoder(res.Body).Decode(&response)
 	if err != nil {
@@ -74,6 +87,12 @@ func (bc *BlockClient) Get(ctx context.Context, id BlockID) (Block, error) {
 		return nil, err
 	}
 
+	defer func() {
+		if errClose := res.Body.Close(); errClose != nil {
+			log.Println("failed to close body, should never happen")
+		}
+	}()
+
 	var response map[string]interface{}
 	err = json.NewDecoder(res.Body).Decode(&response)
 	if err != nil {
@@ -89,6 +108,12 @@ func (bc *BlockClient) Delete(ctx context.Context, id BlockID) (Block, error) {
 		return nil, err
 	}
 
+	defer func() {
+		if errClose := res.Body.Close(); errClose != nil {
+			log.Println("failed to close body, should never happen")
+		}
+	}()
+
 	var response map[string]interface{}
 	err = json.NewDecoder(res.Body).Decode(&response)
 	if err != nil {
@@ -102,6 +127,12 @@ func (bc *BlockClient) Update(ctx context.Context, id BlockID, requestBody *Bloc
 	if err != nil {
 		return nil, err
 	}
+
+	defer func() {
+		if errClose := res.Body.Close(); errClose != nil {
+			log.Println("failed to close body, should never happen")
+		}
+	}()
 
 	var response map[string]interface{}
 	err = json.NewDecoder(res.Body).Decode(&response)

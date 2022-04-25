@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 )
 
@@ -21,6 +22,12 @@ func (sc *SearchClient) Do(ctx context.Context, request *SearchRequest) (*Search
 	if err != nil {
 		return nil, err
 	}
+
+	defer func() {
+		if errClose := res.Body.Close(); errClose != nil {
+			log.Println("failed to close body, should never happen")
+		}
+	}()
 
 	var response SearchResponse
 	err = json.NewDecoder(res.Body).Decode(&response)

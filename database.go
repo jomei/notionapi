@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"time"
 )
@@ -32,6 +33,13 @@ func (dc *DatabaseClient) Get(ctx context.Context, id DatabaseID) (*Database, er
 	if err != nil {
 		return nil, err
 	}
+
+	defer func() {
+		if errClose := res.Body.Close(); errClose != nil {
+			log.Println("failed to close body, should never happen")
+		}
+	}()
+
 	var response Database
 
 	err = json.NewDecoder(res.Body).Decode(&response)
@@ -49,6 +57,12 @@ func (dc *DatabaseClient) List(ctx context.Context, pagination *Pagination) (*Da
 		return nil, err
 	}
 
+	defer func() {
+		if errClose := res.Body.Close(); errClose != nil {
+			log.Println("failed to close body, should never happen")
+		}
+	}()
+
 	var response DatabaseListResponse
 	err = json.NewDecoder(res.Body).Decode(&response)
 	if err != nil {
@@ -64,6 +78,12 @@ func (dc *DatabaseClient) Query(ctx context.Context, id DatabaseID, requestBody 
 	if err != nil {
 		return nil, err
 	}
+
+	defer func() {
+		if errClose := res.Body.Close(); errClose != nil {
+			log.Println("failed to close body, should never happen")
+		}
+	}()
 
 	var response DatabaseQueryResponse
 	err = json.NewDecoder(res.Body).Decode(&response)
@@ -81,6 +101,12 @@ func (dc *DatabaseClient) Update(ctx context.Context, id DatabaseID, requestBody
 		return nil, err
 	}
 
+	defer func() {
+		if errClose := res.Body.Close(); errClose != nil {
+			log.Println("failed to close body, should never happen")
+		}
+	}()
+
 	var response Database
 	if err := json.NewDecoder(res.Body).Decode(&response); err != nil {
 		return nil, err
@@ -94,6 +120,12 @@ func (dc *DatabaseClient) Create(ctx context.Context, requestBody *DatabaseCreat
 	if err != nil {
 		return nil, err
 	}
+
+	defer func() {
+		if errClose := res.Body.Close(); errClose != nil {
+			log.Println("failed to close body, should never happen")
+		}
+	}()
 
 	var response Database
 	err = json.NewDecoder(res.Body).Decode(&response)
