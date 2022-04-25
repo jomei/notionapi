@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 )
 
@@ -29,6 +30,12 @@ func (uc *UserClient) Get(ctx context.Context, id UserID) (*User, error) {
 		return nil, err
 	}
 
+	defer func() {
+		if errClose := res.Body.Close(); errClose != nil {
+			log.Println("failed to close body, should never happen")
+		}
+	}()
+
 	var response User
 	err = json.NewDecoder(res.Body).Decode(&response)
 	if err != nil {
@@ -44,6 +51,12 @@ func (uc *UserClient) List(ctx context.Context, pagination *Pagination) (*UsersL
 	if err != nil {
 		return nil, err
 	}
+
+	defer func() {
+		if errClose := res.Body.Close(); errClose != nil {
+			log.Println("failed to close body, should never happen")
+		}
+	}()
 
 	var response UsersListResponse
 	err = json.NewDecoder(res.Body).Decode(&response)

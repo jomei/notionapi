@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"time"
 )
@@ -31,6 +32,12 @@ func (pc *PageClient) Get(ctx context.Context, id PageID) (*Page, error) {
 		return nil, err
 	}
 
+	defer func() {
+		if errClose := res.Body.Close(); errClose != nil {
+			log.Println("failed to close body, should never happen")
+		}
+	}()
+
 	return handlePageResponse(res)
 }
 
@@ -40,6 +47,12 @@ func (pc *PageClient) Create(ctx context.Context, requestBody *PageCreateRequest
 	if err != nil {
 		return nil, err
 	}
+
+	defer func() {
+		if errClose := res.Body.Close(); errClose != nil {
+			log.Println("failed to close body, should never happen")
+		}
+	}()
 
 	return handlePageResponse(res)
 }
@@ -57,6 +70,12 @@ func (pc *PageClient) Update(ctx context.Context, id PageID, request *PageUpdate
 	if err != nil {
 		return nil, err
 	}
+
+	defer func() {
+		if errClose := res.Body.Close(); errClose != nil {
+			log.Println("failed to close body, should never happen")
+		}
+	}()
 
 	return handlePageResponse(res)
 }
