@@ -17,6 +17,7 @@ func (dID DatabaseID) String() string {
 
 type DatabaseService interface {
 	Get(context.Context, DatabaseID) (*Database, error)
+	// DEPRECATED: this endpoint is removed in 2022-02-22
 	List(context.Context, *Pagination) (*DatabaseListResponse, error)
 	Query(context.Context, DatabaseID, *DatabaseQueryRequest) (*DatabaseQueryResponse, error)
 	Update(context.Context, DatabaseID, *DatabaseUpdateRequest) (*Database, error)

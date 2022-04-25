@@ -231,7 +231,9 @@ type ParagraphBlock struct {
 }
 
 type Paragraph struct {
-	Text     []RichText `json:"text"`
+	// DEPRECATED use RichText instead
+	Text     []RichText `json:"text,omitempty"`
+	RichText []RichText `json:"rich_text"`
 	Children Blocks     `json:"children,omitempty"`
 }
 
