@@ -158,6 +158,8 @@ type Block interface {
 	GetObject() ObjectType
 	GetCreatedTime() *time.Time
 	GetLastEditedTime() *time.Time
+	GetCreatedBy() *User
+	GetLastEditedBy() *User
 	GetHasChildren() bool
 	GetArchived() bool
 }
@@ -215,6 +217,14 @@ func (b BasicBlock) GetCreatedTime() *time.Time {
 
 func (b BasicBlock) GetLastEditedTime() *time.Time {
 	return b.LastEditedTime
+}
+
+func (b BasicBlock) GetCreatedBy() *User {
+	return b.CreatedBy
+}
+
+func (b BasicBlock) GetLastEditedBy() *User {
+	return b.LastEditedBy
 }
 
 func (b BasicBlock) GetHasChildren() bool {
