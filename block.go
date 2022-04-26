@@ -235,6 +235,8 @@ func (b BasicBlock) GetArchived() bool {
 	return b.Archived
 }
 
+var _ Block = (*BasicBlock)(nil)
+
 type ParagraphBlock struct {
 	BasicBlock
 	Paragraph Paragraph `json:"paragraph"`
