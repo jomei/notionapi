@@ -243,7 +243,7 @@ type Heading1Block struct {
 }
 
 type Heading struct {
-	Text     []RichText `json:"text"`
+	RichText []RichText `json:"rich_text"`
 	Children Blocks     `json:"children,omitempty"`
 }
 
@@ -263,7 +263,9 @@ type CalloutBlock struct {
 }
 
 type Callout struct {
-	Text     []RichText `json:"text"`
+	// DEPRECATED use RichText instead
+	Text     []RichText `json:"text,omitempty"`
+	RichText []RichText `json:"rich_text"`
 	Icon     *Icon      `json:"icon,omitempty"`
 	Children Blocks     `json:"children,omitempty"`
 }
@@ -274,7 +276,9 @@ type QuoteBlock struct {
 }
 
 type Quote struct {
-	Text     []RichText `json:"text"`
+	// DEPRECATED use RichText instead
+	Text     []RichText `json:"text,omitempty"`
+	RichText []RichText `json:"rich_text"`
 	Children Blocks     `json:"children,omitempty"`
 }
 
@@ -305,7 +309,9 @@ type BulletedListItemBlock struct {
 }
 
 type ListItem struct {
-	Text     []RichText `json:"text"`
+	// DEPRECATED use RichText instead
+	Text     []RichText `json:"text,omitempty"`
+	RichText []RichText `json:"rich_text"`
 	Children Blocks     `json:"children,omitempty"`
 }
 
@@ -320,20 +326,26 @@ type ToDoBlock struct {
 }
 
 type ToDo struct {
-	Text     []RichText `json:"text"`
+	// DEPRECATED use RichText instead
+	Text     []RichText `json:"text,omitempty"`
+	RichText []RichText `json:"rich_text"`
 	Children Blocks     `json:"children,omitempty"`
 	Checked  bool       `json:"checked,omitempty"`
 }
 
 type ToggleBlock struct {
 	BasicBlock
-	Text     []RichText `json:"text"`
+	// DEPRECATED use RichText instead
+	Text     []RichText `json:"text,omitempty"`
+	RichText []RichText `json:"rich_text"`
 	Children Blocks     `json:"children,omitempty"`
 	Toggle   Toggle     `json:"toggle"`
 }
 
 type Toggle struct {
-	Text     []RichText `json:"text"`
+	// DEPRECATED use RichText instead
+	Text     []RichText `json:"text,omitempty"`
+	RichText []RichText `json:"rich_text"`
 	Children Blocks     `json:"children,omitempty"`
 }
 
@@ -383,7 +395,9 @@ type CodeBlock struct {
 }
 
 type Code struct {
-	Text     []RichText `json:"text"`
+	// DEPRECATED use RichText instead
+	Text     []RichText `json:"text,omitempty"`
+	RichText []RichText `json:"rich_text"`
 	Language string     `json:"language"`
 }
 
@@ -524,7 +538,9 @@ type TemplateBlock struct {
 }
 
 type Template struct {
-	Text     []RichText `json:"text"`
+	// DEPRECATED use RichText instead
+	Text     []RichText `json:"text,omitempty"`
+	RichText []RichText `json:"rich_text"`
 	Children Blocks     `json:"children,omitempty"`
 }
 

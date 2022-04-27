@@ -78,7 +78,7 @@ func TestBlockClient(t *testing.T) {
 								Type:   notionapi.BlockTypeHeading2,
 							},
 							Heading2: struct {
-								Text     []notionapi.RichText `json:"text"`
+								RichText []notionapi.RichText `json:"rich_text"`
 								Children notionapi.Blocks     `json:"children,omitempty"`
 							}{[]notionapi.RichText{
 								{
@@ -318,7 +318,7 @@ func TestBlockArrayUnmarshal(t *testing.T) {
 							LastEditedBy:   user,
 						},
 						Callout: notionapi.Callout{
-							Text: []notionapi.RichText{
+							RichText: []notionapi.RichText{
 								{
 									Type: "text",
 									Text: notionapi.Text{
@@ -357,7 +357,7 @@ func TestBlockArrayUnmarshal(t *testing.T) {
 							LastEditedBy:   user,
 						},
 						Heading1: notionapi.Heading{
-							Text: []notionapi.RichText{
+							RichText: []notionapi.RichText{
 								{
 									Type: "text",
 									Text: notionapi.Text{
@@ -410,7 +410,7 @@ func TestBlockArrayUnmarshal(t *testing.T) {
 							LastEditedBy:   user,
 						},
 						Heading3: notionapi.Heading{
-							Text: []notionapi.RichText{
+							RichText: []notionapi.RichText{
 								{
 									Type: "text",
 									Text: notionapi.Text{

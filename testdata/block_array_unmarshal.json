@@ -13,7 +13,7 @@
         "id": "some_id"
       },
     "callout": {
-        "text": [{
+        "rich_text": [{
             "type": "text",
             "text": {
                 "content": "This page is designed to be shared with students on the web. Click "
@@ -62,7 +62,7 @@
         "id": "some_id"
       },
     "heading_1": {
-        "text": [{
+        "rich_text": [{
             "type": "text",
             "text": {
                 "content": "History 340"
@@ -126,7 +126,7 @@
         "id": "some_id"
       },
     "heading_3": {
-        "text": [{
+        "rich_text": [{
             "type": "text",
             "text": {
                 "content": "Assignment Submission"
