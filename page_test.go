@@ -426,10 +426,10 @@ func TestPageCreateRequest_MarshallJSON(t *testing.T) {
 							Type:   notionapi.BlockTypeHeading2,
 						},
 						Heading2: struct {
-							Text     []notionapi.RichText `json:"text"`
+							RichText []notionapi.RichText `json:"rich_text"`
 							Children notionapi.Blocks     `json:"children,omitempty"`
 						}{
-							Text: []notionapi.RichText{
+							RichText: []notionapi.RichText{
 								{
 									Type: notionapi.ObjectTypeText,
 									Text: notionapi.Text{Content: "Lacinato"},
@@ -458,7 +458,7 @@ func TestPageCreateRequest_MarshallJSON(t *testing.T) {
 					},
 				},
 			},
-			want: []byte(`{"parent":{"database_id":"some_id"},"properties":{"Link":{"url":"some_url"},"Name":{"title":[{"text":{"content":"New Media Article"}}]},"Publishing/Release Date":{"date":{"start":"2020-12-08T12:00:00Z","end":null}},"Read":{"checkbox":false},"Summary":{"text":[{"type":"text","text":{"content":"Some content"},"annotations":{"bold":true,"italic":false,"strikethrough":false,"underline":false,"code":false,"color":"blue"},"plain_text":"Some content"}]},"Type":{"select":{"id":"some_id","name":"Article","color":"default"}}},"children":[{"object":"block","type":"heading_2","heading_2":{"text":[{"type":"text","text":{"content":"Lacinato"}}]}},{"object":"block","type":"paragraph","paragraph":{"rich_text":[{"text":{"content":"Lacinato","link":{"url":"some_url"}}}]}}]}`),
+			want: []byte(`{"parent":{"database_id":"some_id"},"properties":{"Link":{"url":"some_url"},"Name":{"title":[{"text":{"content":"New Media Article"}}]},"Publishing/Release Date":{"date":{"start":"2020-12-08T12:00:00Z","end":null}},"Read":{"checkbox":false},"Summary":{"text":[{"type":"text","text":{"content":"Some content"},"annotations":{"bold":true,"italic":false,"strikethrough":false,"underline":false,"code":false,"color":"blue"},"plain_text":"Some content"}]},"Type":{"select":{"id":"some_id","name":"Article","color":"default"}}},"children":[{"object":"block","type":"heading_2","heading_2":{"rich_text":[{"type":"text","text":{"content":"Lacinato"}}]}},{"object":"block","type":"paragraph","paragraph":{"rich_text":[{"text":{"content":"Lacinato","link":{"url":"some_url"}}}]}}]}`),
 		},
 	}
 
