@@ -1,10 +1,14 @@
 ### Database
-
 #List
 GET https://api.notion.com/v1/databases
 Content-Type: application/json
 Authorization: Bearer {{token}}
 Notion-Version: {{api_version}}
+
+###
+#Get
+GET https://api.notion.com/v1/databases/{{database_id}}
+Authorization: Bearer {{token}}
 
 ###
 # Query

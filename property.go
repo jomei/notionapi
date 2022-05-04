@@ -107,7 +107,7 @@ type Option struct {
 type DateProperty struct {
 	ID   ObjectID     `json:"id,omitempty"`
 	Type PropertyType `json:"type,omitempty"`
-	Date DateObject   `json:"date"`
+	Date *DateObject  `json:"date,omitempty"`
 }
 
 type DateObject struct {
