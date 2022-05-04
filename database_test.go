@@ -173,7 +173,7 @@ func TestDatabaseClient(t *testing.T) {
 				request: &notionapi.DatabaseQueryRequest{
 					PropertyFilter: &notionapi.PropertyFilter{
 						Property: "Name",
-						Text: &notionapi.TextFilterCondition{
+						RichText: &notionapi.TextFilterCondition{
 							Contains: "Hel",
 						},
 					},
