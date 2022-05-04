@@ -8,7 +8,8 @@ type Condition string
 
 type PropertyFilter struct {
 	Property    string                      `json:"property"`
-	Text        *TextFilterCondition        `json:"text,omitempty"`
+	Text        *TextFilterCondition        `json:"rich_text,omitempty"`
+	Title       *TextFilterCondition        `json:"title,omitempty"`
 	Number      *NumberFilterCondition      `json:"number,omitempty"`
 	Checkbox    *CheckboxFilterCondition    `json:"checkbox,omitempty"`
 	Select      *SelectFilterCondition      `json:"select,omitempty"`

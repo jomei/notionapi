@@ -440,6 +440,30 @@ func TestDatabaseQueryRequest_MarshalJSON(t *testing.T) {
 			},
 			want: []byte(`{"filter":{"property":"created_at","date":{"equals":"2021-05-10T02:43:42Z","past_week":{}}}}`),
 		},
+		{
+			name: "title filter",
+			req: &notionapi.DatabaseQueryRequest{
+				PropertyFilter: &notionapi.PropertyFilter{
+					Property: "Name",
+					Title: &notionapi.TextFilterCondition{
+						Equals: "title",
+					},
+				},
+			},
+			want: []byte(`{"filter":{"property":"Name","title":{"equals":"title"}}}`),
+		},
+		{
+			name: "richtext filter",
+			req: &notionapi.DatabaseQueryRequest{
+				PropertyFilter: &notionapi.PropertyFilter{
+					Property: "Text",
+					Text: &notionapi.TextFilterCondition{
+						Equals: "text",
+					},
+				},
+			},
+			want: []byte(`{"filter":{"property":"Text","rich_text":{"equals":"text"}}}`),
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
