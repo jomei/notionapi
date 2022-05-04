@@ -344,7 +344,7 @@ func TestPageCreateRequest_MarshallJSON(t *testing.T) {
 						},
 					},
 					"Publishing/Release Date": notionapi.DateProperty{
-						Date: notionapi.DateObject{
+						Date: &notionapi.DateObject{
 							Start: &dateObj,
 						},
 					},
@@ -393,7 +393,7 @@ func TestPageCreateRequest_MarshallJSON(t *testing.T) {
 						},
 					},
 					"Publishing/Release Date": notionapi.DateProperty{
-						Date: notionapi.DateObject{
+						Date: &notionapi.DateObject{
 							Start: &dateObj,
 						},
 					},
