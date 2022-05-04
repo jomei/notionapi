@@ -7,8 +7,10 @@ type CompoundFilter map[FilterOperator][]PropertyFilter
 type Condition string
 
 type PropertyFilter struct {
-	Property    string                      `json:"property"`
+	Property string `json:"property"`
+	// DEPRECATED: doesn't for ver. 2022-02-22
 	Text        *TextFilterCondition        `json:"text,omitempty"`
+	RichText    *TextFilterCondition        `json:"rich_text,omitempty"`
 	Number      *NumberFilterCondition      `json:"number,omitempty"`
 	Checkbox    *CheckboxFilterCondition    `json:"checkbox,omitempty"`
 	Select      *SelectFilterCondition      `json:"select,omitempty"`
@@ -38,8 +40,8 @@ type NumberFilterCondition struct {
 	LessThan             *float64 `json:"less_than,omitempty"`
 	GreaterThanOrEqualTo *float64 `json:"greater_than_or_equal_to,omitempty"`
 	LessThanOrEqualTo    *float64 `json:"less_than_or_equal_to,omitempty"`
-	IsEmpty              bool    `json:"is_empty,omitempty"`
-	IsNotEmpty           bool    `json:"is_not_empty,omitempty"`
+	IsEmpty              bool     `json:"is_empty,omitempty"`
+	IsNotEmpty           bool     `json:"is_not_empty,omitempty"`
 }
 
 type CheckboxFilterCondition struct {

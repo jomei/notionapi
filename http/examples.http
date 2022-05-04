@@ -4,14 +4,23 @@
 GET https://api.notion.com/v1/databases
 Content-Type: application/json
 Authorization: Bearer {{token}}
-Notion-Version: 2021-08-16
+Notion-Version: {{api_version}}
 
 ###
 # Query
-POST https://api.notion.com/v1/databases/b382c100-1fea-48b3-a503-72e86583ee4c/query
+POST https://api.notion.com/v1/databases/{{database_id}}/query
 Content-Type: application/json
 Authorization: Bearer {{token}}
 Notion-Version: {{api_version}}
+
+{
+  "filter": {
+    "property": "Name",
+    "rich_text": {
+      "equals": "Hello"
+    }
+  }
+}
 
 ###
 # Create
