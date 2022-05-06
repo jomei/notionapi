@@ -693,6 +693,7 @@ type BlockUpdateRequest struct {
 	Heading3         *Heading   `json:"heading_3,omitempty"`
 	BulletedListItem *ListItem  `json:"bulleted_list_item,omitempty"`
 	NumberedListItem *ListItem  `json:"numbered_list_item,omitempty"`
+	Code             *Code      `json:"code,omitempty"`
 	ToDo             *ToDo      `json:"to_do,omitempty"`
 	Toggle           *Toggle    `json:"toggle,omitempty"`
 	Embed            *Embed     `json:"embed,omitempty"`
