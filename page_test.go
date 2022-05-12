@@ -475,3 +475,37 @@ func TestPageCreateRequest_MarshallJSON(t *testing.T) {
 		})
 	}
 }
+
+func TestPageUpdateRequest_MarshallJSON(t *testing.T) {
+	tests := []struct {
+		name    string
+		req     *notionapi.PageUpdateRequest
+		want    []byte
+		wantErr bool
+	}{
+		{
+			name: "update checkbox",
+			req: &notionapi.PageUpdateRequest{
+				Properties: map[string]notionapi.Property{
+					"Checked": notionapi.CheckboxProperty{
+						Checkbox: false,
+					},
+				},
+			},
+			want: []byte(`{"properties":{"Checked":{"checkbox":false}},"archived":false}`),
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := json.Marshal(tt.req)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("MarshalJSON() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("MarshalJSON() got = %s, want %s", got, tt.want)
+			}
+		})
+	}
+}
