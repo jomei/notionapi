@@ -340,9 +340,9 @@ type ToDoBlock struct {
 type ToDo struct {
 	// DEPRECATED use RichText instead
 	Text     []RichText `json:"text,omitempty"`
-	RichText []RichText `json:"rich_text"`
+	RichText []RichText `json:"rich_text,omitempty"`
 	Children Blocks     `json:"children,omitempty"`
-	Checked  bool       `json:"checked,omitempty"`
+	Checked  bool       `json:"checked"`
 }
 
 type ToggleBlock struct {

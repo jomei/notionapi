@@ -473,3 +473,33 @@ func TestBlockArrayUnmarshal(t *testing.T) {
 		}
 	})
 }
+
+func TestBlockUpdateRequest_MarshallJSON(t *testing.T) {
+	tests := []struct {
+		name    string
+		req     *notionapi.BlockUpdateRequest
+		want    []byte
+		wantErr bool
+	}{
+		{
+			name: "update todo checkbox",
+			req: &notionapi.BlockUpdateRequest{
+				ToDo: &notionapi.ToDo{Checked: false},
+			},
+			want: []byte(`{"to_do":{"checked":false}}`),
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := json.Marshal(tt.req)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("MarshalJSON() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("MarshalJSON() got = %s, want %s", got, tt.want)
+			}
+		})
+	}
+}

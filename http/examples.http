@@ -65,10 +65,26 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 Notion-Version: {{api_version}}
 
+###
+# Update
+PATCH https://api.notion.com/v1/pages/{{page_id}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+Notion-Version: {{api_version}}
+
+{
+  "archived": false,
+  "properties": {
+    "Checked": {
+      "checkbox": false
+    }
+  }
+}
+
 
 ### Block
 # Get
-GET https://api.notion.com/v1/blocks/a7bde50e-23ca-4317-b71c-35a2daff9a2d
+GET https://api.notion.com/v1/blocks/{{block_id}}
 Content-Type: application/json
 Authorization: Bearer {{token}}
 Notion-Version: {{api_version}}
@@ -90,9 +106,7 @@ Authorization: Bearer {{token}}
 Notion-Version: {{api_version}}
 
 {
-  "paragraph": {
-    "text": [{
-      "text": { "content": "Lacinato kale" }
-    }]
+  "to_do": {
+    "checked": false
   }
 }
