@@ -402,6 +402,7 @@ func (i Image) GetURL() string {
 }
 
 type CodeBlock struct {
+	Caption []RichText `json:"caption,omitempty"`
 	BasicBlock
 	Code Code `json:"code"`
 }
