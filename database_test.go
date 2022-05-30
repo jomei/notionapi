@@ -440,6 +440,96 @@ func TestDatabaseQueryRequest_MarshalJSON(t *testing.T) {
 			},
 			want: []byte(`{"filter":{"property":"created_at","date":{"equals":"2021-05-10T02:43:42Z","past_week":{}}}}`),
 		},
+		{
+			name: "timestamp created",
+			req: &notionapi.DatabaseQueryRequest{
+				Filter: &notionapi.TimestampCreatedTimeFilter{
+					CreatedTime: notionapi.DateFilterCondition{
+						NextWeek: &struct{}{},
+					},
+				},
+			},
+			want: []byte(`{"filter":{"timestamp":"created_time","created_time":{"next_week":{}}}}`),
+		},
+		{
+			name: "timestamp last edited",
+			req: &notionapi.DatabaseQueryRequest{
+				Filter: &notionapi.TimestampLastEditedTimeFilter{
+					LastEditedTime: notionapi.DateFilterCondition{
+						Before: &dateObj,
+					},
+				},
+			},
+			want: []byte(`{"filter":{"timestamp":"last_edited_time","last_edited_time":{"before":"2021-05-10T02:43:42Z"}}}`),
+		},
+		{
+			name: "or compound filter one level",
+			req: &notionapi.DatabaseQueryRequest{
+				Filter: notionapi.OrCompoundFilter{
+					notionapi.PropertyFilter{
+						Property: "Status",
+						Select: &notionapi.SelectFilterCondition{
+							Equals: "Reading",
+						},
+					},
+					notionapi.PropertyFilter{
+						Property: "Publisher",
+						Select: &notionapi.SelectFilterCondition{
+							Equals: "NYT",
+						},
+					},
+				},
+			},
+			want: []byte(`{"filter":{"or":[{"property":"Status","select":{"equals":"Reading"}},{"property":"Publisher","select":{"equals":"NYT"}}]}}`),
+		},
+		{
+			name: "and compound filter one level",
+			req: &notionapi.DatabaseQueryRequest{
+				Filter: notionapi.AndCompoundFilter{
+					notionapi.PropertyFilter{
+						Property: "Status",
+						Select: &notionapi.SelectFilterCondition{
+							Equals: "Reading",
+						},
+					},
+					notionapi.PropertyFilter{
+						Property: "Publisher",
+						Select: &notionapi.SelectFilterCondition{
+							Equals: "NYT",
+						},
+					},
+				},
+			},
+			want: []byte(`{"filter":{"and":[{"property":"Status","select":{"equals":"Reading"}},{"property":"Publisher","select":{"equals":"NYT"}}]}}`),
+		},
+		{
+			name: "compound filter two levels",
+			req: &notionapi.DatabaseQueryRequest{
+				Filter: notionapi.OrCompoundFilter{
+					notionapi.PropertyFilter{
+						Property: "Description",
+						RichText: &notionapi.TextFilterCondition{
+							Contains: "fish",
+						},
+					},
+					notionapi.AndCompoundFilter{
+						notionapi.PropertyFilter{
+							Property: "Food group",
+							Select: &notionapi.SelectFilterCondition{
+								Equals: "🥦Vegetable",
+							},
+						},
+						notionapi.PropertyFilter{
+							Property: "Is protein rich?",
+							Checkbox: &notionapi.CheckboxFilterCondition{
+								Equals: true,
+							},
+						},
+					},
+				},
+			},
+			want: []byte(`{"filter":{"or":[{"property":"Description","rich_text":{"contains":"fish"}},{"and":[{"property":"Food group","select":{"equals":"🥦Vegetable"}},{"property":"Is protein rich?","checkbox":{"equals":true}}]}]}}`),
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

@@ -1,10 +1,72 @@
 package notionapi
 
+import (
+	"encoding/json"
+)
+
 type FilterOperator string
+
+type Filter interface {
+	filter()
+}
 
 type CompoundFilter map[FilterOperator][]PropertyFilter
 
+type AndCompoundFilter []Filter
+type OrCompoundFilter []Filter
+
+func (f AndCompoundFilter) filter() {}
+func (f OrCompoundFilter) filter()  {}
+
+func (f AndCompoundFilter) MarshalJSON() ([]byte, error) {
+	return json.Marshal(struct {
+		And []Filter `json:"and"`
+	}{
+		And: f,
+	})
+}
+
+func (f OrCompoundFilter) MarshalJSON() ([]byte, error) {
+	return json.Marshal(struct {
+		Or []Filter `json:"or"`
+	}{
+		Or: f,
+	})
+}
+
 type Condition string
+
+type TimestampCreatedTimeFilter struct {
+	CreatedTime DateFilterCondition `json:"created_time"`
+}
+
+func (f TimestampCreatedTimeFilter) MarshalJSON() ([]byte, error) {
+	return json.Marshal(struct {
+		Timestamp   TimestampType       `json:"timestamp"`
+		CreatedTime DateFilterCondition `json:"created_time"`
+	}{
+		Timestamp:   TimestampCreated,
+		CreatedTime: f.CreatedTime,
+	})
+}
+
+func (f TimestampCreatedTimeFilter) filter() {}
+
+type TimestampLastEditedTimeFilter struct {
+	LastEditedTime DateFilterCondition `json:"last_edited_time"`
+}
+
+func (f TimestampLastEditedTimeFilter) MarshalJSON() ([]byte, error) {
+	return json.Marshal(struct {
+		Timestamp      TimestampType       `json:"timestamp"`
+		LastEditedTime DateFilterCondition `json:"last_edited_time"`
+	}{
+		Timestamp:      TimestampLastEdited,
+		LastEditedTime: f.LastEditedTime,
+	})
+}
+
+func (f TimestampLastEditedTimeFilter) filter() {}
 
 type PropertyFilter struct {
 	Property string `json:"property"`
@@ -21,6 +83,8 @@ type PropertyFilter struct {
 	Relation    *RelationFilterCondition    `json:"relation,omitempty"`
 	Formula     *FormulaFilterCondition     `json:"formula,omitempty"`
 }
+
+func (f PropertyFilter) filter() {}
 
 type TextFilterCondition struct {
 	Equals         string `json:"equals,omitempty"`
