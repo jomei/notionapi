@@ -84,7 +84,7 @@
       }]
     },
     "Some Files": {
-      "id": "file1",
+      "id": "files",
       "type": "files",
       "files": [
         {

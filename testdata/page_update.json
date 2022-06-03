@@ -68,6 +68,19 @@
         }
       ]
     },
+    "Important Files": {
+      "id": "importantfiles!",
+      "type": "files",
+      "files": [
+        {
+          "name": "https://google.com",
+          "type": "external",
+          "external": {
+            "url": "https://google.com"
+          }
+        }
+      ]
+    },
     "Name": {
       "id": "title",
       "type": "title",
