@@ -95,6 +95,19 @@ func TestPageClient(t *testing.T) {
 								},
 							},
 						},
+						"Some Files": &notionapi.FilesProperty{
+							ID:   "files",
+							Type: "files",
+							Files: []notionapi.File{
+								{
+									Name: "https://google.com",
+									Type: "external",
+									External: &notionapi.FileObject{
+										URL: "https://google.com",
+									},
+								},
+							},
+						},
 						"Name": &notionapi.TitleProperty{
 							ID:   "title",
 							Type: "title",
@@ -264,6 +277,25 @@ func TestPageClient(t *testing.T) {
 								{
 									Type: notionapi.ObjectTypeText,
 									Text: notionapi.Text{Content: "patch"},
+								},
+							},
+						},
+						"Important Files": notionapi.FilesProperty{
+							Type: "files",
+							Files: []notionapi.File{
+								{
+									Type: "external",
+									Name: "https://google.com",
+									External: &notionapi.FileObject{
+										URL: "https://google.com",
+									},
+								},
+								{
+									Type: "external",
+									Name: "https://123.com",
+									External: &notionapi.FileObject{
+										URL: "https://123.com",
+									},
 								},
 							},
 						},
