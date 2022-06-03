@@ -83,6 +83,19 @@
         "href": null
       }]
     },
+    "Some Files": {
+      "id": "file1",
+      "type": "files",
+      "files": [
+        {
+          "name": "https://google.com",
+          "type": "external",
+          "external": {
+            "url": "https://google.com"
+          }
+        }
+      ]
+    },
     "RollupArray": {
       "id": "abcd",
       "type": "rollup",
