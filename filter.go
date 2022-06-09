@@ -36,37 +36,13 @@ func (f OrCompoundFilter) MarshalJSON() ([]byte, error) {
 
 type Condition string
 
-type TimestampCreatedTimeFilter struct {
-	CreatedTime DateFilterCondition `json:"created_time"`
+type TimestampFilter struct {
+	Timestamp      TimestampType        `json:"timestamp"`
+	CreatedTime    *DateFilterCondition `json:"created_time,omitempty"`
+	LastEditedTime *DateFilterCondition `json:"last_edited_time,omitempty"`
 }
 
-func (f TimestampCreatedTimeFilter) MarshalJSON() ([]byte, error) {
-	return json.Marshal(struct {
-		Timestamp   TimestampType       `json:"timestamp"`
-		CreatedTime DateFilterCondition `json:"created_time"`
-	}{
-		Timestamp:   TimestampCreated,
-		CreatedTime: f.CreatedTime,
-	})
-}
-
-func (f TimestampCreatedTimeFilter) filter() {}
-
-type TimestampLastEditedTimeFilter struct {
-	LastEditedTime DateFilterCondition `json:"last_edited_time"`
-}
-
-func (f TimestampLastEditedTimeFilter) MarshalJSON() ([]byte, error) {
-	return json.Marshal(struct {
-		Timestamp      TimestampType       `json:"timestamp"`
-		LastEditedTime DateFilterCondition `json:"last_edited_time"`
-	}{
-		Timestamp:      TimestampLastEdited,
-		LastEditedTime: f.LastEditedTime,
-	})
-}
-
-func (f TimestampLastEditedTimeFilter) filter() {}
+func (f TimestampFilter) filter() {}
 
 type PropertyFilter struct {
 	Property string `json:"property"`

@@ -443,8 +443,9 @@ func TestDatabaseQueryRequest_MarshalJSON(t *testing.T) {
 		{
 			name: "timestamp created",
 			req: &notionapi.DatabaseQueryRequest{
-				Filter: &notionapi.TimestampCreatedTimeFilter{
-					CreatedTime: notionapi.DateFilterCondition{
+				Filter: &notionapi.TimestampFilter{
+					Timestamp: notionapi.TimestampCreated,
+					CreatedTime: &notionapi.DateFilterCondition{
 						NextWeek: &struct{}{},
 					},
 				},
@@ -454,8 +455,9 @@ func TestDatabaseQueryRequest_MarshalJSON(t *testing.T) {
 		{
 			name: "timestamp last edited",
 			req: &notionapi.DatabaseQueryRequest{
-				Filter: &notionapi.TimestampLastEditedTimeFilter{
-					LastEditedTime: notionapi.DateFilterCondition{
+				Filter: &notionapi.TimestampFilter{
+					Timestamp: notionapi.TimestampLastEdited,
+					LastEditedTime: &notionapi.DateFilterCondition{
 						Before: &dateObj,
 					},
 				},
