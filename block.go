@@ -402,6 +402,7 @@ func (i Image) GetURL() string {
 }
 
 type CodeBlock struct {
+	// DEPRECATED: USE Code.Caption instead
 	Caption []RichText `json:"caption,omitempty"`
 	BasicBlock
 	Code Code `json:"code"`
@@ -410,7 +411,8 @@ type CodeBlock struct {
 type Code struct {
 	// DEPRECATED use RichText instead
 	Text     []RichText `json:"text,omitempty"`
-	RichText []RichText `json:"rich_text"`
+	RichText []RichText `json:"rich_text,omitempty"`
+	Caption  []RichText `json:"caption,omitempty"`
 	Language string     `json:"language"`
 }
 
