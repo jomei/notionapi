@@ -1,10 +1,48 @@
 package notionapi
 
+import (
+	"encoding/json"
+)
+
 type FilterOperator string
+
+type Filter interface {
+	filter()
+}
 
 type CompoundFilter map[FilterOperator][]PropertyFilter
 
+type AndCompoundFilter []Filter
+type OrCompoundFilter []Filter
+
+func (f AndCompoundFilter) filter() {}
+func (f OrCompoundFilter) filter()  {}
+
+func (f AndCompoundFilter) MarshalJSON() ([]byte, error) {
+	return json.Marshal(struct {
+		And []Filter `json:"and"`
+	}{
+		And: f,
+	})
+}
+
+func (f OrCompoundFilter) MarshalJSON() ([]byte, error) {
+	return json.Marshal(struct {
+		Or []Filter `json:"or"`
+	}{
+		Or: f,
+	})
+}
+
 type Condition string
+
+type TimestampFilter struct {
+	Timestamp      TimestampType        `json:"timestamp"`
+	CreatedTime    *DateFilterCondition `json:"created_time,omitempty"`
+	LastEditedTime *DateFilterCondition `json:"last_edited_time,omitempty"`
+}
+
+func (f TimestampFilter) filter() {}
 
 type PropertyFilter struct {
 	Property string `json:"property"`
@@ -21,6 +59,8 @@ type PropertyFilter struct {
 	Relation    *RelationFilterCondition    `json:"relation,omitempty"`
 	Formula     *FormulaFilterCondition     `json:"formula,omitempty"`
 }
+
+func (f PropertyFilter) filter() {}
 
 type TextFilterCondition struct {
 	Equals         string `json:"equals,omitempty"`
