@@ -37,6 +37,27 @@ type NumberPropertyConfig struct {
 	Format FormatType         `json:"format"`
 }
 
+// MarshalJSON returns encoded json.
+// Modify the json structure without changing the fields in NumberPropertyConfig for backward compatibility.
+func (p NumberPropertyConfig) MarshalJSON() ([]byte, error) {
+	v, err := json.Marshal(&struct {
+		ID     ObjectID           `json:"id,omitempty"`
+		Type   PropertyConfigType `json:"type"`
+		Number struct {
+			Format FormatType `json:"format"`
+		} `json:"number"`
+	}{
+		ID:   p.ID,
+		Type: p.Type,
+		Number: struct {
+			Format FormatType `json:"format"`
+		}{
+			Format: p.Format,
+		},
+	})
+	return v, err
+}
+
 type FormatType string
 
 func (ft FormatType) String() string {
