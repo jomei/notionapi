@@ -32,36 +32,21 @@ func (p RichTextPropertyConfig) GetType() PropertyConfigType {
 }
 
 type NumberPropertyConfig struct {
-	ID     ObjectID           `json:"id,omitempty"`
-	Type   PropertyConfigType `json:"type"`
-	Format FormatType         `json:"format"`
-}
-
-// MarshalJSON returns encoded json.
-// Modify the json structure without changing the fields in NumberPropertyConfig for backward compatibility.
-func (p NumberPropertyConfig) MarshalJSON() ([]byte, error) {
-	v, err := json.Marshal(&struct {
-		ID     ObjectID           `json:"id,omitempty"`
-		Type   PropertyConfigType `json:"type"`
-		Number struct {
-			Format FormatType `json:"format"`
-		} `json:"number"`
-	}{
-		ID:   p.ID,
-		Type: p.Type,
-		Number: struct {
-			Format FormatType `json:"format"`
-		}{
-			Format: p.Format,
-		},
-	})
-	return v, err
+	ID   ObjectID           `json:"id,omitempty"`
+	Type PropertyConfigType `json:"type"`
+	// Deprecated: use Number instead.
+	Format FormatType   `json:"format,omitempty"`
+	Number NumberFormat `json:"number"`
 }
 
 type FormatType string
 
 func (ft FormatType) String() string {
 	return string(ft)
+}
+
+type NumberFormat struct {
+	Format FormatType `json:"format"`
 }
 
 func (p NumberPropertyConfig) GetType() PropertyConfigType {
