@@ -1,13 +1,13 @@
 package notionapi
 
 import (
+	"encoding/json"
 	"reflect"
 	"testing"
 )
 
 func TestNumberPropertyConfig_MarshalJSON(t *testing.T) {
 	type fields struct {
-		ID     ObjectID
 		Type   PropertyConfigType
 		Format FormatType
 	}
@@ -18,7 +18,7 @@ func TestNumberPropertyConfig_MarshalJSON(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "The Format field goes into the number property",
+			name: "returns correct json",
 			fields: fields{
 				Type:   PropertyConfigTypeNumber,
 				Format: FormatDollar,
@@ -30,11 +30,10 @@ func TestNumberPropertyConfig_MarshalJSON(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			p := NumberPropertyConfig{
-				ID:     tt.fields.ID,
 				Type:   tt.fields.Type,
-				Format: tt.fields.Format,
+				Number: NumberFormat{Format: tt.fields.Format},
 			}
-			got, err := p.MarshalJSON()
+			got, err := json.Marshal(p)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("MarshalJSON() error = %v, wantErr %v", err, tt.wantErr)
 				return
