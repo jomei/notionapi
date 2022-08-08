@@ -457,10 +457,7 @@ func TestPageCreateRequest_MarshallJSON(t *testing.T) {
 							Object: notionapi.ObjectTypeBlock,
 							Type:   notionapi.BlockTypeHeading2,
 						},
-						Heading2: struct {
-							RichText []notionapi.RichText `json:"rich_text"`
-							Children notionapi.Blocks     `json:"children,omitempty"`
-						}{
+						Heading2: notionapi.Heading{
 							RichText: []notionapi.RichText{
 								{
 									Type: notionapi.ObjectTypeText,
