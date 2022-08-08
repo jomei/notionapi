@@ -139,7 +139,7 @@ func TestBlockClient(t *testing.T) {
 				}
 				a, err := json.Marshal(got)
 				if err != nil {
-					t.Errorf("AppendChildren() marhall error = %v", err)
+					t.Errorf("AppendChildren() marshal error = %v", err)
 					return
 				}
 				b, err := json.Marshal(tt.want)
