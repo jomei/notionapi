@@ -70,13 +70,13 @@ func (uc *UserClient) List(ctx context.Context, pagination *Pagination) (*UsersL
 type UserType string
 
 type User struct {
-	Object    ObjectType `json:"object"`
+	Object    ObjectType `json:"object,omitempty"`
 	ID        UserID     `json:"id"`
-	Type      UserType   `json:"type"`
-	Name      string     `json:"name"`
-	AvatarURL string     `json:"avatar_url"`
-	Person    *Person    `json:"person"`
-	Bot       *Bot       `json:"bot"`
+	Type      UserType   `json:"type,omitempty"`
+	Name      string     `json:"name,omitempty"`
+	AvatarURL string     `json:"avatar_url,omitempty"`
+	Person    *Person    `json:"person,omitempty"`
+	Bot       *Bot       `json:"bot,omitempty"`
 }
 
 type Person struct {
