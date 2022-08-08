@@ -80,12 +80,13 @@ func TestBlockClient(t *testing.T) {
 							Heading2: struct {
 								RichText []notionapi.RichText `json:"rich_text"`
 								Children notionapi.Blocks     `json:"children,omitempty"`
+								Color    string               `json:"color,omitempty"`
 							}{[]notionapi.RichText{
 								{
 									Type: notionapi.ObjectTypeText,
 									Text: notionapi.Text{Content: "Hello"},
 								},
-							}, nil,
+							}, nil, "",
 							},
 						},
 					},
@@ -121,6 +122,7 @@ func TestBlockClient(t *testing.T) {
 										PlainText: "AAAAAA",
 									},
 								},
+								Color: "blue",
 							},
 						},
 					},
@@ -238,6 +240,7 @@ func TestBlockClient(t *testing.T) {
 								Text: notionapi.Text{Content: "Hello"},
 							},
 						},
+						Color: notionapi.ColorYellow.String(),
 					},
 				},
 				want: &notionapi.ParagraphBlock{
@@ -259,6 +262,7 @@ func TestBlockClient(t *testing.T) {
 								PlainText:   "Hello",
 							},
 						},
+						Color: notionapi.ColorYellow.String(),
 					},
 				},
 				wantErr: false,
@@ -344,6 +348,7 @@ func TestBlockArrayUnmarshal(t *testing.T) {
 								Type:  "emoji",
 								Emoji: &emoji,
 							},
+							Color: notionapi.ColorBlue.String(),
 						},
 					},
 					&notionapi.Heading1Block{
@@ -369,6 +374,7 @@ func TestBlockArrayUnmarshal(t *testing.T) {
 									PlainText: "History 340",
 								},
 							},
+							Color: notionapi.ColorBrownBackground.String(),
 						},
 					},
 					&notionapi.ChildDatabaseBlock{
@@ -423,6 +429,7 @@ func TestBlockArrayUnmarshal(t *testing.T) {
 									PlainText: "Assignment Submission",
 								},
 							},
+							Color: notionapi.ColorDefault.String(),
 						},
 					},
 					&notionapi.ParagraphBlock{
@@ -448,6 +455,7 @@ func TestBlockArrayUnmarshal(t *testing.T) {
 									PlainText: "All essays and papers are due in lecture (due dates are listed on the schedule). No electronic copies will be accepted!",
 								},
 							},
+							Color: notionapi.ColorRed.String(),
 						},
 					},
 				},

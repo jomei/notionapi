@@ -45,7 +45,8 @@
         "icon": {
             "type": "emoji",
             "emoji": "📌"
-        }
+        },
+        "color": "blue"
     }
 }, {
     "object": "block",
@@ -76,7 +77,8 @@
                 "color": "default"
             },
             "plain_text": "History 340"
-        }]
+        }],
+        "color":"brown_background"
     }
 }, {
     "object": "block",
@@ -140,7 +142,8 @@
                 "color": "default"
             },
             "plain_text": "Assignment Submission"
-        }]
+        }],
+        "color":"default"
     }
 }, {
     "object": "block",
@@ -171,6 +174,7 @@
                 "color": "default"
             },
             "plain_text": "All essays and papers are due in lecture (due dates are listed on the schedule). No electronic copies will be accepted!"
-        }]
+        }],
+        "color":"red"
     }
 }]
