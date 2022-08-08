@@ -247,6 +247,7 @@ type Paragraph struct {
 	Text     []RichText `json:"text,omitempty"`
 	RichText []RichText `json:"rich_text"`
 	Children Blocks     `json:"children,omitempty"`
+	Color    string     `json:"color,omitempty"`
 }
 
 type Heading1Block struct {
@@ -257,6 +258,7 @@ type Heading1Block struct {
 type Heading struct {
 	RichText []RichText `json:"rich_text"`
 	Children Blocks     `json:"children,omitempty"`
+	Color    string     `json:"color,omitempty"`
 }
 
 type Heading2Block struct {
@@ -280,6 +282,7 @@ type Callout struct {
 	RichText []RichText `json:"rich_text"`
 	Icon     *Icon      `json:"icon,omitempty"`
 	Children Blocks     `json:"children,omitempty"`
+	Color    string     `json:"color,omitempty"`
 }
 
 type QuoteBlock struct {
@@ -292,6 +295,7 @@ type Quote struct {
 	Text     []RichText `json:"text,omitempty"`
 	RichText []RichText `json:"rich_text"`
 	Children Blocks     `json:"children,omitempty"`
+	Color    string     `json:"color,omitempty"`
 }
 
 type TableBlock struct {
@@ -325,6 +329,7 @@ type ListItem struct {
 	Text     []RichText `json:"text,omitempty"`
 	RichText []RichText `json:"rich_text"`
 	Children Blocks     `json:"children,omitempty"`
+	Color    string     `json:"color,omitempty"`
 }
 
 type NumberedListItemBlock struct {
@@ -343,6 +348,7 @@ type ToDo struct {
 	RichText []RichText `json:"rich_text,omitempty"`
 	Children Blocks     `json:"children,omitempty"`
 	Checked  bool       `json:"checked"`
+	Color    string     `json:"color,omitempty"`
 }
 
 type ToggleBlock struct {
@@ -359,6 +365,7 @@ type Toggle struct {
 	Text     []RichText `json:"text,omitempty"`
 	RichText []RichText `json:"rich_text"`
 	Children Blocks     `json:"children,omitempty"`
+	Color    string     `json:"color,omitempty"`
 }
 
 type ChildPageBlock struct {
@@ -476,6 +483,7 @@ type TableOfContentsBlock struct {
 
 type TableOfContents struct {
 	// empty
+	Color string `json:"color,omitempty"`
 }
 
 type DividerBlock struct {
