@@ -58,6 +58,7 @@ type PropertyFilter struct {
 	Files       *FilesFilterCondition       `json:"files,omitempty"`
 	Relation    *RelationFilterCondition    `json:"relation,omitempty"`
 	Formula     *FormulaFilterCondition     `json:"formula,omitempty"`
+	Rollup      *RollupFilterCondition      `json:"rollup,omitempty"`
 }
 
 func (f PropertyFilter) filter() {}
@@ -143,4 +144,24 @@ type FormulaFilterCondition struct {
 	Checkbox *CheckboxFilterCondition `json:"checkbox,omitempty"`
 	Number   *NumberFilterCondition   `json:"number,omitempty"`
 	Date     *DateFilterCondition     `json:"date,omitempty"`
+}
+
+type RollupFilterCondition struct {
+	Any    *RollupSubfilterCondition `json:"any,omitempty"`
+	None   *RollupSubfilterCondition `json:"none,omitempty"`
+	Every  *RollupSubfilterCondition `json:"every,omitempty"`
+	Date   *DateFilterCondition      `json:"date,omitempty"`
+	Number *NumberFilterCondition    `json:"number,omitempty"`
+}
+
+type RollupSubfilterCondition struct {
+	RichText    *TextFilterCondition        `json:"rich_text,omitempty"`
+	Number      *NumberFilterCondition      `json:"number,omitempty"`
+	Checkbox    *CheckboxFilterCondition    `json:"checkbox,omitempty"`
+	Select      *SelectFilterCondition      `json:"select,omitempty"`
+	MultiSelect *MultiSelectFilterCondition `json:"multiSelect,omitempty"`
+	Relation    *RelationFilterCondition    `json:"relation,omitempty"`
+	Date        *DateFilterCondition        `json:"date,omitempty"`
+	People      *PeopleFilterCondition      `json:"people,omitempty"`
+	Files       *FilesFilterCondition       `json:"files,omitempty"`
 }
