@@ -45,9 +45,7 @@ type TimestampFilter struct {
 func (f TimestampFilter) filter() {}
 
 type PropertyFilter struct {
-	Property string `json:"property"`
-	// DEPRECATED: doesn't for ver. 2022-02-22
-	Text        *TextFilterCondition        `json:"text,omitempty"`
+	Property    string                      `json:"property"`
 	RichText    *TextFilterCondition        `json:"rich_text,omitempty"`
 	Number      *NumberFilterCondition      `json:"number,omitempty"`
 	Checkbox    *CheckboxFilterCondition    `json:"checkbox,omitempty"`
