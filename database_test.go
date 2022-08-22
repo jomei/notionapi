@@ -92,68 +92,6 @@ func TestDatabaseClient(t *testing.T) {
 		}
 	})
 
-	t.Run("List", func(t *testing.T) {
-		tests := []struct {
-			name       string
-			filePath   string
-			statusCode int
-			want       *notionapi.DatabaseListResponse
-			wantErr    bool
-			err        error
-		}{
-			{
-				name:       "returns list of databases",
-				filePath:   "testdata/database_list.json",
-				statusCode: http.StatusOK,
-				want: &notionapi.DatabaseListResponse{
-					Object: notionapi.ObjectTypeList,
-					Results: []notionapi.Database{
-						{
-							Object:         notionapi.ObjectTypeDatabase,
-							ID:             "some_id",
-							CreatedTime:    timestamp,
-							LastEditedTime: timestamp,
-							CreatedBy:      user,
-							LastEditedBy:   user,
-							Title: []notionapi.RichText{
-								{
-									Type: notionapi.ObjectTypeText,
-									Text: notionapi.Text{
-										Content: "Test Database",
-									},
-									Annotations: &notionapi.Annotations{
-										Color: notionapi.ColorDefault,
-									},
-									PlainText: "Test Database",
-								},
-							},
-						},
-					},
-					HasMore: false,
-				},
-				wantErr: false,
-			},
-		}
-
-		for _, tt := range tests {
-			t.Run(tt.name, func(t *testing.T) {
-				c := newMockedClient(t, tt.filePath, tt.statusCode)
-				client := notionapi.NewClient("some_token", notionapi.WithHTTPClient(c))
-
-				got, err := client.Database.List(context.Background(), nil)
-
-				if (err != nil) != tt.wantErr {
-					t.Errorf("List() error = %v, wantErr %v", err, tt.wantErr)
-					return
-				}
-				got.Results[0].Properties = nil
-				if !reflect.DeepEqual(got, tt.want) {
-					t.Errorf("List() got = %v, want %v", got, tt.want)
-				}
-			})
-		}
-	})
-
 	t.Run("Query", func(t *testing.T) {
 		tests := []struct {
 			name       string
@@ -171,7 +109,7 @@ func TestDatabaseClient(t *testing.T) {
 				filePath:   "testdata/database_query.json",
 				statusCode: http.StatusOK,
 				request: &notionapi.DatabaseQueryRequest{
-					PropertyFilter: &notionapi.PropertyFilter{
+					Filter: &notionapi.PropertyFilter{
 						Property: "Name",
 						RichText: &notionapi.TextFilterCondition{
 							Contains: "Hel",
@@ -375,71 +313,6 @@ func TestDatabaseQueryRequest_MarshalJSON(t *testing.T) {
 		want    []byte
 		wantErr bool
 	}{
-		{
-			name: "with property filter without sort",
-			req: &notionapi.DatabaseQueryRequest{
-				PropertyFilter: &notionapi.PropertyFilter{
-					Property: "Status",
-					Select: &notionapi.SelectFilterCondition{
-						Equals: "Reading",
-					},
-				},
-			},
-			want: []byte(`{"filter":{"property":"Status","select":{"equals":"Reading"}}}`),
-		},
-		{
-			name: "with property filter with sort",
-			req: &notionapi.DatabaseQueryRequest{
-				PropertyFilter: &notionapi.PropertyFilter{
-					Property: "Status",
-					Select: &notionapi.SelectFilterCondition{
-						Equals: "Reading",
-					},
-				},
-				Sorts: []notionapi.SortObject{
-					{
-						Property:  "Score /5",
-						Direction: notionapi.SortOrderASC,
-					},
-				},
-			},
-			want: []byte(`{"sorts":[{"property":"Score /5","direction":"ascending"}],"filter":{"property":"Status","select":{"equals":"Reading"}}}`),
-		},
-		{
-			name: "compound filter",
-			req: &notionapi.DatabaseQueryRequest{
-				CompoundFilter: &notionapi.CompoundFilter{
-					notionapi.FilterOperatorOR: []notionapi.PropertyFilter{
-						{
-							Property: "Status",
-							Select: &notionapi.SelectFilterCondition{
-								Equals: "Reading",
-							},
-						},
-						{
-							Property: "Publisher",
-							Select: &notionapi.SelectFilterCondition{
-								Equals: "NYT",
-							},
-						},
-					},
-				},
-			},
-			want: []byte(`{"filter":{"or":[{"property":"Status","select":{"equals":"Reading"}},{"property":"Publisher","select":{"equals":"NYT"}}]}}`),
-		},
-		{
-			name: "date filter",
-			req: &notionapi.DatabaseQueryRequest{
-				PropertyFilter: &notionapi.PropertyFilter{
-					Property: "created_at",
-					Date: &notionapi.DateFilterCondition{
-						Equals:   &dateObj,
-						PastWeek: &struct{}{},
-					},
-				},
-			},
-			want: []byte(`{"filter":{"property":"created_at","date":{"equals":"2021-05-10T02:43:42Z","past_week":{}}}}`),
-		},
 		{
 			name: "timestamp created",
 			req: &notionapi.DatabaseQueryRequest{
