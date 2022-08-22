@@ -17,8 +17,6 @@ func (dID DatabaseID) String() string {
 
 type DatabaseService interface {
 	Get(context.Context, DatabaseID) (*Database, error)
-	// DEPRECATED: this endpoint is removed in 2022-02-22
-	List(context.Context, *Pagination) (*DatabaseListResponse, error)
 	Query(context.Context, DatabaseID, *DatabaseQueryRequest) (*DatabaseQueryResponse, error)
 	Update(context.Context, DatabaseID, *DatabaseUpdateRequest) (*Database, error)
 	Create(ctx context.Context, request *DatabaseCreateRequest) (*Database, error)
@@ -43,28 +41,6 @@ func (dc *DatabaseClient) Get(ctx context.Context, id DatabaseID) (*Database, er
 
 	var response Database
 
-	err = json.NewDecoder(res.Body).Decode(&response)
-	if err != nil {
-		return nil, err
-	}
-
-	return &response, nil
-}
-
-// List https://developers.notion.com/reference/get-databases
-func (dc *DatabaseClient) List(ctx context.Context, pagination *Pagination) (*DatabaseListResponse, error) {
-	res, err := dc.apiClient.request(ctx, http.MethodGet, "databases", pagination.ToQuery(), nil)
-	if err != nil {
-		return nil, err
-	}
-
-	defer func() {
-		if errClose := res.Body.Close(); errClose != nil {
-			log.Println("failed to close body, should never happen")
-		}
-	}()
-
-	var response DatabaseListResponse
 	err = json.NewDecoder(res.Body).Decode(&response)
 	if err != nil {
 		return nil, err
