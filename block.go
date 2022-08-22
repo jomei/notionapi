@@ -531,8 +531,9 @@ type LinkToPageBlock struct {
 }
 
 type LinkToPage struct {
-	Type   BlockType `json:"type"`
-	PageID PageID    `json:"page_id"`
+	Type       BlockType  `json:"type"`
+	PageID     PageID     `json:"page_id,omitempty"`
+	DatabaseID DatabaseID `json:"database_id,omitempty"`
 }
 
 type TemplateBlock struct {
