@@ -139,11 +139,6 @@ type DatabaseListResponse struct {
 }
 
 type DatabaseQueryRequest struct {
-	// Deprecated: use Filter instead
-	PropertyFilter *PropertyFilter
-	// Deprecated: use Filter instead
-	CompoundFilter *CompoundFilter
-
 	Filter      Filter
 	Sorts       []SortObject `json:"sorts,omitempty"`
 	StartCursor Cursor       `json:"start_cursor,omitempty"`
@@ -151,15 +146,6 @@ type DatabaseQueryRequest struct {
 }
 
 func (qr *DatabaseQueryRequest) MarshalJSON() ([]byte, error) {
-	var filter interface{}
-	switch {
-	case qr.PropertyFilter != nil:
-		filter = qr.PropertyFilter
-	case qr.CompoundFilter != nil:
-		filter = qr.CompoundFilter
-	case qr.Filter != nil:
-		filter = qr.Filter
-	}
 	return json.Marshal(struct {
 		Sorts       []SortObject `json:"sorts,omitempty"`
 		StartCursor Cursor       `json:"start_cursor,omitempty"`
@@ -169,7 +155,7 @@ func (qr *DatabaseQueryRequest) MarshalJSON() ([]byte, error) {
 		Sorts:       qr.Sorts,
 		StartCursor: qr.StartCursor,
 		PageSize:    qr.PageSize,
-		Filter:      filter,
+		Filter:      qr.Filter,
 	})
 }
 
