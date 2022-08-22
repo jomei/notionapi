@@ -243,9 +243,7 @@ type ParagraphBlock struct {
 }
 
 type Paragraph struct {
-	// DEPRECATED use RichText instead
-	Text     []RichText `json:"text,omitempty"`
-	RichText []RichText `json:"rich_text"`
+	RichText []RichText `json:"rich_text,omitempty"`
 	Children Blocks     `json:"children,omitempty"`
 	Color    string     `json:"color,omitempty"`
 }
@@ -277,9 +275,7 @@ type CalloutBlock struct {
 }
 
 type Callout struct {
-	// DEPRECATED use RichText instead
-	Text     []RichText `json:"text,omitempty"`
-	RichText []RichText `json:"rich_text"`
+	RichText []RichText `json:"rich_text,omitempty"`
 	Icon     *Icon      `json:"icon,omitempty"`
 	Children Blocks     `json:"children,omitempty"`
 	Color    string     `json:"color,omitempty"`
@@ -291,9 +287,7 @@ type QuoteBlock struct {
 }
 
 type Quote struct {
-	// DEPRECATED use RichText instead
-	Text     []RichText `json:"text,omitempty"`
-	RichText []RichText `json:"rich_text"`
+	RichText []RichText `json:"rich_text,omitempty"`
 	Children Blocks     `json:"children,omitempty"`
 	Color    string     `json:"color,omitempty"`
 }
@@ -325,9 +319,7 @@ type BulletedListItemBlock struct {
 }
 
 type ListItem struct {
-	// DEPRECATED use RichText instead
-	Text     []RichText `json:"text,omitempty"`
-	RichText []RichText `json:"rich_text"`
+	RichText []RichText `json:"rich_text,omitempty"`
 	Children Blocks     `json:"children,omitempty"`
 	Color    string     `json:"color,omitempty"`
 }
@@ -343,8 +335,6 @@ type ToDoBlock struct {
 }
 
 type ToDo struct {
-	// DEPRECATED use RichText instead
-	Text     []RichText `json:"text,omitempty"`
 	RichText []RichText `json:"rich_text,omitempty"`
 	Children Blocks     `json:"children,omitempty"`
 	Checked  bool       `json:"checked"`
@@ -353,17 +343,11 @@ type ToDo struct {
 
 type ToggleBlock struct {
 	BasicBlock
-	// DEPRECATED use RichText instead
-	Text     []RichText `json:"text,omitempty"`
-	RichText []RichText `json:"rich_text"`
-	Children Blocks     `json:"children,omitempty"`
-	Toggle   Toggle     `json:"toggle"`
+	Toggle Toggle `json:"toggle"`
 }
 
 type Toggle struct {
-	// DEPRECATED use RichText instead
-	Text     []RichText `json:"text,omitempty"`
-	RichText []RichText `json:"rich_text"`
+	RichText []RichText `json:"rich_text,omitempty"`
 	Children Blocks     `json:"children,omitempty"`
 	Color    string     `json:"color,omitempty"`
 }
@@ -409,15 +393,11 @@ func (i Image) GetURL() string {
 }
 
 type CodeBlock struct {
-	// DEPRECATED: USE Code.Caption instead
-	Caption []RichText `json:"caption,omitempty"`
 	BasicBlock
 	Code Code `json:"code"`
 }
 
 type Code struct {
-	// DEPRECATED use RichText instead
-	Text     []RichText `json:"text,omitempty"`
 	RichText []RichText `json:"rich_text,omitempty"`
 	Caption  []RichText `json:"caption,omitempty"`
 	Language string     `json:"language"`
@@ -561,9 +541,7 @@ type TemplateBlock struct {
 }
 
 type Template struct {
-	// DEPRECATED use RichText instead
-	Text     []RichText `json:"text,omitempty"`
-	RichText []RichText `json:"rich_text"`
+	RichText []RichText `json:"rich_text,omitempty"`
 	Children Blocks     `json:"children,omitempty"`
 }
 
