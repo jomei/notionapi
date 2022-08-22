@@ -32,11 +32,9 @@ func (p RichTextPropertyConfig) GetType() PropertyConfigType {
 }
 
 type NumberPropertyConfig struct {
-	ID   ObjectID           `json:"id,omitempty"`
-	Type PropertyConfigType `json:"type"`
-	// Deprecated: use Number instead.
-	Format FormatType   `json:"format,omitempty"`
-	Number NumberFormat `json:"number"`
+	ID     ObjectID           `json:"id,omitempty"`
+	Type   PropertyConfigType `json:"type"`
+	Number NumberFormat       `json:"number"`
 }
 
 type FormatType string
