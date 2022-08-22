@@ -234,6 +234,13 @@ func (p LastEditedByPropertyConfig) GetType() PropertyConfigType {
 	return p.Type
 }
 
+//TODO: Status database properties cannot currently be configured via the API and so have no additional configuration within the status property.
+type StatusPropertyConfig struct{}
+
+func (p StatusPropertyConfig) GetType() PropertyConfigType {
+	return ""
+}
+
 type PropertyConfigs map[string]PropertyConfig
 
 func (p *PropertyConfigs) UnmarshalJSON(data []byte) error {
@@ -295,6 +302,8 @@ func parsePropertyConfigs(raw map[string]interface{}) (PropertyConfigs, error) {
 				p = &LastEditedTimePropertyConfig{}
 			case PropertyConfigLastEditedBy:
 				p = &LastEditedByPropertyConfig{}
+			case PropertyConfigStatus:
+				p = &StatusPropertyConfig{}
 			default:
 
 				return nil, fmt.Errorf("unsupported property type: %s", rawProperty["type"].(string))

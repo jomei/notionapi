@@ -30,6 +30,7 @@ const (
 	PropertyConfigCreatedBy       PropertyConfigType = "created_by"
 	PropertyConfigLastEditedTime  PropertyConfigType = "last_edited_time"
 	PropertyConfigLastEditedBy    PropertyConfigType = "last_edited_by"
+	PropertyConfigStatus          PropertyConfigType = "status"
 )
 
 const (
@@ -53,6 +54,7 @@ const (
 	PropertyTypeCreatedBy      PropertyType = "created_by"
 	PropertyTypeLastEditedTime PropertyType = "last_edited_time"
 	PropertyTypeLastEditedBy   PropertyType = "last_edited_by"
+	PropertyTypeStatus         PropertyType = "status"
 )
 
 const (
