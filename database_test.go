@@ -46,7 +46,7 @@ func TestDatabaseClient(t *testing.T) {
 					Title: []notionapi.RichText{
 						{
 							Type:        notionapi.ObjectTypeText,
-							Text:        notionapi.Text{Content: "Test Database"},
+							Text:        &notionapi.Text{Content: "Test Database"},
 							Annotations: &notionapi.Annotations{Color: "default"},
 							PlainText:   "Test Database",
 							Href:        "",
@@ -178,7 +178,7 @@ func TestDatabaseClient(t *testing.T) {
 					Title: []notionapi.RichText{
 						{
 							Type: notionapi.ObjectTypeText,
-							Text: notionapi.Text{Content: "patch"},
+							Text: &notionapi.Text{Content: "patch"},
 						},
 					},
 					Properties: notionapi.PropertyConfigs{
@@ -201,7 +201,7 @@ func TestDatabaseClient(t *testing.T) {
 					Title: []notionapi.RichText{
 						{
 							Type: notionapi.ObjectTypeText,
-							Text: notionapi.Text{Content: "patch"},
+							Text: &notionapi.Text{Content: "patch"},
 						},
 					},
 				},
@@ -248,7 +248,7 @@ func TestDatabaseClient(t *testing.T) {
 					Title: []notionapi.RichText{
 						{
 							Type: notionapi.ObjectTypeText,
-							Text: notionapi.Text{Content: "Grocery List"},
+							Text: &notionapi.Text{Content: "Grocery List"},
 						},
 					},
 					Properties: notionapi.PropertyConfigs{
@@ -271,7 +271,7 @@ func TestDatabaseClient(t *testing.T) {
 					Title: []notionapi.RichText{
 						{
 							Type:        notionapi.ObjectTypeText,
-							Text:        notionapi.Text{Content: "Grocery List"},
+							Text:        &notionapi.Text{Content: "Grocery List"},
 							PlainText:   "Grocery List",
 							Annotations: &notionapi.Annotations{Color: notionapi.ColorDefault},
 						},

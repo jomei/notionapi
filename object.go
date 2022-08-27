@@ -34,9 +34,27 @@ func (c Color) MarshalText() ([]byte, error) {
 	return []byte(c), nil
 }
 
+type DatabaseMention struct {
+	ID ObjectID `json:"id"`
+}
+
+type PageMention struct {
+	ID ObjectID `json:"id"`
+}
+
+type Mention struct {
+	Type            ObjectType       `json:"type,omitempty"`
+	DatabaseMention *DatabaseMention `json:"database,omitempty"`
+	PageMention     *PageMention     `json:"page,omitempty"`
+	User            *User            `json:"user,omitempty"`
+	Date            *DateObject      `json:"date,omitempty"`
+}
+
 type RichText struct {
 	Type        ObjectType   `json:"type,omitempty"`
-	Text        Text         `json:"text"`
+	Text        *Text        `json:"text,omitempty"`
+	Mention     *Mention     `json:"mention,omitempty"`
+	Equation    *Equation    `json:"equation,omitempty"`
 	Annotations *Annotations `json:"annotations,omitempty"`
 	PlainText   string       `json:"plain_text,omitempty"`
 	Href        string       `json:"href,omitempty"`
