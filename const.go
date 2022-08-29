@@ -242,3 +242,16 @@ const (
 	RollupTypeDate   RollupType = "date"
 	RollupTypeArray  RollupType = "array"
 )
+
+const (
+	MentionTypeDatabase        MentionType = "database"
+	MentionTypePage            MentionType = "page"
+	MentionTypeUser            MentionType = "user"
+	MentionTypeDate            MentionType = "date"
+	MentionTypeTemplateMention MentionType = "template_mention"
+)
+
+const (
+	TemplateMentionTypeUser TemplateMentionType = "template_mention_user"
+	TemplateMentionTypeDate TemplateMentionType = "template_mention_date"
+)

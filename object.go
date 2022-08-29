@@ -34,6 +34,12 @@ func (c Color) MarshalText() ([]byte, error) {
 	return []byte(c), nil
 }
 
+type MentionType string
+
+func (mType MentionType) String() string {
+	return string(mType)
+}
+
 type DatabaseMention struct {
 	ID ObjectID `json:"id"`
 }
@@ -42,12 +48,25 @@ type PageMention struct {
 	ID ObjectID `json:"id"`
 }
 
+type TemplateMentionType string
+
+func (tMType TemplateMentionType) String() string {
+	return string(tMType)
+}
+
+type TemplateMention struct {
+	Type                TemplateMentionType `json:"type"`
+	TemplateMentionUser string              `json:"template_mention_user,omitempty"`
+	TemplateMentionDate string              `json:"template_mention_date,omitempty"`
+}
+
 type Mention struct {
-	Type            ObjectType       `json:"type,omitempty"`
-	DatabaseMention *DatabaseMention `json:"database,omitempty"`
-	PageMention     *PageMention     `json:"page,omitempty"`
+	Type            MentionType      `json:"type,omitempty"`
+	Database        *DatabaseMention `json:"database,omitempty"`
+	Page            *PageMention     `json:"page,omitempty"`
 	User            *User            `json:"user,omitempty"`
 	Date            *DateObject      `json:"date,omitempty"`
+	TemplateMention *TemplateMention `json:"template_mention,omitempty"`
 }
 
 type RichText struct {
