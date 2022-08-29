@@ -492,9 +492,9 @@ func TestBlockUpdateRequest_MarshallJSON(t *testing.T) {
 		{
 			name: "update todo checkbox",
 			req: &notionapi.BlockUpdateRequest{
-				ToDo: &notionapi.ToDo{Checked: false},
+				ToDo: &notionapi.ToDo{Checked: false, RichText: make([]notionapi.RichText, 0)},
 			},
-			want: []byte(`{"to_do":{"checked":false}}`),
+			want: []byte(`{"to_do":{"rich_text":[],"checked":false}}`),
 		},
 	}
 
