@@ -243,7 +243,7 @@ type ParagraphBlock struct {
 }
 
 type Paragraph struct {
-	RichText []RichText `json:"rich_text,omitempty"`
+	RichText []RichText `json:"rich_text"`
 	Children Blocks     `json:"children,omitempty"`
 	Color    string     `json:"color,omitempty"`
 }
@@ -275,7 +275,7 @@ type CalloutBlock struct {
 }
 
 type Callout struct {
-	RichText []RichText `json:"rich_text,omitempty"`
+	RichText []RichText `json:"rich_text"`
 	Icon     *Icon      `json:"icon,omitempty"`
 	Children Blocks     `json:"children,omitempty"`
 	Color    string     `json:"color,omitempty"`
@@ -287,7 +287,7 @@ type QuoteBlock struct {
 }
 
 type Quote struct {
-	RichText []RichText `json:"rich_text,omitempty"`
+	RichText []RichText `json:"rich_text"`
 	Children Blocks     `json:"children,omitempty"`
 	Color    string     `json:"color,omitempty"`
 }
@@ -319,7 +319,7 @@ type BulletedListItemBlock struct {
 }
 
 type ListItem struct {
-	RichText []RichText `json:"rich_text,omitempty"`
+	RichText []RichText `json:"rich_text"`
 	Children Blocks     `json:"children,omitempty"`
 	Color    string     `json:"color,omitempty"`
 }
@@ -335,7 +335,7 @@ type ToDoBlock struct {
 }
 
 type ToDo struct {
-	RichText []RichText `json:"rich_text,omitempty"`
+	RichText []RichText `json:"rich_text"`
 	Children Blocks     `json:"children,omitempty"`
 	Checked  bool       `json:"checked"`
 	Color    string     `json:"color,omitempty"`
@@ -347,7 +347,7 @@ type ToggleBlock struct {
 }
 
 type Toggle struct {
-	RichText []RichText `json:"rich_text,omitempty"`
+	RichText []RichText `json:"rich_text"`
 	Children Blocks     `json:"children,omitempty"`
 	Color    string     `json:"color,omitempty"`
 }
@@ -398,7 +398,7 @@ type CodeBlock struct {
 }
 
 type Code struct {
-	RichText []RichText `json:"rich_text,omitempty"`
+	RichText []RichText `json:"rich_text"`
 	Caption  []RichText `json:"caption,omitempty"`
 	Language string     `json:"language"`
 }
@@ -542,7 +542,7 @@ type TemplateBlock struct {
 }
 
 type Template struct {
-	RichText []RichText `json:"rich_text,omitempty"`
+	RichText []RichText `json:"rich_text"`
 	Children Blocks     `json:"children,omitempty"`
 }
 
