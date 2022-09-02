@@ -85,7 +85,7 @@ func TestPageClient(t *testing.T) {
 							RichText: []notionapi.RichText{
 								{
 									Type: "text",
-									Text: notionapi.Text{
+									Text: &notionapi.Text{
 										Content: "some text",
 									},
 									Annotations: &notionapi.Annotations{
@@ -114,7 +114,7 @@ func TestPageClient(t *testing.T) {
 							Title: []notionapi.RichText{
 								{
 									Type: "text",
-									Text: notionapi.Text{
+									Text: &notionapi.Text{
 										Content: "Hello",
 									},
 									Annotations: &notionapi.Annotations{
@@ -207,7 +207,7 @@ func TestPageClient(t *testing.T) {
 					Properties: notionapi.Properties{
 						"Name": notionapi.TitleProperty{
 							Title: []notionapi.RichText{
-								{Text: notionapi.Text{Content: "hello"}},
+								{Text: &notionapi.Text{Content: "hello"}},
 							},
 						},
 					},
@@ -276,7 +276,7 @@ func TestPageClient(t *testing.T) {
 							RichText: []notionapi.RichText{
 								{
 									Type: notionapi.ObjectTypeText,
-									Text: notionapi.Text{Content: "patch"},
+									Text: &notionapi.Text{Content: "patch"},
 								},
 							},
 						},
@@ -372,7 +372,7 @@ func TestPageCreateRequest_MarshallJSON(t *testing.T) {
 					},
 					"Name": notionapi.TitleProperty{
 						Title: []notionapi.RichText{
-							{Text: notionapi.Text{Content: "New Media Article"}},
+							{Text: &notionapi.Text{Content: "New Media Article"}},
 						},
 					},
 					"Publishing/Release Date": notionapi.DateProperty{
@@ -387,7 +387,7 @@ func TestPageCreateRequest_MarshallJSON(t *testing.T) {
 						Text: []notionapi.RichText{
 							{
 								Type: notionapi.ObjectTypeText,
-								Text: notionapi.Text{
+								Text: &notionapi.Text{
 									Content: "Some content",
 								},
 								Annotations: &notionapi.Annotations{
@@ -421,7 +421,7 @@ func TestPageCreateRequest_MarshallJSON(t *testing.T) {
 					},
 					"Name": notionapi.TitleProperty{
 						Title: []notionapi.RichText{
-							{Text: notionapi.Text{Content: "New Media Article"}},
+							{Text: &notionapi.Text{Content: "New Media Article"}},
 						},
 					},
 					"Publishing/Release Date": notionapi.DateProperty{
@@ -436,7 +436,7 @@ func TestPageCreateRequest_MarshallJSON(t *testing.T) {
 						Text: []notionapi.RichText{
 							{
 								Type: notionapi.ObjectTypeText,
-								Text: notionapi.Text{
+								Text: &notionapi.Text{
 									Content: "Some content",
 								},
 								Annotations: &notionapi.Annotations{
@@ -461,7 +461,7 @@ func TestPageCreateRequest_MarshallJSON(t *testing.T) {
 							RichText: []notionapi.RichText{
 								{
 									Type: notionapi.ObjectTypeText,
-									Text: notionapi.Text{Content: "Lacinato"},
+									Text: &notionapi.Text{Content: "Lacinato"},
 								},
 							},
 						},
@@ -474,7 +474,7 @@ func TestPageCreateRequest_MarshallJSON(t *testing.T) {
 						Paragraph: notionapi.Paragraph{
 							RichText: []notionapi.RichText{
 								{
-									Text: notionapi.Text{
+									Text: &notionapi.Text{
 										Content: "Lacinato",
 										Link: &notionapi.Link{
 											Url: "some_url",

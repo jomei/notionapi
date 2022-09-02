@@ -84,7 +84,7 @@ func TestBlockClient(t *testing.T) {
 							}{[]notionapi.RichText{
 								{
 									Type: notionapi.ObjectTypeText,
-									Text: notionapi.Text{Content: "Hello"},
+									Text: &notionapi.Text{Content: "Hello"},
 								},
 							}, nil, "",
 							},
@@ -114,7 +114,7 @@ func TestBlockClient(t *testing.T) {
 								RichText: []notionapi.RichText{
 									{
 										Type: notionapi.ObjectTypeText,
-										Text: notionapi.Text{Content: "AAAAAA"},
+										Text: &notionapi.Text{Content: "AAAAAA"},
 										Annotations: &notionapi.Annotations{
 											Bold:  true,
 											Color: notionapi.ColorDefault,
@@ -237,7 +237,7 @@ func TestBlockClient(t *testing.T) {
 					Paragraph: &notionapi.Paragraph{
 						RichText: []notionapi.RichText{
 							{
-								Text: notionapi.Text{Content: "Hello"},
+								Text: &notionapi.Text{Content: "Hello"},
 							},
 						},
 						Color: notionapi.ColorYellow.String(),
@@ -255,7 +255,7 @@ func TestBlockClient(t *testing.T) {
 						RichText: []notionapi.RichText{
 							{
 								Type: notionapi.ObjectTypeText,
-								Text: notionapi.Text{
+								Text: &notionapi.Text{
 									Content: "Hello",
 								},
 								Annotations: &notionapi.Annotations{Color: notionapi.ColorDefault},
@@ -325,7 +325,7 @@ func TestBlockArrayUnmarshal(t *testing.T) {
 							RichText: []notionapi.RichText{
 								{
 									Type: "text",
-									Text: notionapi.Text{
+									Text: &notionapi.Text{
 										Content: "This page is designed to be shared with students on the web. Click ",
 									},
 									Annotations: &notionapi.Annotations{
@@ -334,7 +334,7 @@ func TestBlockArrayUnmarshal(t *testing.T) {
 									PlainText: "This page is designed to be shared with students on the web. Click ",
 								}, {
 									Type: "text",
-									Text: notionapi.Text{
+									Text: &notionapi.Text{
 										Content: "Share",
 									},
 									Annotations: &notionapi.Annotations{
@@ -365,7 +365,7 @@ func TestBlockArrayUnmarshal(t *testing.T) {
 							RichText: []notionapi.RichText{
 								{
 									Type: "text",
-									Text: notionapi.Text{
+									Text: &notionapi.Text{
 										Content: "History 340",
 									},
 									Annotations: &notionapi.Annotations{
@@ -419,7 +419,7 @@ func TestBlockArrayUnmarshal(t *testing.T) {
 							RichText: []notionapi.RichText{
 								{
 									Type: "text",
-									Text: notionapi.Text{
+									Text: &notionapi.Text{
 										Content: "Assignment Submission",
 									},
 									Annotations: &notionapi.Annotations{
@@ -446,7 +446,7 @@ func TestBlockArrayUnmarshal(t *testing.T) {
 							RichText: []notionapi.RichText{
 								{
 									Type: "text",
-									Text: notionapi.Text{
+									Text: &notionapi.Text{
 										Content: "All essays and papers are due in lecture (due dates are listed on the schedule). No electronic copies will be accepted!",
 									},
 									Annotations: &notionapi.Annotations{
