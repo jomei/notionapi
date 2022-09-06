@@ -57,6 +57,7 @@ type PropertyFilter struct {
 	Relation    *RelationFilterCondition    `json:"relation,omitempty"`
 	Formula     *FormulaFilterCondition     `json:"formula,omitempty"`
 	Rollup      *RollupFilterCondition      `json:"rollup,omitempty"`
+	Status      *StatusFilterCondition      `json:"status,omitempty"`
 }
 
 func (f PropertyFilter) filter() {}
@@ -162,4 +163,11 @@ type RollupSubfilterCondition struct {
 	Date        *DateFilterCondition        `json:"date,omitempty"`
 	People      *PeopleFilterCondition      `json:"people,omitempty"`
 	Files       *FilesFilterCondition       `json:"files,omitempty"`
+}
+
+type StatusFilterCondition struct {
+	Equals       string `json:"equals,omitempty"`
+	DoesNotEqual string `json:"does_not_equal,omitempty"`
+	IsEmpty      bool   `json:"is_empty,omitempty"`
+	IsNotEmpty   bool   `json:"is_not_empty,omitempty"`
 }
