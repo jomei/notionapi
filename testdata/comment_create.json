@@ -1,0 +1,24 @@
+{
+  "object": "comment",
+  "id": "some_id",
+  "parent": {
+      "type": "page_id",
+      "page_id": "some_id"
+  },
+  "discussion_id": "some_id",
+  "created_time": "2021-05-24T05:06:34.827Z",
+  "last_edited_time": "2021-05-24T05:06:34.827Z",
+  "created_by": {
+      "object": "user",
+      "id": "some_id"
+  },
+  "rich_text": [
+      {
+          "type": "text",
+          "text": {
+              "content": "Hello world",
+              "link": null
+          }
+      }
+  ]
+}

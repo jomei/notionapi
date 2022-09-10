@@ -15,7 +15,7 @@ import (
 const (
 	apiURL        = "https://api.notion.com"
 	apiVersion    = "v1"
-	notionVersion = "2022-02-22"
+	notionVersion = "2022-06-28"
 )
 
 type Token string
@@ -40,6 +40,7 @@ type Client struct {
 	Page     PageService
 	User     UserService
 	Search   SearchService
+	Comment  CommentService
 }
 
 func NewClient(token Token, opts ...ClientOption) *Client {
@@ -60,6 +61,7 @@ func NewClient(token Token, opts ...ClientOption) *Client {
 	c.Page = &PageClient{apiClient: c}
 	c.User = &UserClient{apiClient: c}
 	c.Search = &SearchClient{apiClient: c}
+	c.Comment = &CommentClient{apiClient: c}
 
 	for _, opt := range opts {
 		opt(c)

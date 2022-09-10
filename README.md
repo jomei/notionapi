@@ -6,7 +6,7 @@
 An API client for the [Notion API](https://developers.notion.com/) implemented in Golang
 
 # Supported APIs
-It supports all APIs for Notion API version `2022-02-22`
+It supports all APIs for Notion API version `2022-06-28`
 
 # Installation
 
