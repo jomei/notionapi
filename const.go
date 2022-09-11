@@ -8,6 +8,7 @@ const (
 	ObjectTypeText     ObjectType = "text"
 	ObjectTypeUser     ObjectType = "user"
 	ObjectTypeError    ObjectType = "error"
+	ObjectTypeComment  ObjectType = "comment"
 )
 
 const (
