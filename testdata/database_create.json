@@ -41,7 +41,7 @@
     }
   ],
   "parent": {
-    "type": "page_id",
-    "page_id": "a7744006-9233-4cd0-bf44-3a49de2c01b5"
+    "type": "block_id",
+    "block_id": "a7744006-9233-4cd0-bf44-3a49de2c01b5"
   }
 }

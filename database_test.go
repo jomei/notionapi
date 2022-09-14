@@ -195,8 +195,8 @@ func TestDatabaseClient(t *testing.T) {
 					CreatedBy:      user,
 					LastEditedBy:   user,
 					Parent: notionapi.Parent{
-						Type:   "page_id",
-						PageID: "48f8fee9-cd79-4180-bc2f-ec0398253067",
+						Type:    "block_id",
+						BlockID: "48f8fee9-cd79-4180-bc2f-ec0398253067",
 					},
 					Title: []notionapi.RichText{
 						{
@@ -265,8 +265,8 @@ func TestDatabaseClient(t *testing.T) {
 					CreatedBy:      user,
 					LastEditedBy:   user,
 					Parent: notionapi.Parent{
-						Type:   "page_id",
-						PageID: "a7744006-9233-4cd0-bf44-3a49de2c01b5",
+						Type:    "block_id",
+						BlockID: "a7744006-9233-4cd0-bf44-3a49de2c01b5",
 					},
 					Title: []notionapi.RichText{
 						{

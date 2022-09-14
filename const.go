@@ -180,6 +180,7 @@ const (
 	ParentTypeDatabaseID ParentType = "database_id"
 	ParentTypePageID     ParentType = "page_id"
 	ParentTypeWorkspace  ParentType = "workspace"
+	ParentTypeBlockID    ParentType = "block_id"
 )
 
 const (
