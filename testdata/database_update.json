@@ -12,8 +12,8 @@
     "id": "some_id"
   },
   "parent": {
-    "type": "block_id",
-    "block_id": "48f8fee9-cd79-4180-bc2f-ec0398253067"
+    "type": "page_id",
+    "page_id": "48f8fee9-cd79-4180-bc2f-ec0398253067"
   },  
   "icon": {
     "type": "emoji",
