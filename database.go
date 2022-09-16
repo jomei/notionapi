@@ -124,7 +124,12 @@ type Database struct {
 	Parent         Parent     `json:"parent"`
 	URL            string     `json:"url"`
 	// Properties is a map of property configurations that defines what Page.Properties each page of the database can use
-	Properties PropertyConfigs `json:"properties"`
+	Properties  PropertyConfigs `json:"properties"`
+	Description []RichText      `json:"description"`
+	IsInline    bool            `json:"is_inline"`
+	Archived    bool            `json:"archived"`
+	Icon        *Icon           `json:"icon,omitempty"`
+	Cover       *Image          `json:"cover,omitempty"`
 }
 
 func (db *Database) GetObject() ObjectType {

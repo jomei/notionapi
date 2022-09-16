@@ -141,5 +141,7 @@
       "type": "url",
       "url": {}
     }
-  }
+  },
+  "description": [],
+  "is_inline": false
 }
