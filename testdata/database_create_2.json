@@ -43,5 +43,7 @@
     "parent": {
         "type": "block_id",
         "block_id": "a7744006-9233-4cd0-bf44-3a49de2c01b5"
-    }
+    },
+    "description": [],
+    "is_inline": false
 }

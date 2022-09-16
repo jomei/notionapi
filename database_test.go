@@ -16,6 +16,8 @@ func TestDatabaseClient(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	emoji := notionapi.Emoji("🎉")
+
 	var user = notionapi.User{
 		Object: "user",
 		ID:     "some_id",
@@ -204,6 +206,19 @@ func TestDatabaseClient(t *testing.T) {
 							Text: &notionapi.Text{Content: "patch"},
 						},
 					},
+					Description: []notionapi.RichText{},
+					IsInline:    false,
+					Archived:    false,
+					Icon: &notionapi.Icon{
+						Type:  "emoji",
+						Emoji: &emoji,
+					},
+					Cover: &notionapi.Image{
+						Type: "external",
+						External: &notionapi.FileObject{
+							URL: "https://website.domain/images/image.png",
+						},
+					},
 				},
 			},
 		}
@@ -276,6 +291,19 @@ func TestDatabaseClient(t *testing.T) {
 							Annotations: &notionapi.Annotations{Color: notionapi.ColorDefault},
 						},
 					},
+					Description: []notionapi.RichText{},
+					IsInline:    false,
+					Archived:    false,
+					Icon: &notionapi.Icon{
+						Type:  "emoji",
+						Emoji: &emoji,
+					},
+					Cover: &notionapi.Image{
+						Type: "external",
+						External: &notionapi.FileObject{
+							URL: "https://website.domain/images/image.png",
+						},
+					},
 				},
 			},
 			{
@@ -316,6 +344,19 @@ func TestDatabaseClient(t *testing.T) {
 							Text:        &notionapi.Text{Content: "Grocery List"},
 							PlainText:   "Grocery List",
 							Annotations: &notionapi.Annotations{Color: notionapi.ColorDefault},
+						},
+					},
+					Description: []notionapi.RichText{},
+					IsInline:    false,
+					Archived:    false,
+					Icon: &notionapi.Icon{
+						Type:  "emoji",
+						Emoji: &emoji,
+					},
+					Cover: &notionapi.Image{
+						Type: "external",
+						External: &notionapi.FileObject{
+							URL: "https://website.domain/images/image.png",
 						},
 					},
 				},
