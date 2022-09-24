@@ -558,7 +558,7 @@ type Synced struct {
 }
 
 type SyncedFrom struct {
-	BlockID BlockID `json:"original_synced_block_id"`
+	BlockID BlockID `json:"block_id"`
 }
 
 type UnsupportedBlock struct {
