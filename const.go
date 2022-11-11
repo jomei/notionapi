@@ -63,12 +63,18 @@ const (
 	FormatNumberWithCommas FormatType = "number_with_commas"
 	FormatPercent          FormatType = "percent"
 	FormatDollar           FormatType = "dollar"
+	FormatCanadianDollar   FormatType = "canadian_dollar"
 	FormatEuro             FormatType = "euro"
 	FormatPound            FormatType = "pound"
 	FormatYen              FormatType = "yen"
 	FormatRuble            FormatType = "ruble"
 	FormatRupee            FormatType = "rupee"
+	FormatWon              FormatType = "won"
 	FormatYuan             FormatType = "yuan"
+	FormatReal             FormatType = "real"
+	FormatLira             FormatType = "lira"
+	FormatRupiah           FormatType = "rupiah"
+	FormatFranc            FormatType = "franc"
 	FormatHongKongDollar   FormatType = "hong_kong_dollar"
 	FormatNewZealandDollar FormatType = "hong_kong_dollar"
 	FormatKrona            FormatType = "krona"
@@ -89,6 +95,9 @@ const (
 	FormatRiyal            FormatType = "riyal"
 	FormatRinggit          FormatType = "ringgit"
 	FormatLeu              FormatType = "leu"
+	FormatArgentinePeso    FormatType = "argentine_peso"
+	FormatUruguayanPeso    FormatType = "uruguayan_peso"
+	FormatSingaporeDollar  FormatType = "singapore_dollar"
 )
 
 const (
