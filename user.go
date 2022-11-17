@@ -26,6 +26,9 @@ type UserClient struct {
 // Get https://developers.notion.com/reference/get-user
 func (uc *UserClient) Get(ctx context.Context, id UserID) (*User, error) {
 	res, err := uc.apiClient.request(ctx, http.MethodGet, fmt.Sprintf("users/%s", id.String()), nil, nil)
+	if _, ok := err.(*Error); ok {
+		return &User{StatusCode: res.StatusCode, Header: res.Header}, err
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -41,6 +44,8 @@ func (uc *UserClient) Get(ctx context.Context, id UserID) (*User, error) {
 	if err != nil {
 		return nil, err
 	}
+	response.StatusCode = res.StatusCode
+	response.Header = res.Header
 
 	return &response, nil
 }
@@ -48,6 +53,9 @@ func (uc *UserClient) Get(ctx context.Context, id UserID) (*User, error) {
 // List https://developers.notion.com/reference/get-users
 func (uc *UserClient) List(ctx context.Context, pagination *Pagination) (*UsersListResponse, error) {
 	res, err := uc.apiClient.request(ctx, http.MethodGet, "users", pagination.ToQuery(), nil)
+	if _, ok := err.(*Error); ok {
+		return &UsersListResponse{StatusCode: res.StatusCode, Header: res.Header}, err
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -63,6 +71,8 @@ func (uc *UserClient) List(ctx context.Context, pagination *Pagination) (*UsersL
 	if err != nil {
 		return nil, err
 	}
+	response.StatusCode = res.StatusCode
+	response.Header = res.Header
 
 	return &response, nil
 }
@@ -70,13 +80,15 @@ func (uc *UserClient) List(ctx context.Context, pagination *Pagination) (*UsersL
 type UserType string
 
 type User struct {
-	Object    ObjectType `json:"object,omitempty"`
-	ID        UserID     `json:"id"`
-	Type      UserType   `json:"type,omitempty"`
-	Name      string     `json:"name,omitempty"`
-	AvatarURL string     `json:"avatar_url,omitempty"`
-	Person    *Person    `json:"person,omitempty"`
-	Bot       *Bot       `json:"bot,omitempty"`
+	StatusCode int
+	Header     http.Header
+	Object     ObjectType `json:"object,omitempty"`
+	ID         UserID     `json:"id"`
+	Type       UserType   `json:"type,omitempty"`
+	Name       string     `json:"name,omitempty"`
+	AvatarURL  string     `json:"avatar_url,omitempty"`
+	Person     *Person    `json:"person,omitempty"`
+	Bot        *Bot       `json:"bot,omitempty"`
 }
 
 type Person struct {
@@ -86,6 +98,8 @@ type Person struct {
 type Bot struct{}
 
 type UsersListResponse struct {
+	StatusCode int
+	Header     http.Header
 	Object     ObjectType `json:"object"`
 	Results    []User     `json:"results"`
 	HasMore    bool       `json:"has_more"`

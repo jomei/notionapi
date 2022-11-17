@@ -2,10 +2,11 @@ package notionapi_test
 
 import (
 	"context"
-	"github.com/jomei/notionapi"
 	"net/http"
 	"reflect"
 	"testing"
+
+	"github.com/jomei/notionapi"
 )
 
 func TestUserClient(t *testing.T) {
@@ -25,12 +26,14 @@ func TestUserClient(t *testing.T) {
 				filePath:   "testdata/user_get.json",
 				statusCode: http.StatusOK,
 				want: &notionapi.User{
-					Object:    notionapi.ObjectTypeUser,
-					ID:        "some_id",
-					Type:      notionapi.UserTypePerson,
-					Name:      "John Doe",
-					AvatarURL: "some.url",
-					Person:    &notionapi.Person{Email: "some@email.com"},
+					StatusCode: http.StatusOK,
+					Header:     make(http.Header),
+					Object:     notionapi.ObjectTypeUser,
+					ID:         "some_id",
+					Type:       notionapi.UserTypePerson,
+					Name:       "John Doe",
+					AvatarURL:  "some.url",
+					Person:     &notionapi.Person{Email: "some@email.com"},
 				},
 			},
 		}
@@ -67,7 +70,9 @@ func TestUserClient(t *testing.T) {
 				filePath:   "testdata/user_list.json",
 				statusCode: http.StatusOK,
 				want: &notionapi.UsersListResponse{
-					Object: notionapi.ObjectTypeList,
+					StatusCode: http.StatusOK,
+					Header:     make(http.Header),
+					Object:     notionapi.ObjectTypeList,
 					Results: []notionapi.User{
 						{
 							Object:    notionapi.ObjectTypeUser,

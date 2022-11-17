@@ -127,7 +127,7 @@ func (c *Client) request(ctx context.Context, method string, urlStr string, quer
 			return nil, err
 		}
 
-		return nil, &apiErr
+		return res, &apiErr
 	}
 
 	return res, nil
