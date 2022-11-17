@@ -92,7 +92,9 @@ func TestBlockClient(t *testing.T) {
 					},
 				},
 				want: &notionapi.AppendBlockChildrenResponse{
-					Object: notionapi.ObjectTypeList,
+					StatusCode: http.StatusOK,
+					Header:     make(http.Header),
+					Object:     notionapi.ObjectTypeList,
 					Results: []notionapi.Block{
 						notionapi.ParagraphBlock{
 							BasicBlock: notionapi.BasicBlock{
@@ -174,6 +176,8 @@ func TestBlockClient(t *testing.T) {
 				id:         "some_id",
 				want: &notionapi.ChildPageBlock{
 					BasicBlock: notionapi.BasicBlock{
+						StatusCode:     http.StatusOK,
+						Header:         make(http.Header),
 						Object:         notionapi.ObjectTypeBlock,
 						ID:             "some_id",
 						Type:           notionapi.BlockTypeChildPage,
@@ -245,6 +249,8 @@ func TestBlockClient(t *testing.T) {
 				},
 				want: &notionapi.ParagraphBlock{
 					BasicBlock: notionapi.BasicBlock{
+						StatusCode:     http.StatusOK,
+						Header:         make(http.Header),
 						Object:         notionapi.ObjectTypeBlock,
 						ID:             "some_id",
 						Type:           notionapi.BlockTypeParagraph,

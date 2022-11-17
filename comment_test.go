@@ -37,7 +37,9 @@ func TestCommentClient(t *testing.T) {
 				statusCode: http.StatusOK,
 				id:         "some_id",
 				want: &notionapi.CommentQueryResponse{
-					Object: notionapi.ObjectTypeList,
+					StatusCode: http.StatusOK,
+					Header:     make(http.Header),
+					Object:     notionapi.ObjectTypeList,
 					Results: []notionapi.Comment{
 						{
 							Object:         notionapi.ObjectTypeComment,
@@ -128,6 +130,8 @@ func TestCommentClient(t *testing.T) {
 					},
 				},
 				want: &notionapi.Comment{
+					StatusCode:     http.StatusOK,
+					Header:         make(http.Header),
 					Object:         notionapi.ObjectTypeComment,
 					ID:             "some_id",
 					DiscussionID:   "some_id",

@@ -47,6 +47,8 @@ type SearchRequest struct {
 }
 
 type SearchResponse struct {
+	StatusCode int
+	Header     http.Header
 	Object     ObjectType `json:"object"`
 	Results    []Object   `json:"results"`
 	HasMore    bool       `json:"has_more"`

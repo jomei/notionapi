@@ -28,6 +28,9 @@ type PageClient struct {
 // Get https://developers.notion.com/reference/get-page
 func (pc *PageClient) Get(ctx context.Context, id PageID) (*Page, error) {
 	res, err := pc.apiClient.request(ctx, http.MethodGet, fmt.Sprintf("pages/%s", id.String()), nil, nil)
+	if _, ok := err.(*Error); ok {
+		return &Page{StatusCode: res.StatusCode, Header: res.Header}, err
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -44,6 +47,9 @@ func (pc *PageClient) Get(ctx context.Context, id PageID) (*Page, error) {
 // Create https://developers.notion.com/reference/post-page
 func (pc *PageClient) Create(ctx context.Context, requestBody *PageCreateRequest) (*Page, error) {
 	res, err := pc.apiClient.request(ctx, http.MethodPost, "pages", nil, requestBody)
+	if _, ok := err.(*Error); ok {
+		return &Page{StatusCode: res.StatusCode, Header: res.Header}, err
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -67,6 +73,9 @@ type PageUpdateRequest struct {
 // Update https://developers.notion.com/reference/patch-page
 func (pc *PageClient) Update(ctx context.Context, id PageID, request *PageUpdateRequest) (*Page, error) {
 	res, err := pc.apiClient.request(ctx, http.MethodPatch, fmt.Sprintf("pages/%s", id.String()), nil, request)
+	if _, ok := err.(*Error); ok {
+		return &Page{StatusCode: res.StatusCode, Header: res.Header}, err
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -81,6 +90,8 @@ func (pc *PageClient) Update(ctx context.Context, id PageID, request *PageUpdate
 }
 
 type Page struct {
+	StatusCode     int
+	Header         http.Header
 	Object         ObjectType `json:"object"`
 	ID             ObjectID   `json:"id"`
 	CreatedTime    time.Time  `json:"created_time"`
@@ -124,6 +135,8 @@ func handlePageResponse(res *http.Response) (*Page, error) {
 	if err != nil {
 		return nil, err
 	}
+	response.StatusCode = res.StatusCode
+	response.Header = res.Header
 
 	return &response, nil
 }

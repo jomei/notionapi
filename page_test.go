@@ -33,6 +33,8 @@ func TestPageClient(t *testing.T) {
 				filePath:   "testdata/page_get.json",
 				statusCode: http.StatusOK,
 				want: &notionapi.Page{
+					StatusCode:     http.StatusOK,
+					Header:         make(http.Header),
 					Object:         notionapi.ObjectTypePage,
 					ID:             "some_id",
 					CreatedTime:    timestamp,
@@ -213,6 +215,8 @@ func TestPageClient(t *testing.T) {
 					},
 				},
 				want: &notionapi.Page{
+					StatusCode:     http.StatusOK,
+					Header:         make(http.Header),
 					Object:         notionapi.ObjectTypePage,
 					ID:             "some_id",
 					CreatedTime:    timestamp,
@@ -302,6 +306,8 @@ func TestPageClient(t *testing.T) {
 					},
 				},
 				want: &notionapi.Page{
+					StatusCode:     http.StatusOK,
+					Header:         make(http.Header),
 					Object:         notionapi.ObjectTypePage,
 					ID:             "some_id",
 					CreatedTime:    timestamp,

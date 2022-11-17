@@ -39,6 +39,8 @@ func TestDatabaseClient(t *testing.T) {
 				filePath:   "testdata/database_get.json",
 				statusCode: http.StatusOK,
 				want: &notionapi.Database{
+					StatusCode:     http.StatusOK,
+					Header:         make(http.Header),
 					Object:         notionapi.ObjectTypeDatabase,
 					ID:             "some_id",
 					CreatedTime:    timestamp,
@@ -119,7 +121,9 @@ func TestDatabaseClient(t *testing.T) {
 					},
 				},
 				want: &notionapi.DatabaseQueryResponse{
-					Object: notionapi.ObjectTypeList,
+					StatusCode: http.StatusOK,
+					Header:     make(http.Header),
+					Object:     notionapi.ObjectTypeList,
 					Results: []notionapi.Page{
 						{
 							Object:         notionapi.ObjectTypePage,
@@ -190,6 +194,8 @@ func TestDatabaseClient(t *testing.T) {
 					},
 				},
 				want: &notionapi.Database{
+					StatusCode:     http.StatusOK,
+					Header:         make(http.Header),
 					Object:         notionapi.ObjectTypeDatabase,
 					ID:             "some_id",
 					CreatedTime:    timestamp,
@@ -273,6 +279,8 @@ func TestDatabaseClient(t *testing.T) {
 					},
 				},
 				want: &notionapi.Database{
+					StatusCode:     http.StatusOK,
+					Header:         make(http.Header),
 					Object:         notionapi.ObjectTypeDatabase,
 					ID:             "some_id",
 					CreatedTime:    timestamp,
@@ -328,6 +336,8 @@ func TestDatabaseClient(t *testing.T) {
 					},
 				},
 				want: &notionapi.Database{
+					StatusCode:     http.StatusOK,
+					Header:         make(http.Header),
 					Object:         notionapi.ObjectTypeDatabase,
 					ID:             "some_id",
 					CreatedTime:    timestamp,

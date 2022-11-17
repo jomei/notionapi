@@ -32,6 +32,9 @@ type BlockClient struct {
 // populated, instead the HasChildren flag will be true.
 func (bc *BlockClient) GetChildren(ctx context.Context, id BlockID, pagination *Pagination) (*GetChildrenResponse, error) {
 	res, err := bc.apiClient.request(ctx, http.MethodGet, fmt.Sprintf("blocks/%s/children", id.String()), pagination.ToQuery(), nil)
+	if _, ok := err.(*Error); ok {
+		return &GetChildrenResponse{StatusCode: res.StatusCode, Header: res.Header}, err
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -47,11 +50,15 @@ func (bc *BlockClient) GetChildren(ctx context.Context, id BlockID, pagination *
 	if err != nil {
 		return nil, err
 	}
+	response.StatusCode = res.StatusCode
+	response.Header = res.Header
 
 	return response, nil
 }
 
 type GetChildrenResponse struct {
+	StatusCode int
+	Header     http.Header
 	Object     ObjectType `json:"object"`
 	Results    Blocks     `json:"results"`
 	NextCursor string     `json:"next_cursor"`
@@ -61,6 +68,9 @@ type GetChildrenResponse struct {
 // AppendChildren https://developers.notion.com/reference/patch-block-children
 func (bc *BlockClient) AppendChildren(ctx context.Context, id BlockID, requestBody *AppendBlockChildrenRequest) (*AppendBlockChildrenResponse, error) {
 	res, err := bc.apiClient.request(ctx, http.MethodPatch, fmt.Sprintf("blocks/%s/children", id.String()), nil, requestBody)
+	if _, ok := err.(*Error); ok {
+		return &AppendBlockChildrenResponse{StatusCode: res.StatusCode, Header: res.Header}, err
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -76,6 +86,9 @@ func (bc *BlockClient) AppendChildren(ctx context.Context, id BlockID, requestBo
 	if err != nil {
 		return nil, err
 	}
+	response.StatusCode = res.StatusCode
+	response.Header = res.Header
+
 	return &response, nil
 }
 
@@ -83,6 +96,9 @@ func (bc *BlockClient) AppendChildren(ctx context.Context, id BlockID, requestBo
 // NOTE: If the block has children, it will not retrieve those children.
 func (bc *BlockClient) Get(ctx context.Context, id BlockID) (Block, error) {
 	res, err := bc.apiClient.request(ctx, http.MethodGet, fmt.Sprintf("blocks/%s", id.String()), nil, nil)
+	if _, ok := err.(*Error); ok {
+		return &BasicBlock{StatusCode: res.StatusCode, Header: res.Header}, err
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -98,12 +114,17 @@ func (bc *BlockClient) Get(ctx context.Context, id BlockID) (Block, error) {
 	if err != nil {
 		return nil, err
 	}
+	response["status_code"] = res.StatusCode
+	response["header"] = res.Header
 	return decodeBlock(response)
 }
 
 // Delete https://developers.notion.com/reference/delete-a-block
 func (bc *BlockClient) Delete(ctx context.Context, id BlockID) (Block, error) {
 	res, err := bc.apiClient.request(ctx, http.MethodDelete, fmt.Sprintf("blocks/%s", id.String()), nil, nil)
+	if _, ok := err.(*Error); ok {
+		return &BasicBlock{StatusCode: res.StatusCode, Header: res.Header}, err
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -119,11 +140,16 @@ func (bc *BlockClient) Delete(ctx context.Context, id BlockID) (Block, error) {
 	if err != nil {
 		return nil, err
 	}
+	response["status_code"] = res.StatusCode
+	response["header"] = res.Header
 	return decodeBlock(response)
 }
 
 func (bc *BlockClient) Update(ctx context.Context, id BlockID, requestBody *BlockUpdateRequest) (Block, error) {
 	res, err := bc.apiClient.request(ctx, http.MethodPatch, fmt.Sprintf("blocks/%s", id.String()), nil, requestBody)
+	if _, ok := err.(*Error); ok {
+		return &BasicBlock{StatusCode: res.StatusCode, Header: res.Header}, err
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -139,6 +165,8 @@ func (bc *BlockClient) Update(ctx context.Context, id BlockID, requestBody *Bloc
 	if err != nil {
 		return nil, err
 	}
+	response["status_code"] = res.StatusCode
+	response["header"] = res.Header
 	return decodeBlock(response)
 }
 
@@ -153,6 +181,8 @@ type AppendBlockChildrenRequest struct {
 }
 
 type Block interface {
+	GetStatusCode() int
+	GetHeader() http.Header
 	GetType() BlockType
 	GetID() BlockID
 	GetObject() ObjectType
@@ -188,15 +218,25 @@ func (b *Blocks) UnmarshalJSON(data []byte) error {
 // See https://developers.notion.com/reference/block for the list.
 // BasicBlock implements the Block interface.
 type BasicBlock struct {
-	Object         ObjectType `json:"object"`
-	ID             BlockID    `json:"id,omitempty"`
-	Type           BlockType  `json:"type"`
-	CreatedTime    *time.Time `json:"created_time,omitempty"`
-	LastEditedTime *time.Time `json:"last_edited_time,omitempty"`
-	CreatedBy      *User      `json:"created_by,omitempty"`
-	LastEditedBy   *User      `json:"last_edited_by,omitempty"`
-	HasChildren    bool       `json:"has_children,omitempty"`
-	Archived       bool       `json:"archived,omitempty"`
+	StatusCode     int         `json:"status_code,omitempty"`
+	Header         http.Header `json:"header,omitempty"`
+	Object         ObjectType  `json:"object"`
+	ID             BlockID     `json:"id,omitempty"`
+	Type           BlockType   `json:"type"`
+	CreatedTime    *time.Time  `json:"created_time,omitempty"`
+	LastEditedTime *time.Time  `json:"last_edited_time,omitempty"`
+	CreatedBy      *User       `json:"created_by,omitempty"`
+	LastEditedBy   *User       `json:"last_edited_by,omitempty"`
+	HasChildren    bool        `json:"has_children,omitempty"`
+	Archived       bool        `json:"archived,omitempty"`
+}
+
+func (b BasicBlock) GetStatusCode() int {
+	return b.StatusCode
+}
+
+func (b BasicBlock) GetHeader() http.Header {
+	return b.Header
 }
 
 func (b BasicBlock) GetType() BlockType {
@@ -566,8 +606,10 @@ type UnsupportedBlock struct {
 }
 
 type AppendBlockChildrenResponse struct {
-	Object  ObjectType `json:"object"`
-	Results []Block    `json:"results"`
+	StatusCode int
+	Header     http.Header
+	Object     ObjectType `json:"object"`
+	Results    []Block    `json:"results"`
 }
 
 type appendBlockResponse struct {

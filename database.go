@@ -29,6 +29,9 @@ type DatabaseClient struct {
 // Get https://developers.notion.com/reference/get-database
 func (dc *DatabaseClient) Get(ctx context.Context, id DatabaseID) (*Database, error) {
 	res, err := dc.apiClient.request(ctx, http.MethodGet, fmt.Sprintf("databases/%s", id.String()), nil, nil)
+	if _, ok := err.(*Error); ok {
+		return &Database{StatusCode: res.StatusCode, Header: res.Header}, err
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -45,6 +48,8 @@ func (dc *DatabaseClient) Get(ctx context.Context, id DatabaseID) (*Database, er
 	if err != nil {
 		return nil, err
 	}
+	response.StatusCode = res.StatusCode
+	response.Header = res.Header
 
 	return &response, nil
 }
@@ -52,6 +57,9 @@ func (dc *DatabaseClient) Get(ctx context.Context, id DatabaseID) (*Database, er
 // Query https://developers.notion.com/reference/post-database-query
 func (dc *DatabaseClient) Query(ctx context.Context, id DatabaseID, requestBody *DatabaseQueryRequest) (*DatabaseQueryResponse, error) {
 	res, err := dc.apiClient.request(ctx, http.MethodPost, fmt.Sprintf("databases/%s/query", id.String()), nil, requestBody)
+	if _, ok := err.(*Error); ok {
+		return &DatabaseQueryResponse{StatusCode: res.StatusCode, Header: res.Header}, err
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -67,6 +75,8 @@ func (dc *DatabaseClient) Query(ctx context.Context, id DatabaseID, requestBody 
 	if err != nil {
 		return nil, err
 	}
+	response.StatusCode = res.StatusCode
+	response.Header = res.Header
 
 	return &response, nil
 }
@@ -74,6 +84,9 @@ func (dc *DatabaseClient) Query(ctx context.Context, id DatabaseID, requestBody 
 // Update https://developers.notion.com/reference/update-a-database
 func (dc *DatabaseClient) Update(ctx context.Context, id DatabaseID, requestBody *DatabaseUpdateRequest) (*Database, error) {
 	res, err := dc.apiClient.request(ctx, http.MethodPatch, fmt.Sprintf("databases/%s", id.String()), nil, requestBody)
+	if _, ok := err.(*Error); ok {
+		return &Database{StatusCode: res.StatusCode, Header: res.Header}, err
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -88,12 +101,18 @@ func (dc *DatabaseClient) Update(ctx context.Context, id DatabaseID, requestBody
 	if err := json.NewDecoder(res.Body).Decode(&response); err != nil {
 		return nil, err
 	}
+	response.StatusCode = res.StatusCode
+	response.Header = res.Header
+
 	return &response, nil
 }
 
 // Create https://developers.notion.com/reference/create-a-database
 func (dc *DatabaseClient) Create(ctx context.Context, requestBody *DatabaseCreateRequest) (*Database, error) {
 	res, err := dc.apiClient.request(ctx, http.MethodPost, "databases", nil, requestBody)
+	if _, ok := err.(*Error); ok {
+		return &Database{StatusCode: res.StatusCode, Header: res.Header}, err
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -109,11 +128,15 @@ func (dc *DatabaseClient) Create(ctx context.Context, requestBody *DatabaseCreat
 	if err != nil {
 		return nil, err
 	}
+	response.StatusCode = res.StatusCode
+	response.Header = res.Header
 
 	return &response, nil
 }
 
 type Database struct {
+	StatusCode     int
+	Header         http.Header
 	Object         ObjectType `json:"object"`
 	ID             ObjectID   `json:"id"`
 	CreatedTime    time.Time  `json:"created_time"`
@@ -165,6 +188,8 @@ func (qr *DatabaseQueryRequest) MarshalJSON() ([]byte, error) {
 }
 
 type DatabaseQueryResponse struct {
+	StatusCode int
+	Header     http.Header
 	Object     ObjectType `json:"object"`
 	Results    []Page     `json:"results"`
 	HasMore    bool       `json:"has_more"`

@@ -33,6 +33,9 @@ func (cc *CommentClient) Get(ctx context.Context, id BlockID, pagination *Pagina
 	queryParams["block_id"] = id.String()
 
 	res, err := cc.apiClient.request(ctx, http.MethodGet, "comments", queryParams, nil)
+	if _, ok := err.(*Error); ok {
+		return &CommentQueryResponse{StatusCode: res.StatusCode, Header: res.Header}, err
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -49,6 +52,8 @@ func (cc *CommentClient) Get(ctx context.Context, id BlockID, pagination *Pagina
 	if err != nil {
 		return nil, err
 	}
+	response.StatusCode = res.StatusCode
+	response.Header = res.Header
 
 	return &response, nil
 }
@@ -56,6 +61,9 @@ func (cc *CommentClient) Get(ctx context.Context, id BlockID, pagination *Pagina
 // Create https://developers.notion.com/reference/create-a-comment
 func (cc *CommentClient) Create(ctx context.Context, requestBody *CommentCreateRequest) (*Comment, error) {
 	res, err := cc.apiClient.request(ctx, http.MethodPost, "comments", nil, requestBody)
+	if _, ok := err.(*Error); ok {
+		return &Comment{StatusCode: res.StatusCode, Header: res.Header}, err
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -71,6 +79,8 @@ func (cc *CommentClient) Create(ctx context.Context, requestBody *CommentCreateR
 	if err != nil {
 		return nil, err
 	}
+	response.StatusCode = res.StatusCode
+	response.Header = res.Header
 
 	return &response, nil
 }
@@ -82,6 +92,8 @@ func (dID DiscussionID) String() string {
 }
 
 type Comment struct {
+	StatusCode     int
+	Header         http.Header
 	Object         ObjectType   `json:"object"`
 	ID             ObjectID     `json:"id"`
 	DiscussionID   DiscussionID `json:"discussion_id"`
@@ -93,6 +105,8 @@ type Comment struct {
 }
 
 type CommentQueryResponse struct {
+	StatusCode int
+	Header     http.Header
 	Object     ObjectType `json:"object"`
 	Results    []Comment  `json:"results"`
 	HasMore    bool       `json:"has_more"`
