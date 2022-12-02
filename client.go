@@ -10,6 +10,7 @@ import (
 	"net/url"
 	"reflect"
 	"strconv"
+	"time"
 )
 
 const (
@@ -115,9 +116,29 @@ func (c *Client) request(ctx context.Context, method string, urlStr string, quer
 	req.Header.Add("Notion-Version", c.notionVersion)
 	req.Header.Add("Content-Type", "application/json")
 
-	res, err := c.httpClient.Do(req.WithContext(ctx))
-	if err != nil {
-		return nil, err
+	var res *http.Response
+	for {
+		res, err := c.httpClient.Do(req.WithContext(ctx))
+		if err != nil {
+			return nil, err
+		}
+
+		if res.StatusCode == http.StatusTooManyRequests {
+			retryAfter := res.Header["Retry-After"][0]
+			waitUntil, err := time.Parse(time.RFC1123, retryAfter)
+			if err != nil {
+				waitSeconds, err := strconv.Atoi(retryAfter)
+				if err != nil {
+					break // should not happen
+				} else {
+					time.Sleep(time.Duration(waitSeconds) * time.Second)
+				}
+			} else {
+				time.Sleep(waitUntil.Sub(time.Now()))
+			}
+		} else {
+			break
+		}
 	}
 
 	if res.StatusCode != http.StatusOK {
