@@ -124,6 +124,7 @@ func (c *Client) request(ctx context.Context, method string, urlStr string, quer
 		}
 
 		if res.StatusCode == http.StatusTooManyRequests {
+			// https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Retry-After
 			retryAfter := res.Header["Retry-After"][0]
 			waitUntil, err := time.Parse(time.RFC1123, retryAfter)
 			if err != nil {
