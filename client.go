@@ -10,7 +10,10 @@ import (
 	"net/url"
 	"reflect"
 	"strconv"
+	"sync"
 	"time"
+
+	"github.com/pkg/errors"
 )
 
 const (
@@ -33,6 +36,8 @@ type Client struct {
 	baseUrl       *url.URL
 	apiVersion    string
 	notionVersion string
+
+	requestMutex sync.Mutex
 
 	Token Token
 
@@ -86,6 +91,9 @@ func WithVersion(version string) ClientOption {
 }
 
 func (c *Client) request(ctx context.Context, method string, urlStr string, queryParams map[string]string, requestBody interface{}) (*http.Response, error) {
+	c.requestMutex.Lock()
+	defer c.requestMutex.Unlock()
+
 	u, err := c.baseUrl.Parse(fmt.Sprintf("%s/%s", c.apiVersion, urlStr))
 	if err != nil {
 		return nil, err
@@ -116,6 +124,7 @@ func (c *Client) request(ctx context.Context, method string, urlStr string, quer
 	req.Header.Add("Notion-Version", c.notionVersion)
 	req.Header.Add("Content-Type", "application/json")
 
+	failedAttempts := 0
 	var res *http.Response
 	for {
 		res, err := c.httpClient.Do(req.WithContext(ctx))
@@ -125,6 +134,11 @@ func (c *Client) request(ctx context.Context, method string, urlStr string, quer
 
 		if res.StatusCode == http.StatusTooManyRequests {
 			// https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Retry-After
+			failedAttempts++
+			if failedAttempts == 3 {
+				return nil, errors.New("Retry request with 429 response failed")
+			}
+			var delay time.Duration
 			retryAfter := res.Header["Retry-After"][0]
 			waitUntil, err := time.Parse(time.RFC1123, retryAfter)
 			if err != nil {
@@ -132,10 +146,15 @@ func (c *Client) request(ctx context.Context, method string, urlStr string, quer
 				if err != nil {
 					break // should not happen
 				} else {
-					time.Sleep(time.Duration(waitSeconds) * time.Second)
+					delay = time.Duration(waitSeconds) * time.Second
 				}
 			} else {
-				time.Sleep(waitUntil.Sub(time.Now()))
+				delay = waitUntil.Sub(time.Now())
+			}
+			select {
+			case <-ctx.Done():
+				return nil, ctx.Err()
+			case <-time.After(delay):
 			}
 		} else {
 			break
