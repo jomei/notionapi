@@ -16,6 +16,8 @@ func TestDatabaseClient(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	emoji := notionapi.Emoji("🎉")
+
 	var user = notionapi.User{
 		Object: "user",
 		ID:     "some_id",
@@ -204,6 +206,19 @@ func TestDatabaseClient(t *testing.T) {
 							Text: &notionapi.Text{Content: "patch"},
 						},
 					},
+					Description: []notionapi.RichText{},
+					IsInline:    false,
+					Archived:    false,
+					Icon: &notionapi.Icon{
+						Type:  "emoji",
+						Emoji: &emoji,
+					},
+					Cover: &notionapi.Image{
+						Type: "external",
+						External: &notionapi.FileObject{
+							URL: "https://website.domain/images/image.png",
+						},
+					},
 				},
 			},
 		}
@@ -274,6 +289,74 @@ func TestDatabaseClient(t *testing.T) {
 							Text:        &notionapi.Text{Content: "Grocery List"},
 							PlainText:   "Grocery List",
 							Annotations: &notionapi.Annotations{Color: notionapi.ColorDefault},
+						},
+					},
+					Description: []notionapi.RichText{},
+					IsInline:    false,
+					Archived:    false,
+					Icon: &notionapi.Icon{
+						Type:  "emoji",
+						Emoji: &emoji,
+					},
+					Cover: &notionapi.Image{
+						Type: "external",
+						External: &notionapi.FileObject{
+							URL: "https://website.domain/images/image.png",
+						},
+					},
+				},
+			},
+			{
+				name:       "returns created db 2",
+				filePath:   "testdata/database_create_2.json",
+				statusCode: http.StatusOK,
+				request: &notionapi.DatabaseCreateRequest{
+					Parent: notionapi.Parent{
+						Type:   notionapi.ParentTypePageID,
+						PageID: "some_id",
+					},
+					Title: []notionapi.RichText{
+						{
+							Type: notionapi.ObjectTypeText,
+							Text: &notionapi.Text{Content: "Grocery List"},
+						},
+					},
+					Properties: notionapi.PropertyConfigs{
+						"create": notionapi.TitlePropertyConfig{
+							Type: notionapi.PropertyConfigTypeTitle,
+						},
+					},
+				},
+				want: &notionapi.Database{
+					Object:         notionapi.ObjectTypeDatabase,
+					ID:             "some_id",
+					CreatedTime:    timestamp,
+					LastEditedTime: timestamp,
+					CreatedBy:      user,
+					LastEditedBy:   user,
+					Parent: notionapi.Parent{
+						Type:    "block_id",
+						BlockID: "a7744006-9233-4cd0-bf44-3a49de2c01b5",
+					},
+					Title: []notionapi.RichText{
+						{
+							Type:        notionapi.ObjectTypeText,
+							Text:        &notionapi.Text{Content: "Grocery List"},
+							PlainText:   "Grocery List",
+							Annotations: &notionapi.Annotations{Color: notionapi.ColorDefault},
+						},
+					},
+					Description: []notionapi.RichText{},
+					IsInline:    false,
+					Archived:    false,
+					Icon: &notionapi.Icon{
+						Type:  "emoji",
+						Emoji: &emoji,
+					},
+					Cover: &notionapi.Image{
+						Type: "external",
+						External: &notionapi.FileObject{
+							URL: "https://website.domain/images/image.png",
 						},
 					},
 				},

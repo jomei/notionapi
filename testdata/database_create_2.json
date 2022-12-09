@@ -1,0 +1,49 @@
+{
+    "object": "database",
+    "id": "some_id",
+    "cover": {
+        "type": "external",
+        "external": {
+            "url": "https://website.domain/images/image.png"
+        }
+    },
+    "icon": {
+        "type": "emoji",
+        "emoji": "🎉"
+    },
+    "created_time": "2021-05-24T05:06:34.827Z",
+    "last_edited_time": "2021-05-24T05:06:34.827Z",
+    "created_by": {
+        "object": "user",
+        "id": "some_id"
+    },
+    "last_edited_by": {
+        "object": "user",
+        "id": "some_id"
+    },
+    "title": [
+        {
+            "type": "text",
+            "text": {
+                "content": "Grocery List",
+                "link": null
+            },
+            "annotations": {
+                "bold": false,
+                "italic": false,
+                "strikethrough": false,
+                "underline": false,
+                "code": false,
+                "color": "default"
+            },
+            "plain_text": "Grocery List",
+            "href": null
+        }
+    ],
+    "parent": {
+        "type": "block_id",
+        "block_id": "a7744006-9233-4cd0-bf44-3a49de2c01b5"
+    },
+    "description": [],
+    "is_inline": false
+}
