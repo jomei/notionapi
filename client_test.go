@@ -1,9 +1,12 @@
 package notionapi_test
 
 import (
+	"context"
 	"net/http"
 	"os"
 	"testing"
+
+	"github.com/jomei/notionapi"
 )
 
 // RoundTripFunc .
@@ -23,7 +26,7 @@ func newTestClient(fn RoundTripFunc) *http.Client {
 
 // newMockedClient returns *http.Client which responds with content from given file
 func newMockedClient(t *testing.T, requestMockFile string, statusCode int) *http.Client {
-	return newTestClient(func(req *http.Request) *http.Response {
+	return newTestClient(func(*http.Request) *http.Response {
 		b, err := os.Open(requestMockFile)
 		if err != nil {
 			t.Fatal(err)
@@ -36,4 +39,22 @@ func newMockedClient(t *testing.T, requestMockFile string, statusCode int) *http
 		}
 		return resp
 	})
+}
+
+func TestRateLimitRetryError(t *testing.T) {
+	c := newTestClient(func(*http.Request) *http.Response {
+		return &http.Response{
+			StatusCode: http.StatusTooManyRequests,
+			Header:     http.Header{"Retry-After": []string{"0"}},
+		}
+	})
+	client := notionapi.NewClient("some_token", notionapi.WithHTTPClient(c))
+	_, err := client.Block.Get(context.Background(), notionapi.BlockID("some_block_id"))
+	if err == nil {
+		t.Errorf("Get() error = %v", err)
+	}
+	wantErr := "Retry request with 429 response failed"
+	if err.Error() != wantErr {
+		t.Errorf("Get() error = %v, wantErr %s", err, wantErr)
+	}
 }

@@ -127,7 +127,8 @@ func (c *Client) request(ctx context.Context, method string, urlStr string, quer
 	failedAttempts := 0
 	var res *http.Response
 	for {
-		res, err := c.httpClient.Do(req.WithContext(ctx))
+		var err error
+		res, err = c.httpClient.Do(req.WithContext(ctx))
 		if err != nil {
 			return nil, err
 		}
@@ -137,24 +138,16 @@ func (c *Client) request(ctx context.Context, method string, urlStr string, quer
 			if failedAttempts == 3 {
 				return nil, errors.New("Retry request with 429 response failed")
 			}
-			var delay time.Duration
-			// https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Retry-After
+			// https://developers.notion.com/reference/request-limits#rate-limits
 			retryAfter := res.Header["Retry-After"][0]
-			waitUntil, err := time.Parse(time.RFC1123, retryAfter)
+			waitSeconds, err := strconv.Atoi(retryAfter)
 			if err != nil {
-				waitSeconds, err := strconv.Atoi(retryAfter)
-				if err != nil {
-					break // should not happen
-				} else {
-					delay = time.Duration(waitSeconds) * time.Second
-				}
-			} else {
-				delay = waitUntil.Sub(time.Now())
+				break // should not happen
 			}
 			select {
 			case <-ctx.Done():
 				return nil, ctx.Err()
-			case <-time.After(delay):
+			case <-time.After(time.Duration(waitSeconds) * time.Second):
 			}
 		} else {
 			break
