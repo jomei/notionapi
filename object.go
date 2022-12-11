@@ -184,9 +184,3 @@ type PropertyID string
 func (pID PropertyID) String() string {
 	return string(pID)
 }
-
-type Status struct {
-	ID    ObjectID `json:"id"`
-	Name  string   `json:"name"`
-	Color Color    `json:"color"`
-}
