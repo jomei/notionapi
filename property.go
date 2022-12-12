@@ -275,7 +275,7 @@ func (p LastEditedByProperty) GetType() PropertyType {
 type StatusProperty struct {
 	ID     ObjectID     `json:"id,omitempty"`
 	Type   PropertyType `json:"type,omitempty"`
-	Status Option       `json:"status"`
+	Status Status       `json:"status"`
 }
 
 func (p StatusProperty) GetType() PropertyType {
