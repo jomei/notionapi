@@ -185,5 +185,4 @@ func (pID PropertyID) String() string {
 	return string(pID)
 }
 
-// DEPRECATED
 type Status = Option
