@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/jomei/notionapi"
+	"github.com/conduitio-labs/notionapi"
 )
 
 func TestDate(t *testing.T) {
