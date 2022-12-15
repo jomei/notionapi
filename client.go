@@ -10,7 +10,6 @@ import (
 	"net/url"
 	"reflect"
 	"strconv"
-	"sync"
 	"time"
 
 	"github.com/pkg/errors"
@@ -36,8 +35,6 @@ type Client struct {
 	baseUrl       *url.URL
 	apiVersion    string
 	notionVersion string
-
-	requestMutex sync.Mutex
 
 	Token Token
 
@@ -91,9 +88,6 @@ func WithVersion(version string) ClientOption {
 }
 
 func (c *Client) request(ctx context.Context, method string, urlStr string, queryParams map[string]string, requestBody interface{}) (*http.Response, error) {
-	c.requestMutex.Lock()
-	defer c.requestMutex.Unlock()
-
 	u, err := c.baseUrl.Parse(fmt.Sprintf("%s/%s", c.apiVersion, urlStr))
 	if err != nil {
 		return nil, err
