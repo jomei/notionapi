@@ -48,12 +48,12 @@ func TestRateLimitRetryError(t *testing.T) {
 			Header:     http.Header{"Retry-After": []string{"0"}},
 		}
 	})
-	client := notionapi.NewClient("some_token", notionapi.WithHTTPClient(c))
+	client := notionapi.NewClient("some_token", notionapi.WithHTTPClient(c), notionapi.WithRetry(2))
 	_, err := client.Block.Get(context.Background(), notionapi.BlockID("some_block_id"))
 	if err == nil {
 		t.Errorf("Get() error = %v", err)
 	}
-	wantErr := "Retry request with 429 response failed"
+	wantErr := "Retry request with 429 response failed after 2 retries"
 	if err.Error() != wantErr {
 		t.Errorf("Get() error = %v, wantErr %s", err, wantErr)
 	}
