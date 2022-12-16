@@ -10,12 +10,14 @@ import (
 	"net/url"
 	"reflect"
 	"strconv"
+	"time"
 )
 
 const (
 	apiURL        = "https://api.notion.com"
 	apiVersion    = "v1"
 	notionVersion = "2022-06-28"
+	maxRetries    = 3
 )
 
 type Token string
@@ -32,6 +34,8 @@ type Client struct {
 	baseUrl       *url.URL
 	apiVersion    string
 	notionVersion string
+
+	maxRetries int
 
 	Token Token
 
@@ -54,6 +58,7 @@ func NewClient(token Token, opts ...ClientOption) *Client {
 		baseUrl:       u,
 		apiVersion:    apiVersion,
 		notionVersion: notionVersion,
+		maxRetries:    maxRetries,
 	}
 
 	c.Database = &DatabaseClient{apiClient: c}
@@ -81,6 +86,13 @@ func WithHTTPClient(client *http.Client) ClientOption {
 func WithVersion(version string) ClientOption {
 	return func(c *Client) {
 		c.notionVersion = version
+	}
+}
+
+// WithRetry overrides the default number of max retry attempts on 429 errors
+func WithRetry(retries int) ClientOption {
+	return func(c *Client) {
+		c.maxRetries = retries
 	}
 }
 
@@ -115,9 +127,34 @@ func (c *Client) request(ctx context.Context, method string, urlStr string, quer
 	req.Header.Add("Notion-Version", c.notionVersion)
 	req.Header.Add("Content-Type", "application/json")
 
-	res, err := c.httpClient.Do(req.WithContext(ctx))
-	if err != nil {
-		return nil, err
+	failedAttempts := 0
+	var res *http.Response
+	for {
+		var err error
+		res, err = c.httpClient.Do(req.WithContext(ctx))
+		if err != nil {
+			return nil, err
+		}
+
+		if res.StatusCode != http.StatusTooManyRequests {
+			break
+		}
+
+		failedAttempts++
+		if failedAttempts == c.maxRetries {
+			return nil, fmt.Errorf("Retry request with 429 response failed after %d retries", failedAttempts)
+		}
+		// https://developers.notion.com/reference/request-limits#rate-limits
+		retryAfter := res.Header["Retry-After"][0]
+		waitSeconds, err := strconv.Atoi(retryAfter)
+		if err != nil {
+			break // should not happen
+		}
+		select {
+		case <-ctx.Done():
+			return nil, ctx.Err()
+		case <-time.After(time.Duration(waitSeconds) * time.Second):
+		}
 	}
 
 	if res.StatusCode != http.StatusOK {
