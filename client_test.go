@@ -41,20 +41,42 @@ func newMockedClient(t *testing.T, requestMockFile string, statusCode int) *http
 	})
 }
 
-func TestRateLimitRetryError(t *testing.T) {
-	c := newTestClient(func(*http.Request) *http.Response {
-		return &http.Response{
-			StatusCode: http.StatusTooManyRequests,
-			Header:     http.Header{"Retry-After": []string{"0"}},
+func TestRateLimit(t *testing.T) {
+	t.Run("should return error when rate limit is exceeded", func(t *testing.T) {
+		c := newTestClient(func(*http.Request) *http.Response {
+			return &http.Response{
+				StatusCode: http.StatusTooManyRequests,
+				Header:     http.Header{"Retry-After": []string{"0"}},
+			}
+		})
+		client := notionapi.NewClient("some_token", notionapi.WithHTTPClient(c), notionapi.WithRetry(2))
+		_, err := client.Block.Get(context.Background(), "some_block_id")
+		if err == nil {
+			t.Errorf("Get() error = %v", err)
+		}
+		wantErr := "Retry request with 429 response failed after 2 retries"
+		if err.Error() != wantErr {
+			t.Errorf("Get() error = %v, wantErr %s", err, wantErr)
 		}
 	})
-	client := notionapi.NewClient("some_token", notionapi.WithHTTPClient(c), notionapi.WithRetry(2))
-	_, err := client.Block.Get(context.Background(), notionapi.BlockID("some_block_id"))
-	if err == nil {
-		t.Errorf("Get() error = %v", err)
-	}
-	wantErr := "Retry request with 429 response failed after 2 retries"
-	if err.Error() != wantErr {
-		t.Errorf("Get() error = %v, wantErr %s", err, wantErr)
-	}
+
+	t.Run("should make maxRetries attempts", func(t *testing.T) {
+		attempts := 0
+		maxRetries := 2
+		c := newTestClient(func(*http.Request) *http.Response {
+			attempts++
+			return &http.Response{
+				StatusCode: http.StatusTooManyRequests,
+				Header:     http.Header{"Retry-After": []string{"0"}},
+			}
+		})
+		client := notionapi.NewClient("some_token", notionapi.WithHTTPClient(c), notionapi.WithRetry(maxRetries))
+		_, err := client.Block.Get(context.Background(), "some_block_id")
+		if err == nil {
+			t.Errorf("Get() error = %v", err)
+		}
+		if attempts != maxRetries {
+			t.Errorf("Get() attempts = %v, want %v", attempts, maxRetries)
+		}
+	})
 }
