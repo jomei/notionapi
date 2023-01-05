@@ -17,6 +17,7 @@ func (uID UserID) String() string {
 type UserService interface {
 	Get(context.Context, UserID) (*User, error)
 	List(context.Context, *Pagination) (*UsersListResponse, error)
+	Me(context.Context) (*User, error)
 }
 
 type UserClient struct {
@@ -67,6 +68,28 @@ func (uc *UserClient) List(ctx context.Context, pagination *Pagination) (*UsersL
 	return &response, nil
 }
 
+// Me https://developers.notion.com/reference/get-self
+func (uc *UserClient) Me(ctx context.Context) (*User, error) {
+	res, err := uc.apiClient.request(ctx, http.MethodGet, "users/me", nil, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	defer func() {
+		if errClose := res.Body.Close(); errClose != nil {
+			log.Println("failed to close body, should never happen")
+		}
+	}()
+
+	var response User
+	err = json.NewDecoder(res.Body).Decode(&response)
+	if err != nil {
+		return nil, err
+	}
+
+	return &response, nil
+}
+
 type UserType string
 
 type User struct {
@@ -83,7 +106,15 @@ type Person struct {
 	Email string `json:"email"`
 }
 
-type Bot struct{}
+type Bot struct {
+	Owner         Owner  `json:"owner"`
+	WorkspaceName string `json:"workspace_name"`
+}
+
+type Owner struct {
+	Type      string `json:"type"`
+	Workspace bool   `json:"workspace"`
+}
 
 type UsersListResponse struct {
 	Object     ObjectType `json:"object"`
