@@ -106,4 +106,49 @@ func TestUserClient(t *testing.T) {
 			})
 		}
 	})
+
+	t.Run("Me", func(t *testing.T) {
+		tests := []struct {
+			name       string
+			filePath   string
+			statusCode int
+			want       *notionapi.User
+			wantErr    bool
+			err        error
+		}{
+			{
+				name:       "returns me-user",
+				filePath:   "testdata/user_me.json",
+				statusCode: http.StatusOK,
+				want: &notionapi.User{
+					Object:    notionapi.ObjectTypeUser,
+					ID:        "some_id",
+					Type:      notionapi.UserTypePerson,
+					Name:      "John Doe",
+					AvatarURL: "some.url",
+					Bot: &notionapi.Bot{Owner: notionapi.Owner{
+						Type:      "workspace",
+						Workspace: true,
+					}, WorkspaceName: "John Doe's Workspace"},
+				},
+			},
+		}
+
+		for _, tt := range tests {
+			t.Run(tt.name, func(t *testing.T) {
+				c := newMockedClient(t, tt.filePath, tt.statusCode)
+				client := notionapi.NewClient("some_token", notionapi.WithHTTPClient(c))
+
+				got, err := client.User.Me(context.Background())
+				if (err != nil) != tt.wantErr {
+					t.Errorf("Get() error = %v, wantErr %v", err, tt.wantErr)
+					return
+				}
+
+				if !reflect.DeepEqual(got, tt.want) {
+					t.Errorf("Get() got = %v, want %v", got, tt.want)
+				}
+			})
+		}
+	})
 }
