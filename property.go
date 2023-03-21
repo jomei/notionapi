@@ -289,7 +289,7 @@ func (p *Properties) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &raw); err != nil {
 		return err
 	}
-	props, err := parsePageProperties(raw)
+	props, err := parsePageProperties(raw, data)
 	if err != nil {
 		return err
 	}
@@ -298,7 +298,7 @@ func (p *Properties) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func parsePageProperties(raw map[string]interface{}) (map[string]Property, error) {
+func parsePageProperties(raw map[string]interface{}, data []byte) (map[string]Property, error) {
 	result := make(map[string]Property)
 	for k, v := range raw {
 		switch rawProperty := v.(type) {
@@ -307,12 +307,8 @@ func parsePageProperties(raw map[string]interface{}) (map[string]Property, error
 			if err != nil {
 				return nil, err
 			}
-			b, err := json.Marshal(rawProperty)
-			if err != nil {
-				return nil, err
-			}
 
-			if err = json.Unmarshal(b, &p); err != nil {
+			if err = json.Unmarshal(data, &p); err != nil {
 				return nil, err
 			}
 
