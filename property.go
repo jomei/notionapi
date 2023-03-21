@@ -285,11 +285,11 @@ func (p StatusProperty) GetType() PropertyType {
 type Properties map[string]Property
 
 func (p *Properties) UnmarshalJSON(data []byte) error {
-	var raw map[string]interface{}
+	var raw map[string]json.RawMessage
 	if err := json.Unmarshal(data, &raw); err != nil {
 		return err
 	}
-	props, err := parsePageProperties(raw, data)
+	props, err := parsePageProperties(raw)
 	if err != nil {
 		return err
 	}
@@ -298,23 +298,28 @@ func (p *Properties) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func parsePageProperties(raw map[string]interface{}, data []byte) (map[string]Property, error) {
+func parsePageProperties(raw map[string]json.RawMessage) (map[string]Property, error) {
 	result := make(map[string]Property)
-	for k, v := range raw {
-		switch rawProperty := v.(type) {
+	for k, rawMessage := range raw {
+		var parsedMessage interface{}
+		err := json.Unmarshal(rawMessage, &parsedMessage)
+		if err != nil {
+			return nil, err
+		}
+		switch rawProperty := parsedMessage.(type) {
 		case map[string]interface{}:
 			p, err := decodeProperty(rawProperty)
 			if err != nil {
 				return nil, err
 			}
 
-			if err = json.Unmarshal(data, &p); err != nil {
+			if err = json.Unmarshal(rawMessage, &p); err != nil {
 				return nil, err
 			}
 
 			result[k] = p
 		default:
-			return nil, errors.New(fmt.Sprintf("unsupported property format %T", v))
+			return nil, errors.New(fmt.Sprintf("unsupported property format %T", parsedMessage))
 		}
 	}
 
