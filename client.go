@@ -39,12 +39,13 @@ type Client struct {
 
 	Token Token
 
-	Database DatabaseService
-	Block    BlockService
-	Page     PageService
-	User     UserService
-	Search   SearchService
-	Comment  CommentService
+	Database       DatabaseService
+	Block          BlockService
+	Page           PageService
+	User           UserService
+	Search         SearchService
+	Comment        CommentService
+	Authentication AuthenticationService
 }
 
 func NewClient(token Token, opts ...ClientOption) *Client {
@@ -67,6 +68,7 @@ func NewClient(token Token, opts ...ClientOption) *Client {
 	c.User = &UserClient{apiClient: c}
 	c.Search = &SearchClient{apiClient: c}
 	c.Comment = &CommentClient{apiClient: c}
+	c.Authentication = &AuthenticationClient{apiClient: c}
 
 	for _, opt := range opts {
 		opt(c)
