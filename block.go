@@ -254,9 +254,10 @@ type Heading1Block struct {
 }
 
 type Heading struct {
-	RichText []RichText `json:"rich_text"`
-	Children Blocks     `json:"children,omitempty"`
-	Color    string     `json:"color,omitempty"`
+	RichText     []RichText `json:"rich_text"`
+	Children     Blocks     `json:"children,omitempty"`
+	Color        string     `json:"color,omitempty"`
+	IsToggleable bool       `json:"is_toggleable,omitempty"`
 }
 
 type Heading2Block struct {
