@@ -78,15 +78,16 @@ func TestBlockClient(t *testing.T) {
 								Type:   notionapi.BlockTypeHeading2,
 							},
 							Heading2: struct {
-								RichText []notionapi.RichText `json:"rich_text"`
-								Children notionapi.Blocks     `json:"children,omitempty"`
-								Color    string               `json:"color,omitempty"`
+								RichText     []notionapi.RichText `json:"rich_text"`
+								Children     notionapi.Blocks     `json:"children,omitempty"`
+								Color        string               `json:"color,omitempty"`
+								IsToggleable bool                 `json:"is_toggleable,omitempty"`
 							}{[]notionapi.RichText{
 								{
 									Type: notionapi.ObjectTypeText,
 									Text: &notionapi.Text{Content: "Hello"},
 								},
-							}, nil, "",
+							}, nil, "", false,
 							},
 						},
 					},
