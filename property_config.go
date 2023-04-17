@@ -232,7 +232,8 @@ func (p LastEditedByPropertyConfig) GetType() PropertyConfigType {
 	return p.Type
 }
 
-//TODO: Status database properties cannot currently be configured via the API and so have no additional configuration within the status property.
+// StatusPropertyConfig can only be used to GET property configs from Notion databases.
+// The api currently does not support creating or updating status properties.
 type StatusPropertyConfig struct{
 	ID           ObjectID           `json:"id"`
 	Type         PropertyConfigType `json:"type"`
