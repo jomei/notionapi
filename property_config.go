@@ -233,10 +233,14 @@ func (p LastEditedByPropertyConfig) GetType() PropertyConfigType {
 }
 
 //TODO: Status database properties cannot currently be configured via the API and so have no additional configuration within the status property.
-type StatusPropertyConfig struct{}
+type StatusPropertyConfig struct{
+	ID           ObjectID           `json:"id"`
+	Type         PropertyConfigType `json:"type"`
+	Status		 Select 			`json:"status"`
+}
 
 func (p StatusPropertyConfig) GetType() PropertyConfigType {
-	return ""
+	return p.Type
 }
 
 type PropertyConfigs map[string]PropertyConfig
