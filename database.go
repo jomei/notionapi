@@ -180,4 +180,5 @@ type DatabaseCreateRequest struct {
 	Parent     Parent          `json:"parent"`
 	Title      []RichText      `json:"title"`
 	Properties PropertyConfigs `json:"properties"`
+	IsInline   bool            `json:"is_inline"`
 }
