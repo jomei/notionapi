@@ -1,6 +1,7 @@
 package notionapi
 
 import (
+	"fmt"
 	"time"
 )
 
@@ -186,3 +187,15 @@ func (pID PropertyID) String() string {
 }
 
 type Status = Option
+
+type UniqueID struct {
+	Prefix *string `json:"prefix,omitempty"`
+	Number int     `json:"number"`
+}
+
+func (uID UniqueID) String() string {
+	if uID.Prefix != nil {
+		return fmt.Sprintf("%s-%d", *uID.Prefix, uID.Number)
+	}
+	return fmt.Sprintf("%d", uID.Number)
+}

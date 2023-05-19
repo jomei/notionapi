@@ -32,6 +32,7 @@ const (
 	PropertyConfigLastEditedTime  PropertyConfigType = "last_edited_time"
 	PropertyConfigLastEditedBy    PropertyConfigType = "last_edited_by"
 	PropertyConfigStatus          PropertyConfigType = "status"
+	PropertyConfigUniqueID        PropertyConfigType = "unique_id"
 )
 
 const (
@@ -56,6 +57,7 @@ const (
 	PropertyTypeLastEditedTime PropertyType = "last_edited_time"
 	PropertyTypeLastEditedBy   PropertyType = "last_edited_by"
 	PropertyTypeStatus         PropertyType = "status"
+	PropertyTypeUniqueID       PropertyType = "unique_id"
 )
 
 const (

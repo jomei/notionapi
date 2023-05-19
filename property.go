@@ -282,6 +282,16 @@ func (p StatusProperty) GetType() PropertyType {
 	return p.Type
 }
 
+type UniqueIDProperty struct {
+	ID       ObjectID     `json:"id,omitempty"`
+	Type     PropertyType `json:"type,omitempty"`
+	UniqueID UniqueID     `json:"unique_id"`
+}
+
+func (p UniqueIDProperty) GetType() PropertyType {
+	return p.Type
+}
+
 type Properties map[string]Property
 
 func (p *Properties) UnmarshalJSON(data []byte) error {
@@ -370,6 +380,8 @@ func decodeProperty(raw map[string]interface{}) (Property, error) {
 		p = &LastEditedByProperty{}
 	case PropertyTypeStatus:
 		p = &StatusProperty{}
+	case PropertyTypeUniqueID:
+		p = &UniqueIDProperty{}
 	default:
 		return nil, errors.New(fmt.Sprintf("unsupported property type: %s", raw["type"].(string)))
 	}
