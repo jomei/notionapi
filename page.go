@@ -25,7 +25,16 @@ type PageClient struct {
 	apiClient *Client
 }
 
-// Get https://developers.notion.com/reference/get-page
+// Retrieves a Page object using the ID specified.
+//
+// Responses contains page properties, not page content. To fetch page content,
+// use the Retrieve block children endpoint.
+//
+// Page properties are limited to up to 25 references per page property. To
+// retrieve data related to properties that have more than 25 references, use
+// the Retrieve a page property endpoint.
+//
+// See https://developers.notion.com/reference/get-page
 func (pc *PageClient) Get(ctx context.Context, id PageID) (*Page, error) {
 	res, err := pc.apiClient.request(ctx, http.MethodGet, fmt.Sprintf("pages/%s", id.String()), nil, nil)
 	if err != nil {
@@ -41,7 +50,21 @@ func (pc *PageClient) Get(ctx context.Context, id PageID) (*Page, error) {
 	return handlePageResponse(res)
 }
 
-// Create https://developers.notion.com/reference/post-page
+// Creates a new page that is a child of an existing page or database.
+//
+// If the new page is a child of an existing page,title is the only valid
+// property in the properties body param.
+//
+// If the new page is a child of an existing database, the keys of the
+// properties object body param must match the parent database's properties.
+//
+// This endpoint can be used to create a new page with or without content using
+// the children option. To add content to a page after creating it, use the
+// Append block children endpoint.
+//
+// Returns a new page object.
+//
+// See https://developers.notion.com/reference/post-page
 func (pc *PageClient) Create(ctx context.Context, requestBody *PageCreateRequest) (*Page, error) {
 	res, err := pc.apiClient.request(ctx, http.MethodPost, "pages", nil, requestBody)
 	if err != nil {
@@ -64,7 +87,21 @@ type PageUpdateRequest struct {
 	Cover      *Image     `json:"cover,omitempty"`
 }
 
-// Update https://developers.notion.com/reference/patch-page
+// Updates the properties of a page in a database. The properties body param of
+// this endpoint can only be used to update the properties of a page that is a
+// child of a database. The page’s properties schema must match the parent
+// database’s properties.
+//
+// This endpoint can be used to update any page icon or cover, and can be used
+// to archive or restore any page.
+//
+// To add page content instead of page properties, use the append block children
+// endpoint. The page_id can be passed as the block_id when adding block
+// children to the page.
+//
+// Returns the updated page object.
+//
+// See https://developers.notion.com/reference/patch-page
 func (pc *PageClient) Update(ctx context.Context, id PageID, request *PageUpdateRequest) (*Page, error) {
 	res, err := pc.apiClient.request(ctx, http.MethodPatch, fmt.Sprintf("pages/%s", id.String()), nil, request)
 	if err != nil {
@@ -80,6 +117,9 @@ func (pc *PageClient) Update(ctx context.Context, id PageID, request *PageUpdate
 	return handlePageResponse(res)
 }
 
+// The Page object contains the page property values of a single Notion page.
+//
+// See https://developers.notion.com/reference/page
 type Page struct {
 	Object         ObjectType `json:"object"`
 	ID             ObjectID   `json:"id"`
@@ -101,7 +141,12 @@ func (p *Page) GetObject() ObjectType {
 
 type ParentType string
 
-// Ref: https://developers.notion.com/reference/parent-object
+// Pages, databases, and blocks are either located inside other pages,
+// databases, and blocks, or are located at the top level of a workspace. This
+// location is known as the "parent". Parent information is represented by a
+// consistent parent object throughout the API.
+//
+// See https://developers.notion.com/reference/parent-object
 type Parent struct {
 	Type       ParentType `json:"type,omitempty"`
 	PageID     PageID     `json:"page_id,omitempty"`
