@@ -15,15 +15,57 @@ func (cID CommentID) String() string {
 }
 
 type CommentService interface {
-	Get(context.Context, BlockID, *Pagination) (*CommentQueryResponse, error)
 	Create(ctx context.Context, request *CommentCreateRequest) (*Comment, error)
+	Get(context.Context, BlockID, *Pagination) (*CommentQueryResponse, error)
 }
 
 type CommentClient struct {
 	apiClient *Client
 }
 
-// Get https://developers.notion.com/reference/retrieve-a-comment
+// Creates a comment in a page or existing discussion thread.
+//
+// There are two locations you can add a new comment to:
+// 1. A page
+// 2. An existing discussion thread
+//
+// If the intention is to add a new comment to a page, a parent object must be
+// provided in the body params. Alternatively, if a new comment is being added
+// to an existing discussion thread, the discussion_id string must be provided
+// in the body params. Exactly one of these parameters must be provided.
+//
+// See https://developers.notion.com/reference/create-a-comment
+func (cc *CommentClient) Create(ctx context.Context, requestBody *CommentCreateRequest) (*Comment, error) {
+	res, err := cc.apiClient.request(ctx, http.MethodPost, "comments", nil, requestBody)
+	if err != nil {
+		return nil, err
+	}
+
+	defer func() {
+		if errClose := res.Body.Close(); errClose != nil {
+			log.Println("failed to close body, should never happen")
+		}
+	}()
+
+	var response Comment
+	err = json.NewDecoder(res.Body).Decode(&response)
+	if err != nil {
+		return nil, err
+	}
+
+	return &response, nil
+}
+
+// CommentCreateRequest represents the request body for CommentClient.Create.
+type CommentCreateRequest struct {
+	Parent       Parent       `json:"parent,omitempty"`
+	DiscussionID DiscussionID `json:"discussion_id,omitempty"`
+	RichText     []RichText   `json:"rich_text"`
+}
+
+// Retrieves a list of un-resolved Comment objects from a page or block.
+//
+// See https://developers.notion.com/reference/retrieve-a-comment
 func (cc *CommentClient) Get(ctx context.Context, id BlockID, pagination *Pagination) (*CommentQueryResponse, error) {
 	queryParams := map[string]string{}
 	if pagination != nil {
@@ -45,28 +87,6 @@ func (cc *CommentClient) Get(ctx context.Context, id BlockID, pagination *Pagina
 
 	var response CommentQueryResponse
 
-	err = json.NewDecoder(res.Body).Decode(&response)
-	if err != nil {
-		return nil, err
-	}
-
-	return &response, nil
-}
-
-// Create https://developers.notion.com/reference/create-a-comment
-func (cc *CommentClient) Create(ctx context.Context, requestBody *CommentCreateRequest) (*Comment, error) {
-	res, err := cc.apiClient.request(ctx, http.MethodPost, "comments", nil, requestBody)
-	if err != nil {
-		return nil, err
-	}
-
-	defer func() {
-		if errClose := res.Body.Close(); errClose != nil {
-			log.Println("failed to close body, should never happen")
-		}
-	}()
-
-	var response Comment
 	err = json.NewDecoder(res.Body).Decode(&response)
 	if err != nil {
 		return nil, err
@@ -97,10 +117,4 @@ type CommentQueryResponse struct {
 	Results    []Comment  `json:"results"`
 	HasMore    bool       `json:"has_more"`
 	NextCursor Cursor     `json:"next_cursor"`
-}
-
-type CommentCreateRequest struct {
-	Parent       Parent       `json:"parent,omitempty"`
-	DiscussionID DiscussionID `json:"discussion_id,omitempty"`
-	RichText     []RichText   `json:"rich_text"`
 }

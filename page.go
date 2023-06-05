@@ -16,38 +16,13 @@ func (pID PageID) String() string {
 }
 
 type PageService interface {
-	Get(context.Context, PageID) (*Page, error)
 	Create(context.Context, *PageCreateRequest) (*Page, error)
+	Get(context.Context, PageID) (*Page, error)
 	Update(context.Context, PageID, *PageUpdateRequest) (*Page, error)
 }
 
 type PageClient struct {
 	apiClient *Client
-}
-
-// Retrieves a Page object using the ID specified.
-//
-// Responses contains page properties, not page content. To fetch page content,
-// use the Retrieve block children endpoint.
-//
-// Page properties are limited to up to 25 references per page property. To
-// retrieve data related to properties that have more than 25 references, use
-// the Retrieve a page property endpoint.
-//
-// See https://developers.notion.com/reference/get-page
-func (pc *PageClient) Get(ctx context.Context, id PageID) (*Page, error) {
-	res, err := pc.apiClient.request(ctx, http.MethodGet, fmt.Sprintf("pages/%s", id.String()), nil, nil)
-	if err != nil {
-		return nil, err
-	}
-
-	defer func() {
-		if errClose := res.Body.Close(); errClose != nil {
-			log.Println("failed to close body, should never happen")
-		}
-	}()
-
-	return handlePageResponse(res)
 }
 
 // Creates a new page that is a child of an existing page or database.
@@ -80,11 +55,47 @@ func (pc *PageClient) Create(ctx context.Context, requestBody *PageCreateRequest
 	return handlePageResponse(res)
 }
 
-type PageUpdateRequest struct {
+// PageCreateRequest represents the request body for PageClient.Create.
+type PageCreateRequest struct {
+	// The parent page or database where the new page is inserted, represented as
+	// a JSON object with a page_id or database_id key, and the corresponding ID.
+	Parent Parent `json:"parent"`
+	// The values of the page’s properties. If the parent is a database, then the
+	// schema must match the parent database’s properties. If the parent is a page,
+	// then the only valid object key is title.
 	Properties Properties `json:"properties"`
-	Archived   bool       `json:"archived"`
-	Icon       *Icon      `json:"icon,omitempty"`
-	Cover      *Image     `json:"cover,omitempty"`
+	// The content to be rendered on the new page, represented as an array of
+	// block objects.
+	Children []Block `json:"children,omitempty"`
+	// The icon of the new page. Either an emoji object or an external file object.
+	Icon *Icon `json:"icon,omitempty"`
+	// The cover image of the new page, represented as a file object.
+	Cover *Image `json:"cover,omitempty"`
+}
+
+// Retrieves a Page object using the ID specified.
+//
+// Responses contains page properties, not page content. To fetch page content,
+// use the Retrieve block children endpoint.
+//
+// Page properties are limited to up to 25 references per page property. To
+// retrieve data related to properties that have more than 25 references, use
+// the Retrieve a page property endpoint.
+//
+// See https://developers.notion.com/reference/get-page
+func (pc *PageClient) Get(ctx context.Context, id PageID) (*Page, error) {
+	res, err := pc.apiClient.request(ctx, http.MethodGet, fmt.Sprintf("pages/%s", id.String()), nil, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	defer func() {
+		if errClose := res.Body.Close(); errClose != nil {
+			log.Println("failed to close body, should never happen")
+		}
+	}()
+
+	return handlePageResponse(res)
 }
 
 // Updates the properties of a page in a database. The properties body param of
@@ -115,6 +126,22 @@ func (pc *PageClient) Update(ctx context.Context, id PageID, request *PageUpdate
 	}()
 
 	return handlePageResponse(res)
+}
+
+// PageUpdateRequest represents the request body for PageClient.Update.
+type PageUpdateRequest struct {
+	// The property values to update for the page. The keys are the names or IDs
+	// of the property and the values are property values. If a page property ID
+	// is not included, then it is not changed.
+	Properties Properties `json:"properties"`
+	// Whether the page is archived (deleted). Set to true to archive a page. Set
+	// to false to un-archive (restore) a page.
+	Archived bool `json:"archived"`
+	// A page icon for the page. Supported types are external file object or emoji
+	// object.
+	Icon *Icon `json:"icon,omitempty"`
+	// A cover image for the page. Only external file objects are supported.
+	Cover *Image `json:"cover,omitempty"`
 }
 
 // The Page object contains the page property values of a single Notion page.
@@ -153,14 +180,6 @@ type Parent struct {
 	DatabaseID DatabaseID `json:"database_id,omitempty"`
 	BlockID    BlockID    `json:"block_id,omitempty"`
 	Workspace  bool       `json:"workspace,omitempty"`
-}
-
-type PageCreateRequest struct {
-	Parent     Parent     `json:"parent"`
-	Properties Properties `json:"properties"`
-	Children   []Block    `json:"children,omitempty"`
-	Icon       *Icon      `json:"icon,omitempty"`
-	Cover      *Image     `json:"cover,omitempty"`
 }
 
 func handlePageResponse(res *http.Response) (*Page, error) {
