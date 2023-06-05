@@ -15,7 +15,10 @@ type AuthenticationClient struct {
 	apiClient *Client
 }
 
-// Create https://developers.notion.com/reference/create-a-token
+// Creates an access token that a third-party service can use to authenticate
+// with Notion.
+//
+// See https://developers.notion.com/reference/create-a-token
 func (cc *AuthenticationClient) CreateToken(ctx context.Context, request *TokenCreateRequest) (*TokenCreateResponse, error) {
 	res, err := cc.apiClient.request(ctx, http.MethodPost, "oauth/token", nil, request)
 	if err != nil {
@@ -37,10 +40,26 @@ func (cc *AuthenticationClient) CreateToken(ctx context.Context, request *TokenC
 	return &response, nil
 }
 
+// TokenCreateRequest represents the request body for AuthenticationClient.CreateToken.
 type TokenCreateRequest struct {
-	Code            string          `json:"code"`
-	GrantType       string          `json:"grant_type"` // Default value of grant_type is always "authorization_code"
-	RedirectUri     string          `json:"redirect_uri"`
+	// A unique random code that Notion generates to authenticate with your service,
+	// generated when a user initiates the OAuth flow.
+	Code string `json:"code"`
+	// A constant string: "authorization_code".
+	GrantType string `json:"grant_type"`
+	// The "redirect_uri" that was provided in the OAuth Domain & URI section of
+	// the integration's Authorization settings. Do not include this field if a
+	// "redirect_uri" query param was not included in the Authorization URL
+	// provided to users. In most cases, this field is required.
+	RedirectUri string `json:"redirect_uri"`
+	// Required if and only when building Link Preview integrations (otherwise
+	// ignored). An object with key and name properties. key should be a unique
+	// identifier for the account. Notion uses the key to determine whether or not
+	// the user is re-connecting the same account. name should be some way for the
+	// user to know which account they used to authenticate with your service. If
+	// a user has authenticated Notion with your integration before and key is the
+	// same but name is different, then Notion updates the name associated with
+	// your integration.
 	ExternalAccount ExternalAccount `json:"external_account,omitempty"`
 }
 
