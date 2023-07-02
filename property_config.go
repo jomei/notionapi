@@ -164,10 +164,23 @@ type RelationPropertyConfig struct {
 	Relation RelationConfig     `json:"relation"`
 }
 
+type RelationConfigType string
+
+func (rp RelationConfigType) String() string {
+	return string(rp)
+}
+
+type SingleProperty struct{}
+
+type DualProperty struct{}
+
 type RelationConfig struct {
-	DatabaseID         DatabaseID `json:"database_id"`
-	SyncedPropertyID   PropertyID `json:"synced_property_id"`
-	SyncedPropertyName string     `json:"synced_property_name"`
+	DatabaseID         DatabaseID         `json:"database_id"`
+	SyncedPropertyID   PropertyID         `json:"synced_property_id,omitempty"`
+	SyncedPropertyName string             `json:"synced_property_name,omitempty"`
+	Type               RelationConfigType `json:"type,omitempty"`
+	SingleProperty     *SingleProperty    `json:"single_property,omitempty"`
+	DualProperty       *DualProperty      `json:"dual_property,omitempty"`
 }
 
 func (p RelationPropertyConfig) GetType() PropertyConfigType {
