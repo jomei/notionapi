@@ -268,3 +268,8 @@ const (
 	TemplateMentionTypeUser TemplateMentionType = "template_mention_user"
 	TemplateMentionTypeDate TemplateMentionType = "template_mention_date"
 )
+
+const (
+	RelationSingleProperty RelationConfigType = "single_property"
+	RelationDualProperty   RelationConfigType = "dual_property"
+)
