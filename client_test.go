@@ -3,6 +3,8 @@ package notionapi_test
 import (
 	"context"
 	"net/http"
+	"net/http/httptest"
+	"net/url"
 	"os"
 	"testing"
 
@@ -79,4 +81,37 @@ func TestRateLimit(t *testing.T) {
 			t.Errorf("Get() attempts = %v, want %v", attempts, maxRetries)
 		}
 	})
+}
+
+func TestBasicAuthHeader(t *testing.T) {
+	t.Parallel()
+
+	srv := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
+		auth := request.Header.Get("Authorization")
+		if auth != "Basic bXkgaWQgaGVyZTpzZWNyZXQgc2hoaA==" {
+			t.Errorf("expected basic auth, got %q", auth)
+		}
+		writer.WriteHeader(http.StatusNoContent)
+	}))
+	defer srv.Close()
+	srvURL, err := url.Parse(srv.URL)
+	if err != nil {
+		t.Fatalf("could not parse test server url")
+	}
+
+	c := newTestClient(func(req *http.Request) *http.Response {
+		req.URL = srvURL
+		resp, err := http.DefaultTransport.RoundTrip(req)
+		if err != nil {
+			t.Errorf("failed to make http request: %s", err.Error())
+		}
+		return resp
+	})
+
+	opts := []notionapi.ClientOption{
+		notionapi.WithHTTPClient(c),
+		notionapi.WithOAuthAppCredentials("my id here", "secret shhh"),
+	}
+	client := notionapi.NewClient("some_token", opts...)
+	_, _ = client.Authentication.CreateToken(context.Background(), &notionapi.TokenCreateRequest{})
 }

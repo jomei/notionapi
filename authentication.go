@@ -20,7 +20,7 @@ type AuthenticationClient struct {
 //
 // See https://developers.notion.com/reference/create-a-token
 func (cc *AuthenticationClient) CreateToken(ctx context.Context, request *TokenCreateRequest) (*TokenCreateResponse, error) {
-	res, err := cc.apiClient.request(ctx, http.MethodPost, "oauth/token", nil, request)
+	res, err := cc.apiClient.requestImpl(ctx, http.MethodPost, "oauth/token", nil, request, true)
 	if err != nil {
 		return nil, err
 	}
