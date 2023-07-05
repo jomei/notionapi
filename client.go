@@ -3,6 +3,7 @@ package notionapi
 import (
 	"bytes"
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -38,6 +39,10 @@ type Client struct {
 	maxRetries int
 
 	Token Token
+
+	// used in Authorization header only for requests that require Basic authentication.
+	oauthID     string
+	oauthSecret string
 
 	Database       DatabaseService
 	Block          BlockService
@@ -98,7 +103,19 @@ func WithRetry(retries int) ClientOption {
 	}
 }
 
+// WithOAuthAppCredentials sets the OAuth app ID and secret to use when fetching a token from Notion.
+func WithOAuthAppCredentials(id, secret string) ClientOption {
+	return func(c *Client) {
+		c.oauthID = id
+		c.oauthSecret = secret
+	}
+}
+
 func (c *Client) request(ctx context.Context, method string, urlStr string, queryParams map[string]string, requestBody interface{}) (*http.Response, error) {
+	return c.requestImpl(ctx, method, urlStr, queryParams, requestBody, false)
+}
+
+func (c *Client) requestImpl(ctx context.Context, method string, urlStr string, queryParams map[string]string, requestBody interface{}, basicAuth bool) (*http.Response, error) {
 	u, err := c.baseUrl.Parse(fmt.Sprintf("%s/%s", c.apiVersion, urlStr))
 	if err != nil {
 		return nil, err
@@ -125,7 +142,12 @@ func (c *Client) request(ctx context.Context, method string, urlStr string, quer
 		return nil, err
 	}
 
-	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", c.Token.String()))
+	if basicAuth {
+		cred := base64.StdEncoding.EncodeToString([]byte(c.oauthID + ":" + c.oauthSecret))
+		req.Header.Add("Authorization", fmt.Sprintf("Basic %s", cred))
+	} else {
+		req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", c.Token.String()))
+	}
 	req.Header.Add("Notion-Version", c.notionVersion)
 	req.Header.Add("Content-Type", "application/json")
 
