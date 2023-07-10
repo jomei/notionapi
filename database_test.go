@@ -439,6 +439,14 @@ func TestDatabaseClient(t *testing.T) {
 			})
 		}
 	})
+
+	t.Run("Get with empty database_id", func(t *testing.T) {
+		client := notionapi.NewClient("some_token")
+		_, err := client.Database.Get(context.TODO(), notionapi.DatabaseID(""))
+		if err.Error() != "empty database id" {
+			t.Error("database id is required error is expected")
+		}
+	})
 }
 
 func TestDatabaseQueryRequest_MarshalJSON(t *testing.T) {

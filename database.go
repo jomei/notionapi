@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/pkg/errors"
 	"log"
 	"net/http"
 	"time"
@@ -117,6 +118,10 @@ type DatabaseQueryRequest struct {
 
 // See https://developers.notion.com/reference/get-database
 func (dc *DatabaseClient) Get(ctx context.Context, id DatabaseID) (*Database, error) {
+	if id == "" {
+		return nil, errors.New("empty database id")
+	}
+
 	res, err := dc.apiClient.request(ctx, http.MethodGet, fmt.Sprintf("databases/%s", id.String()), nil, nil)
 	if err != nil {
 		return nil, err
