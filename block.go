@@ -167,6 +167,9 @@ type BlockUpdateRequest struct {
 	Bookmark         *Bookmark  `json:"bookmark,omitempty"`
 	Template         *Template  `json:"template,omitempty"`
 	Callout          *Callout   `json:"callout,omitempty"`
+	Equation         *Equation  `json:"equation,omitempty"`
+	Quote            *Quote     `json:"quote,omitempty"`
+	TableRow         *TableRow  `json:"table_row,omitempty"`
 }
 
 // Sets a Block object, including page blocks, to archived: true using the ID
