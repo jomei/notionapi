@@ -61,6 +61,8 @@ func (bc *BlockClient) AppendChildren(ctx context.Context, id BlockID, requestBo
 }
 
 type AppendBlockChildrenRequest struct {
+	// Apepend new children after a specific block. If empty, new children with be appended to the bottom of the parent block.
+	After BlockID `json:"after,omitempty"`
 	// Child content to append to a container block as an array of block objects.
 	Children []Block `json:"children"`
 }
