@@ -144,7 +144,7 @@ type RelationFilterCondition struct {
 }
 
 type FormulaFilterCondition struct {
-	Text     *TextFilterCondition     `json:"text,omitempty"`
+	String   *TextFilterCondition     `json:"string,omitempty"`
 	Checkbox *CheckboxFilterCondition `json:"checkbox,omitempty"`
 	Number   *NumberFilterCondition   `json:"number,omitempty"`
 	Date     *DateFilterCondition     `json:"date,omitempty"`
