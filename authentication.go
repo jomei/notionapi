@@ -20,7 +20,7 @@ type AuthenticationClient struct {
 //
 // See https://developers.notion.com/reference/create-a-token
 func (cc *AuthenticationClient) CreateToken(ctx context.Context, request *TokenCreateRequest) (*TokenCreateResponse, error) {
-	res, err := cc.apiClient.requestImpl(ctx, http.MethodPost, "oauth/token", nil, request, true)
+	res, err := cc.apiClient.requestImpl(ctx, http.MethodPost, "oauth/token", nil, request, true, decodeTokenCreateError)
 	if err != nil {
 		return nil, err
 	}
@@ -40,6 +40,15 @@ func (cc *AuthenticationClient) CreateToken(ctx context.Context, request *TokenC
 	return &response, nil
 }
 
+func decodeTokenCreateError(data []byte) error {
+	var apiErr TokenCreateError
+	err := json.Unmarshal(data, &apiErr)
+	if err != nil {
+		return err
+	}
+	return &apiErr
+}
+
 // TokenCreateRequest represents the request body for AuthenticationClient.CreateToken.
 type TokenCreateRequest struct {
 	// A unique random code that Notion generates to authenticate with your service,
@@ -51,7 +60,7 @@ type TokenCreateRequest struct {
 	// the integration's Authorization settings. Do not include this field if a
 	// "redirect_uri" query param was not included in the Authorization URL
 	// provided to users. In most cases, this field is required.
-	RedirectUri string `json:"redirect_uri"`
+	RedirectUri string `json:"redirect_uri,omitempty"`
 	// Required if and only when building Link Preview integrations (otherwise
 	// ignored). An object with key and name properties. key should be a unique
 	// identifier for the account. Notion uses the key to determine whether or not

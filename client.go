@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"net/url"
 	"reflect"
@@ -22,6 +23,8 @@ const (
 )
 
 type Token string
+
+type errJsonDecodeFunc func(data []byte) error
 
 func (it Token) String() string {
 	return string(it)
@@ -112,10 +115,10 @@ func WithOAuthAppCredentials(id, secret string) ClientOption {
 }
 
 func (c *Client) request(ctx context.Context, method string, urlStr string, queryParams map[string]string, requestBody interface{}) (*http.Response, error) {
-	return c.requestImpl(ctx, method, urlStr, queryParams, requestBody, false)
+	return c.requestImpl(ctx, method, urlStr, queryParams, requestBody, false, decodeClientError)
 }
 
-func (c *Client) requestImpl(ctx context.Context, method string, urlStr string, queryParams map[string]string, requestBody interface{}, basicAuth bool) (*http.Response, error) {
+func (c *Client) requestImpl(ctx context.Context, method string, urlStr string, queryParams map[string]string, requestBody interface{}, basicAuth bool, errDecoder errJsonDecodeFunc) (*http.Response, error) {
 	u, err := c.baseUrl.Parse(fmt.Sprintf("%s/%s", c.apiVersion, urlStr))
 	if err != nil {
 		return nil, err
@@ -187,16 +190,23 @@ func (c *Client) requestImpl(ctx context.Context, method string, urlStr string, 
 	}
 
 	if res.StatusCode != http.StatusOK {
-		var apiErr Error
-		err = json.NewDecoder(res.Body).Decode(&apiErr)
+		data, err := ioutil.ReadAll(res.Body)
 		if err != nil {
 			return nil, err
 		}
-
-		return nil, &apiErr
+		return nil, errDecoder(data)
 	}
 
 	return res, nil
+}
+
+func decodeClientError(data []byte) error {
+	var apiErr Error
+	err := json.Unmarshal(data, &apiErr)
+	if err != nil {
+		return err
+	}
+	return &apiErr
 }
 
 type Pagination struct {
