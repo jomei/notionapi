@@ -20,3 +20,12 @@ type RateLimitedError struct {
 func (e *RateLimitedError) Error() string {
 	return e.Message
 }
+
+type TokenCreateError struct {
+	Code    ErrorCode `json:"error"`
+	Message string    `json:"error_description"`
+}
+
+func (e *TokenCreateError) Error() string {
+	return e.Message
+}
