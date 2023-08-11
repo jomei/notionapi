@@ -189,6 +189,10 @@ func TestBlockClient(t *testing.T) {
 							ID:     "some_id",
 						},
 						HasChildren: true,
+						Parent: &notionapi.Parent{
+							Type:   "page_id",
+							PageID: "59833787-2cf9-4fdf-8782-e53db20768a5",
+						},
 					},
 					ChildPage: struct {
 						Title string `json:"title"`
