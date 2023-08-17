@@ -217,6 +217,7 @@ type Block interface {
 	GetLastEditedBy() *User
 	GetHasChildren() bool
 	GetArchived() bool
+	GetParent() *Parent
 }
 
 type Blocks []Block
@@ -252,6 +253,7 @@ type BasicBlock struct {
 	LastEditedBy   *User      `json:"last_edited_by,omitempty"`
 	HasChildren    bool       `json:"has_children,omitempty"`
 	Archived       bool       `json:"archived,omitempty"`
+	Parent         *Parent    `json:"parent,omitempty"`
 }
 
 func (b BasicBlock) GetType() BlockType {
@@ -288,6 +290,10 @@ func (b BasicBlock) GetHasChildren() bool {
 
 func (b BasicBlock) GetArchived() bool {
 	return b.Archived
+}
+
+func (b BasicBlock) GetParent() *Parent {
+	return b.Parent
 }
 
 var _ Block = (*BasicBlock)(nil)
