@@ -187,6 +187,7 @@ type Database struct {
 	Title          []RichText `json:"title"`
 	Parent         Parent     `json:"parent"`
 	URL            string     `json:"url"`
+	PublicURL      string     `json:"public_url"`
 	// Properties is a map of property configurations that defines what Page.Properties each page of the database can use
 	Properties  PropertyConfigs `json:"properties"`
 	Description []RichText      `json:"description"`
