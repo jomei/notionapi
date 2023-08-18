@@ -11,6 +11,7 @@ import (
 type PropertyType string
 
 type Property interface {
+	GetID() string
 	GetType() PropertyType
 }
 
@@ -44,6 +45,10 @@ type TitleProperty struct {
 	Title []RichText   `json:"title"`
 }
 
+func (p TitleProperty) GetID() string {
+	return p.ID.String()
+}
+
 func (p TitleProperty) GetType() PropertyType {
 	return p.Type
 }
@@ -52,6 +57,10 @@ type RichTextProperty struct {
 	ID       PropertyID   `json:"id,omitempty"`
 	Type     PropertyType `json:"type,omitempty"`
 	RichText []RichText   `json:"rich_text"`
+}
+
+func (p RichTextProperty) GetID() string {
+	return p.ID.String()
 }
 
 func (p RichTextProperty) GetType() PropertyType {
@@ -64,6 +73,10 @@ type TextProperty struct {
 	Text []RichText   `json:"text"`
 }
 
+func (p TextProperty) GetID() string {
+	return p.ID.String()
+}
+
 func (p TextProperty) GetType() PropertyType {
 	return p.Type
 }
@@ -72,6 +85,10 @@ type NumberProperty struct {
 	ID     PropertyID   `json:"id,omitempty"`
 	Type   PropertyType `json:"type,omitempty"`
 	Number float64      `json:"number"`
+}
+
+func (p NumberProperty) GetID() string {
+	return p.ID.String()
 }
 
 func (p NumberProperty) GetType() PropertyType {
@@ -84,6 +101,10 @@ type SelectProperty struct {
 	Select Option       `json:"select"`
 }
 
+func (p SelectProperty) GetID() string {
+	return p.ID.String()
+}
+
 func (p SelectProperty) GetType() PropertyType {
 	return p.Type
 }
@@ -92,6 +113,10 @@ type MultiSelectProperty struct {
 	ID          ObjectID     `json:"id,omitempty"`
 	Type        PropertyType `json:"type,omitempty"`
 	MultiSelect []Option     `json:"multi_select"`
+}
+
+func (p MultiSelectProperty) GetID() string {
+	return p.ID.String()
 }
 
 func (p MultiSelectProperty) GetType() PropertyType {
@@ -115,6 +140,10 @@ type DateObject struct {
 	End   *Date `json:"end"`
 }
 
+func (p DateProperty) GetID() string {
+	return p.ID.String()
+}
+
 func (p DateProperty) GetType() PropertyType {
 	return p.Type
 }
@@ -135,6 +164,10 @@ type Formula struct {
 	Date    *DateObject `json:"date,omitempty"`
 }
 
+func (p FormulaProperty) GetID() string {
+	return p.ID.String()
+}
+
 func (p FormulaProperty) GetType() PropertyType {
 	return p.Type
 }
@@ -147,6 +180,10 @@ type RelationProperty struct {
 
 type Relation struct {
 	ID PageID `json:"id"`
+}
+
+func (p RelationProperty) GetID() string {
+	return p.ID.String()
 }
 
 func (p RelationProperty) GetType() PropertyType {
@@ -168,6 +205,10 @@ type Rollup struct {
 	Array  PropertyArray `json:"array,omitempty"`
 }
 
+func (p RollupProperty) GetID() string {
+	return p.ID.String()
+}
+
 func (p RollupProperty) GetType() PropertyType {
 	return p.Type
 }
@@ -176,6 +217,10 @@ type PeopleProperty struct {
 	ID     ObjectID     `json:"id,omitempty"`
 	Type   PropertyType `json:"type,omitempty"`
 	People []User       `json:"people"`
+}
+
+func (p PeopleProperty) GetID() string {
+	return p.ID.String()
 }
 
 func (p PeopleProperty) GetType() PropertyType {
@@ -188,6 +233,10 @@ type FilesProperty struct {
 	Files []File       `json:"files"`
 }
 
+func (p FilesProperty) GetID() string {
+	return p.ID.String()
+}
+
 func (p FilesProperty) GetType() PropertyType {
 	return p.Type
 }
@@ -196,6 +245,10 @@ type CheckboxProperty struct {
 	ID       ObjectID     `json:"id,omitempty"`
 	Type     PropertyType `json:"type,omitempty"`
 	Checkbox bool         `json:"checkbox"`
+}
+
+func (p CheckboxProperty) GetID() string {
+	return p.ID.String()
 }
 
 func (p CheckboxProperty) GetType() PropertyType {
@@ -208,6 +261,10 @@ type URLProperty struct {
 	URL  string       `json:"url"`
 }
 
+func (p URLProperty) GetID() string {
+	return p.ID.String()
+}
+
 func (p URLProperty) GetType() PropertyType {
 	return p.Type
 }
@@ -216,6 +273,10 @@ type EmailProperty struct {
 	ID    PropertyID   `json:"id,omitempty"`
 	Type  PropertyType `json:"type,omitempty"`
 	Email string       `json:"email"`
+}
+
+func (p EmailProperty) GetID() string {
+	return p.ID.String()
 }
 
 func (p EmailProperty) GetType() PropertyType {
@@ -228,6 +289,10 @@ type PhoneNumberProperty struct {
 	PhoneNumber string       `json:"phone_number"`
 }
 
+func (p PhoneNumberProperty) GetID() string {
+	return p.ID.String()
+}
+
 func (p PhoneNumberProperty) GetType() PropertyType {
 	return p.Type
 }
@@ -236,6 +301,10 @@ type CreatedTimeProperty struct {
 	ID          ObjectID     `json:"id,omitempty"`
 	Type        PropertyType `json:"type,omitempty"`
 	CreatedTime time.Time    `json:"created_time"`
+}
+
+func (p CreatedTimeProperty) GetID() string {
+	return p.ID.String()
 }
 
 func (p CreatedTimeProperty) GetType() PropertyType {
@@ -248,6 +317,10 @@ type CreatedByProperty struct {
 	CreatedBy User         `json:"created_by"`
 }
 
+func (p CreatedByProperty) GetID() string {
+	return p.ID.String()
+}
+
 func (p CreatedByProperty) GetType() PropertyType {
 	return p.Type
 }
@@ -256,6 +329,10 @@ type LastEditedTimeProperty struct {
 	ID             ObjectID     `json:"id,omitempty"`
 	Type           PropertyType `json:"type,omitempty"`
 	LastEditedTime time.Time    `json:"last_edited_time"`
+}
+
+func (p LastEditedTimeProperty) GetID() string {
+	return p.ID.String()
 }
 
 func (p LastEditedTimeProperty) GetType() PropertyType {
@@ -268,6 +345,10 @@ type LastEditedByProperty struct {
 	LastEditedBy User         `json:"last_edited_by"`
 }
 
+func (p LastEditedByProperty) GetID() string {
+	return p.ID.String()
+}
+
 func (p LastEditedByProperty) GetType() PropertyType {
 	return p.Type
 }
@@ -278,6 +359,10 @@ type StatusProperty struct {
 	Status Status       `json:"status"`
 }
 
+func (p StatusProperty) GetID() string {
+	return p.ID.String()
+}
+
 func (p StatusProperty) GetType() PropertyType {
 	return p.Type
 }
@@ -286,6 +371,10 @@ type UniqueIDProperty struct {
 	ID       ObjectID     `json:"id,omitempty"`
 	Type     PropertyType `json:"type,omitempty"`
 	UniqueID UniqueID     `json:"unique_id"`
+}
+
+func (p UniqueIDProperty) GetID() string {
+	return p.ID.String()
 }
 
 func (p UniqueIDProperty) GetType() PropertyType {
