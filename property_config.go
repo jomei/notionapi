@@ -245,11 +245,26 @@ func (p LastEditedByPropertyConfig) GetType() PropertyConfigType {
 	return p.Type
 }
 
-// TODO: Status database properties cannot currently be configured via the API and so have no additional configuration within the status property.
-type StatusPropertyConfig struct{}
+type StatusPropertyConfig struct {
+	ID     ObjectID           `json:"id"`
+	Type   PropertyConfigType `json:"type"`
+	Status StatusConfig       `json:"status"`
+}
 
 func (p StatusPropertyConfig) GetType() PropertyConfigType {
-	return ""
+	return p.Type
+}
+
+type StatusConfig struct {
+	Options []Option      `json:"options"`
+	Groups  []GroupConfig `json:"groups"`
+}
+
+type GroupConfig struct {
+	ID        ObjectID   `json:"id"`
+	Name      string     `json:"name"`
+	Color     string     `json:"color"`
+	OptionIDs []ObjectID `json:"option_ids"`
 }
 
 // TODO: API docs don't have this listed yet, not sure of correct structure
