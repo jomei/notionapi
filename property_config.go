@@ -267,8 +267,15 @@ type GroupConfig struct {
 	OptionIDs []ObjectID `json:"option_ids"`
 }
 
-// TODO: API docs don't have this listed yet, not sure of correct structure
-type UniqueIDPropertyConfig struct{}
+type UniqueIDPropertyConfig struct {
+	ID       ObjectID           `json:"id,omitempty"`
+	Type     PropertyConfigType `json:"type"`
+	UniqueID UniqueIDConfig     `json:"unique_id"`
+}
+
+type UniqueIDConfig struct {
+	Prefix string `json:"prefix"`
+}
 
 func (i UniqueIDPropertyConfig) GetType() PropertyConfigType {
 	return ""
