@@ -58,6 +58,7 @@ const (
 	PropertyTypeLastEditedBy   PropertyType = "last_edited_by"
 	PropertyTypeStatus         PropertyType = "status"
 	PropertyTypeUniqueID       PropertyType = "unique_id"
+	PropertyTypeVerification   PropertyType = "verification"
 )
 
 const (
