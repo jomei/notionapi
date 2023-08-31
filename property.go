@@ -2,7 +2,6 @@ package notionapi
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"time"
 )
@@ -430,7 +429,7 @@ func parsePageProperties(raw map[string]interface{}) (map[string]Property, error
 
 			result[k] = p
 		default:
-			return nil, errors.New(fmt.Sprintf("unsupported property format %T", v))
+			return nil, fmt.Errorf("unsupported property format %T", v)
 		}
 	}
 
@@ -487,7 +486,7 @@ func decodeProperty(raw map[string]interface{}) (Property, error) {
 	case PropertyTypeVerification:
 		p = &VerificationProperty{}
 	default:
-		return nil, errors.New(fmt.Sprintf("unsupported property type: %s", raw["type"].(string)))
+		return nil, fmt.Errorf("unsupported property type: %s", raw["type"].(string))
 	}
 
 	return p, nil
