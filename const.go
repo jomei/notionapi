@@ -33,6 +33,7 @@ const (
 	PropertyConfigLastEditedBy    PropertyConfigType = "last_edited_by"
 	PropertyConfigStatus          PropertyConfigType = "status"
 	PropertyConfigUniqueID        PropertyConfigType = "unique_id"
+	PropertyConfigVerification    PropertyConfigType = "verification"
 )
 
 const (

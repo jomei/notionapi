@@ -281,6 +281,16 @@ func (i UniqueIDPropertyConfig) GetType() PropertyConfigType {
 	return ""
 }
 
+type VerificationPropertyConfig struct {
+	ID           ObjectID           `json:"id,omitempty"`
+	Type         PropertyConfigType `json:"type,omitempty"`
+	Verification Verification       `json:"verification"`
+}
+
+func (p VerificationPropertyConfig) GetType() PropertyConfigType {
+	return p.Type
+}
+
 type PropertyConfigs map[string]PropertyConfig
 
 func (p *PropertyConfigs) UnmarshalJSON(data []byte) error {
@@ -346,6 +356,8 @@ func parsePropertyConfigs(raw map[string]interface{}) (PropertyConfigs, error) {
 				p = &StatusPropertyConfig{}
 			case PropertyConfigUniqueID:
 				p = &UniqueIDPropertyConfig{}
+			case PropertyConfigVerification:
+				p = &VerificationPropertyConfig{}
 			default:
 
 				return nil, fmt.Errorf("unsupported property type: %s", rawProperty["type"].(string))
