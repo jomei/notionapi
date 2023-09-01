@@ -95,7 +95,7 @@ type Annotations struct {
 	Strikethrough bool  `json:"strikethrough"`
 	Underline     bool  `json:"underline"`
 	Code          bool  `json:"code"`
-	Color         Color `json:"color"`
+	Color         Color `json:"color,omitempty"`
 }
 
 type RelationObject struct {
