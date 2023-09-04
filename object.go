@@ -200,9 +200,15 @@ func (uID UniqueID) String() string {
 	return fmt.Sprintf("%d", uID.Number)
 }
 
+type VerificationState string
+
+func (vs VerificationState) String() string {
+	return string(vs)
+}
+
 // Verification documented here: https://developers.notion.com/reference/page-property-values#verification
 type Verification struct {
-	State      string      `json:"state"` // "verified" or "unverified"
-	VerifiedBy *User       `json:"verified_by,omitempty"`
-	Date       *DateObject `json:"date,omitempty"`
+	State      VerificationState `json:"state"`
+	VerifiedBy *User             `json:"verified_by,omitempty"`
+	Date       *DateObject       `json:"date,omitempty"`
 }

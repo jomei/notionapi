@@ -275,3 +275,8 @@ const (
 	RelationSingleProperty RelationConfigType = "single_property"
 	RelationDualProperty   RelationConfigType = "dual_property"
 )
+
+const (
+	VerificationStateVerified   VerificationState = "verified"
+	VerificationStateUnverified VerificationState = "unverified"
+)
