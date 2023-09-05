@@ -4,8 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"time"
-
-	"github.com/pkg/errors"
 )
 
 type PropertyType string
@@ -381,6 +379,20 @@ func (p UniqueIDProperty) GetType() PropertyType {
 	return p.Type
 }
 
+type VerificationProperty struct {
+	ID           ObjectID     `json:"id,omitempty"`
+	Type         PropertyType `json:"type,omitempty"`
+	Verification Verification `json:"verification"`
+}
+
+func (p VerificationProperty) GetID() string {
+	return p.ID.String()
+}
+
+func (p VerificationProperty) GetType() PropertyType {
+	return p.Type
+}
+
 type Properties map[string]Property
 
 func (p *Properties) UnmarshalJSON(data []byte) error {
@@ -417,7 +429,7 @@ func parsePageProperties(raw map[string]interface{}) (map[string]Property, error
 
 			result[k] = p
 		default:
-			return nil, errors.New(fmt.Sprintf("unsupported property format %T", v))
+			return nil, fmt.Errorf("unsupported property format %T", v)
 		}
 	}
 
@@ -471,8 +483,10 @@ func decodeProperty(raw map[string]interface{}) (Property, error) {
 		p = &StatusProperty{}
 	case PropertyTypeUniqueID:
 		p = &UniqueIDProperty{}
+	case PropertyTypeVerification:
+		p = &VerificationProperty{}
 	default:
-		return nil, errors.New(fmt.Sprintf("unsupported property type: %s", raw["type"].(string)))
+		return nil, fmt.Errorf("unsupported property type: %s", raw["type"].(string))
 	}
 
 	return p, nil

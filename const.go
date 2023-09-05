@@ -33,6 +33,7 @@ const (
 	PropertyConfigLastEditedBy    PropertyConfigType = "last_edited_by"
 	PropertyConfigStatus          PropertyConfigType = "status"
 	PropertyConfigUniqueID        PropertyConfigType = "unique_id"
+	PropertyConfigVerification    PropertyConfigType = "verification"
 )
 
 const (
@@ -58,6 +59,7 @@ const (
 	PropertyTypeLastEditedBy   PropertyType = "last_edited_by"
 	PropertyTypeStatus         PropertyType = "status"
 	PropertyTypeUniqueID       PropertyType = "unique_id"
+	PropertyTypeVerification   PropertyType = "verification"
 )
 
 const (
@@ -272,4 +274,9 @@ const (
 const (
 	RelationSingleProperty RelationConfigType = "single_property"
 	RelationDualProperty   RelationConfigType = "dual_property"
+)
+
+const (
+	VerificationStateVerified   VerificationState = "verified"
+	VerificationStateUnverified VerificationState = "unverified"
 )

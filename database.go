@@ -3,8 +3,8 @@ package notionapi
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
-	"github.com/pkg/errors"
 	"log"
 	"net/http"
 	"time"
