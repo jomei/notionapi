@@ -218,6 +218,7 @@ type Block interface {
 	GetHasChildren() bool
 	GetArchived() bool
 	GetParent() *Parent
+	GetRichText() string
 }
 
 type Blocks []Block
@@ -294,6 +295,98 @@ func (b BasicBlock) GetArchived() bool {
 
 func (b BasicBlock) GetParent() *Parent {
 	return b.Parent
+}
+
+func concatenateRichText(richtext []RichText) string {
+	var result string
+	for _, rt := range richtext {
+		result += rt.PlainText
+	}
+	return result
+}
+
+func (h *Heading1Block) GetRichText() string {
+	return concatenateRichText(h.Heading1.RichText)
+}
+
+func (p *ParagraphBlock) GetRichText() string {
+	return concatenateRichText(p.Paragraph.RichText)
+}
+
+func (h *Heading2Block) GetRichText() string {
+	return concatenateRichText(h.Heading2.RichText)
+}
+
+func (h *Heading3Block) GetRichText() string {
+	return concatenateRichText(h.Heading3.RichText)
+}
+
+func (c *CalloutBlock) GetRichText() string {
+	return concatenateRichText(c.Callout.RichText)
+}
+
+func (q *QuoteBlock) GetRichText() string {
+	return concatenateRichText(q.Quote.RichText)
+}
+
+func (b *BulletedListItemBlock) GetRichText() string {
+	return concatenateRichText(b.BulletedListItem.RichText)
+}
+
+func (n *NumberedListItemBlock) GetRichText() string {
+	return concatenateRichText(n.NumberedListItem.RichText)
+}
+
+func (t *ToDoBlock) GetRichText() string {
+	return concatenateRichText(t.ToDo.RichText)
+}
+
+func (b *ToggleBlock) GetRichText() string {
+	return concatenateRichText(b.Toggle.RichText)
+}
+
+func (b *EmbedBlock) GetRichText() string {
+	return concatenateRichText(b.Embed.Caption)
+}
+
+func (b *ImageBlock) GetRichText() string {
+	return concatenateRichText(b.Image.Caption)
+}
+
+func (b *AudioBlock) GetRichText() string {
+	return concatenateRichText(b.Audio.Caption)
+}
+
+func (b *VideoBlock) GetRichText() string {
+	return concatenateRichText(b.Video.Caption)
+}
+
+func (b *FileBlock) GetRichText() string {
+	return concatenateRichText(b.File.Caption)
+}
+
+func (b *PdfBlock) GetRichText() string {
+	return concatenateRichText(b.Pdf.Caption)
+}
+
+func (b *BookmarkBlock) GetRichText() string {
+	return concatenateRichText(b.Bookmark.Caption)
+}
+
+func (b *TemplateBlock) GetRichText() string {
+	return concatenateRichText(b.Template.RichText)
+}
+
+func (b *LinkPreviewBlock) GetRichText() string {
+	return b.LinkPreview.URL
+}
+
+func (b *EquationBlock) GetRichText() string {
+	return b.Equation.Expression
+}
+
+func (b *BasicBlock) GetRichText() string {
+	return "No rich text of a basic block."
 }
 
 var _ Block = (*BasicBlock)(nil)
