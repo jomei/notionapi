@@ -438,7 +438,7 @@ type ImageBlock struct {
 
 type Image struct {
 	Caption  []RichText  `json:"caption,omitempty"`
-	Type     FileType    `json:"type"`
+	Type     FileType    `json:"type,omitempty"`
 	File     *FileObject `json:"file,omitempty"`
 	External *FileObject `json:"external,omitempty"`
 }
@@ -519,7 +519,7 @@ type PdfBlock struct {
 
 type Pdf struct {
 	Caption  []RichText  `json:"caption,omitempty"`
-	Type     FileType    `json:"type"`
+	Type     FileType    `json:"type,omitempty"`
 	File     *FileObject `json:"file,omitempty"`
 	External *FileObject `json:"external,omitempty"`
 }
