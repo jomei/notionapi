@@ -306,75 +306,75 @@ func ConcatenateRichTextString(richtext []RichText) string {
 }
 
 func (h *Heading1Block) GetRichTextString() string {
-	return concatenateRichText(h.Heading1.RichText)
+	return ConcatenateRichTextString(h.Heading1.RichText)
 }
 
 func (p *ParagraphBlock) GetRichTextString() string {
-	return concatenateRichText(p.Paragraph.RichText)
+	return ConcatenateRichTextString(p.Paragraph.RichText)
 }
 
 func (h *Heading2Block) GetRichTextString() string {
-	return concatenateRichText(h.Heading2.RichText)
+	return ConcatenateRichTextString(h.Heading2.RichText)
 }
 
 func (h *Heading3Block) GetRichTextString() string {
-	return concatenateRichText(h.Heading3.RichText)
+	return ConcatenateRichTextString(h.Heading3.RichText)
 }
 
 func (c *CalloutBlock) GetRichTextString() string {
-	return concatenateRichText(c.Callout.RichText)
+	return ConcatenateRichTextString(c.Callout.RichText)
 }
 
 func (q *QuoteBlock) GetRichTextString() string {
-	return concatenateRichText(q.Quote.RichText)
+	return ConcatenateRichTextString(q.Quote.RichText)
 }
 
 func (b *BulletedListItemBlock) GetRichTextString() string {
-	return concatenateRichText(b.BulletedListItem.RichText)
+	return ConcatenateRichTextString(b.BulletedListItem.RichText)
 }
 
 func (n *NumberedListItemBlock) GetRichTextString() string {
-	return concatenateRichText(n.NumberedListItem.RichText)
+	return ConcatenateRichTextString(n.NumberedListItem.RichText)
 }
 
 func (t *ToDoBlock) GetRichTextString() string {
-	return concatenateRichText(t.ToDo.RichText)
+	return ConcatenateRichTextString(t.ToDo.RichText)
 }
 
 func (b *ToggleBlock) GetRichTextString() string {
-	return concatenateRichText(b.Toggle.RichText)
+	return ConcatenateRichTextString(b.Toggle.RichText)
 }
 
 func (b *EmbedBlock) GetRichTextString() string {
-	return concatenateRichText(b.Embed.Caption)
+	return ConcatenateRichTextString(b.Embed.Caption)
 }
 
 func (b *ImageBlock) GetRichTextString() string {
-	return concatenateRichText(b.Image.Caption)
+	return ConcatenateRichTextString(b.Image.Caption)
 }
 
 func (b *AudioBlock) GetRichTextString() string {
-	return concatenateRichText(b.Audio.Caption)
+	return ConcatenateRichTextString(b.Audio.Caption)
 }
 
 func (b *VideoBlock) GetRichTextString() string {
-	return concatenateRichText(b.Video.Caption)
+	return ConcatenateRichTextString(b.Video.Caption)
 }
 
 func (b *FileBlock) GetRichTextString() string {
-	return concatenateRichText(b.File.Caption)
+	return ConcatenateRichTextString(b.File.Caption)
 }
 
 func (b *PdfBlock) GetRichTextString() string {
-	return concatenateRichText(b.Pdf.Caption)
+	return ConcatenateRichTextString(b.Pdf.Caption)
 }
 
 func (b *BookmarkBlock) GetRichTextString() string {
-	return concatenateRichText(b.Bookmark.Caption)
+	return ConcatenateRichTextString(b.Bookmark.Caption)
 }
 
 func (b *TemplateBlock) GetRichTextString() string {
-	return concatenateRichText(b.Template.RichText)
+	return ConcatenateRichTextString(b.Template.RichText)
 }
 
 func (b *LinkPreviewBlock) GetRichTextString() string {
