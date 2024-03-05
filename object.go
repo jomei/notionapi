@@ -212,3 +212,6 @@ type Verification struct {
 	VerifiedBy *User             `json:"verified_by,omitempty"`
 	Date       *DateObject       `json:"date,omitempty"`
 }
+
+type Button struct {
+}
