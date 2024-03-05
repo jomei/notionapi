@@ -60,6 +60,7 @@ const (
 	PropertyTypeStatus         PropertyType = "status"
 	PropertyTypeUniqueID       PropertyType = "unique_id"
 	PropertyTypeVerification   PropertyType = "verification"
+	PropertyTypeButton         PropertyType = "button"
 )
 
 const (

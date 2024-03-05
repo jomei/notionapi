@@ -393,6 +393,20 @@ func (p VerificationProperty) GetType() PropertyType {
 	return p.Type
 }
 
+type ButtonProperty struct {
+	ID     ObjectID     `json:"id,omitempty"`
+	Type   PropertyType `json:"type,omitempty"`
+	Button Button       `json:"button"`
+}
+
+func (p ButtonProperty) GetID() string {
+	return p.ID.String()
+}
+
+func (p ButtonProperty) GetType() PropertyType {
+	return p.Type
+}
+
 type Properties map[string]Property
 
 func (p *Properties) UnmarshalJSON(data []byte) error {
@@ -485,6 +499,8 @@ func decodeProperty(raw map[string]interface{}) (Property, error) {
 		p = &UniqueIDProperty{}
 	case PropertyTypeVerification:
 		p = &VerificationProperty{}
+	case PropertyTypeButton:
+		p = &ButtonProperty{}
 	default:
 		return nil, fmt.Errorf("unsupported property type: %s", raw["type"].(string))
 	}
