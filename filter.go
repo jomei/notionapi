@@ -58,6 +58,7 @@ type PropertyFilter struct {
 	Formula     *FormulaFilterCondition     `json:"formula,omitempty"`
 	Rollup      *RollupFilterCondition      `json:"rollup,omitempty"`
 	Status      *StatusFilterCondition      `json:"status,omitempty"`
+	UniqueId    *UniqueIdFilterCondition    `json:"unique_id,omitempty"`
 }
 
 func (f PropertyFilter) filter() {}
@@ -177,4 +178,13 @@ type StatusFilterCondition struct {
 	DoesNotEqual string `json:"does_not_equal,omitempty"`
 	IsEmpty      bool   `json:"is_empty,omitempty"`
 	IsNotEmpty   bool   `json:"is_not_empty,omitempty"`
+}
+
+type UniqueIdFilterCondition struct {
+	Equals               *int `json:"equals,omitempty"`
+	DoesNotEqual         *int `json:"does_not_equal,omitempty"`
+	GreaterThan          *int `json:"greater_than,omitempty"`
+	LessThan             *int `json:"less_than,omitempty"`
+	GreaterThanOrEqualTo *int `json:"greater_than_or_equal_to,omitempty"`
+	LessThanOrEqualTo    *int `json:"less_than_or_equal_to,omitempty"`
 }
