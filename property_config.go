@@ -359,7 +359,7 @@ type UniqueIDConfig struct {
 }
 
 func (p UniqueIDPropertyConfig) GetType() PropertyConfigType {
-	return ""
+	return p.Type
 }
 
 func (p UniqueIDPropertyConfig) GetID() PropertyID {
