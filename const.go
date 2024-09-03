@@ -34,6 +34,7 @@ const (
 	PropertyConfigStatus          PropertyConfigType = "status"
 	PropertyConfigUniqueID        PropertyConfigType = "unique_id"
 	PropertyConfigVerification    PropertyConfigType = "verification"
+	PropertyConfigButton          PropertyConfigType = "button"
 )
 
 const (
