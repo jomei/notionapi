@@ -387,6 +387,7 @@ func (b EquationBlock) GetRichTextString() string {
 func (b BasicBlock) GetRichTextString() string {
 	return "No rich text of a basic block."
 }
+
 var _ Block = (*BasicBlock)(nil)
 
 type ParagraphBlock struct {
@@ -783,9 +784,9 @@ func decodeBlock(raw map[string]interface{}) (Block, error) {
 		b = &Heading2Block{}
 	case BlockTypeHeading3:
 		b = &Heading3Block{}
-	case BlockCallout:
+	case BlockTypeCallout:
 		b = &CalloutBlock{}
-	case BlockQuote:
+	case BlockTypeQuote:
 		b = &QuoteBlock{}
 	case BlockTypeBulletedListItem:
 		b = &BulletedListItemBlock{}
