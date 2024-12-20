@@ -257,6 +257,15 @@ type BasicBlock struct {
 	Parent         *Parent    `json:"parent,omitempty"`
 }
 
+// NewBasicBlock returns a new BasicBlock with the ObjectTypeBlock and given block type.
+// It's used as a basic block for all other blocks.
+func NewBasicBlock(blockType BlockType) BasicBlock {
+	return BasicBlock{
+		Object: ObjectTypeBlock,
+		Type:   blockType,
+	}
+}
+
 func (b BasicBlock) GetType() BlockType {
 	return b.Type
 }
@@ -401,6 +410,13 @@ type Paragraph struct {
 	Color    string     `json:"color,omitempty"`
 }
 
+func NewParagraphBlock(paragraph Paragraph) *ParagraphBlock {
+	return &ParagraphBlock{
+		BasicBlock: NewBasicBlock(BlockTypeParagraph),
+		Paragraph:  paragraph,
+	}
+}
+
 type Heading1Block struct {
 	BasicBlock
 	Heading1 Heading `json:"heading_1"`
@@ -413,14 +429,52 @@ type Heading struct {
 	IsToggleable bool       `json:"is_toggleable,omitempty"`
 }
 
+func NewHeading1Block(heading1 Heading) *Heading1Block {
+	return &Heading1Block{
+		BasicBlock: NewBasicBlock(BlockTypeHeading1),
+		Heading1:   heading1,
+	}
+}
+
 type Heading2Block struct {
 	BasicBlock
 	Heading2 Heading `json:"heading_2"`
 }
 
+func NewHeading2Block(heading2 Heading) *Heading2Block {
+	return &Heading2Block{
+		BasicBlock: NewBasicBlock(BlockTypeHeading2),
+		Heading2:   heading2,
+	}
+}
+
 type Heading3Block struct {
 	BasicBlock
 	Heading3 Heading `json:"heading_3"`
+}
+
+func NewHeading3Block(heading3 Heading) *Heading3Block {
+	return &Heading3Block{
+		BasicBlock: NewBasicBlock(BlockTypeHeading3),
+		Heading3:   heading3,
+	}
+}
+
+// NewHeadingBlock returns a new Heading[1-3]Block (hidden below Block interface)
+// corresponding to the given heading level.
+// It defaults to Heading 3 if the given level is not supported.
+func NewHeadingBlock(heading Heading, level int) Block {
+	switch level {
+	case 1:
+		return NewHeading1Block(heading)
+	case 2:
+		return NewHeading2Block(heading)
+	case 3:
+		return NewHeading3Block(heading)
+	default:
+		// fallback to level 3
+		return NewHeading3Block(heading)
+	}
 }
 
 type CalloutBlock struct {
@@ -435,6 +489,13 @@ type Callout struct {
 	Color    string     `json:"color,omitempty"`
 }
 
+func NewCalloutBlock(callout Callout) *CalloutBlock {
+	return &CalloutBlock{
+		BasicBlock: NewBasicBlock(BlockTypeCallout),
+		Callout:    callout,
+	}
+}
+
 type QuoteBlock struct {
 	BasicBlock
 	Quote Quote `json:"quote"`
@@ -444,6 +505,13 @@ type Quote struct {
 	RichText []RichText `json:"rich_text"`
 	Children Blocks     `json:"children,omitempty"`
 	Color    string     `json:"color,omitempty"`
+}
+
+func NewQuoteBlock(quote Quote) *QuoteBlock {
+	return &QuoteBlock{
+		BasicBlock: NewBasicBlock(BlockTypeQuote),
+		Quote:      quote,
+	}
 }
 
 type TableBlock struct {
@@ -467,6 +535,20 @@ type TableRow struct {
 	Cells [][]RichText `json:"cells"`
 }
 
+func NewTableRowBlock(tr TableRow) *TableRowBlock {
+	return &TableRowBlock{
+		BasicBlock: NewBasicBlock(BlockTypeTableRowBlock),
+		TableRow:   tr,
+	}
+}
+
+func NewTableBlock(table Table) *TableBlock {
+	return &TableBlock{
+		BasicBlock: NewBasicBlock(BlockTypeTableBlock),
+		Table:      table,
+	}
+}
+
 type BulletedListItemBlock struct {
 	BasicBlock
 	BulletedListItem ListItem `json:"bulleted_list_item"`
@@ -478,9 +560,23 @@ type ListItem struct {
 	Color    string     `json:"color,omitempty"`
 }
 
+func NewBulletedListItemBlock(li ListItem) *BulletedListItemBlock {
+	return &BulletedListItemBlock{
+		BasicBlock:       NewBasicBlock(BlockTypeBulletedListItem),
+		BulletedListItem: li,
+	}
+}
+
 type NumberedListItemBlock struct {
 	BasicBlock
 	NumberedListItem ListItem `json:"numbered_list_item"`
+}
+
+func NewNumberedListItemBlock(li ListItem) *NumberedListItemBlock {
+	return &NumberedListItemBlock{
+		BasicBlock:       NewBasicBlock(BlockTypeNumberedListItem),
+		NumberedListItem: li,
+	}
 }
 
 type ToDoBlock struct {
@@ -495,6 +591,13 @@ type ToDo struct {
 	Color    string     `json:"color,omitempty"`
 }
 
+func NewToDoBlock(t ToDo) *ToDoBlock {
+	return &ToDoBlock{
+		BasicBlock: NewBasicBlock(BlockTypeToDo),
+		ToDo:       t,
+	}
+}
+
 type ToggleBlock struct {
 	BasicBlock
 	Toggle Toggle `json:"toggle"`
@@ -506,11 +609,26 @@ type Toggle struct {
 	Color    string     `json:"color,omitempty"`
 }
 
+func NewToggleBlock(toggle Toggle) *ToggleBlock {
+	return &ToggleBlock{
+		BasicBlock: NewBasicBlock(BlockTypeToggle),
+		Toggle:     toggle,
+	}
+}
+
 type ChildPageBlock struct {
 	BasicBlock
 	ChildPage struct {
 		Title string `json:"title"`
 	} `json:"child_page"`
+}
+
+func NewChildPageBlock(title string) *ChildPageBlock {
+	cpd := &ChildPageBlock{
+		BasicBlock: NewBasicBlock(BlockTypeChildPage),
+	}
+	cpd.ChildPage.Title = title
+	return cpd
 }
 
 type EmbedBlock struct {
@@ -521,6 +639,13 @@ type EmbedBlock struct {
 type Embed struct {
 	Caption []RichText `json:"caption,omitempty"`
 	URL     string     `json:"url"`
+}
+
+func NewEmbedBlock(embed Embed) *EmbedBlock {
+	return &EmbedBlock{
+		BasicBlock: NewBasicBlock(BlockTypeEmbed),
+		Embed:      embed,
+	}
 }
 
 type ImageBlock struct {
@@ -546,6 +671,13 @@ func (i Image) GetURL() string {
 	return ""
 }
 
+func NewImageBlock(image Image) *ImageBlock {
+	return &ImageBlock{
+		BasicBlock: NewBasicBlock(BlockTypeImage),
+		Image:      image,
+	}
+}
+
 type AudioBlock struct {
 	BasicBlock
 	Audio Audio `json:"audio"`
@@ -569,6 +701,13 @@ func (i Audio) GetURL() string {
 	return ""
 }
 
+func NewAudioBlock(audio Audio) *AudioBlock {
+	return &AudioBlock{
+		BasicBlock: NewBasicBlock(BlockTypeAudio),
+		Audio:      audio,
+	}
+}
+
 type CodeBlock struct {
 	BasicBlock
 	Code Code `json:"code"`
@@ -578,6 +717,13 @@ type Code struct {
 	RichText []RichText `json:"rich_text"`
 	Caption  []RichText `json:"caption,omitempty"`
 	Language string     `json:"language"`
+}
+
+func NewCodeBlock(code Code) *CodeBlock {
+	return &CodeBlock{
+		BasicBlock: NewBasicBlock(BlockTypeCode),
+		Code:       code,
+	}
 }
 
 type VideoBlock struct {
@@ -592,6 +738,13 @@ type Video struct {
 	External *FileObject `json:"external,omitempty"`
 }
 
+func NewVideoBlock(video Video) *VideoBlock {
+	return &VideoBlock{
+		BasicBlock: NewBasicBlock(BlockTypeVideo),
+		Video:      video,
+	}
+}
+
 type FileBlock struct {
 	BasicBlock
 	File BlockFile `json:"file"`
@@ -602,6 +755,13 @@ type BlockFile struct {
 	Type     FileType    `json:"type"`
 	File     *FileObject `json:"file,omitempty"`
 	External *FileObject `json:"external,omitempty"`
+}
+
+func NewFileBlock(file BlockFile) *FileBlock {
+	return &FileBlock{
+		BasicBlock: NewBasicBlock(BlockTypeFile),
+		File:       file,
+	}
 }
 
 type PdfBlock struct {
@@ -616,6 +776,13 @@ type Pdf struct {
 	External *FileObject `json:"external,omitempty"`
 }
 
+func NewPdfBlock(pdf Pdf) *PdfBlock {
+	return &PdfBlock{
+		BasicBlock: NewBasicBlock(BlockTypePdf),
+		Pdf:        pdf,
+	}
+}
+
 type BookmarkBlock struct {
 	BasicBlock
 	Bookmark Bookmark `json:"bookmark"`
@@ -626,11 +793,26 @@ type Bookmark struct {
 	URL     string     `json:"url"`
 }
 
+func NewBookmarkBlock(bookmark Bookmark) *BookmarkBlock {
+	return &BookmarkBlock{
+		BasicBlock: NewBasicBlock(BlockTypeBookmark),
+		Bookmark:   bookmark,
+	}
+}
+
 type ChildDatabaseBlock struct {
 	BasicBlock
 	ChildDatabase struct {
 		Title string `json:"title"`
 	} `json:"child_database"`
+}
+
+func NewChildDatabaseBlock(title string) *ChildDatabaseBlock {
+	cdb := &ChildDatabaseBlock{
+		BasicBlock: NewBasicBlock(BlockTypeChildDatabase),
+	}
+	cdb.ChildDatabase.Title = title
+	return cdb
 }
 
 type TableOfContentsBlock struct {
@@ -643,6 +825,13 @@ type TableOfContents struct {
 	Color string `json:"color,omitempty"`
 }
 
+func NewTableOfContentsBlock(toc TableOfContents) *TableOfContentsBlock {
+	return &TableOfContentsBlock{
+		BasicBlock:      NewBasicBlock(BlockTypeTableOfContents),
+		TableOfContents: toc,
+	}
+}
+
 type DividerBlock struct {
 	BasicBlock
 	Divider Divider `json:"divider"`
@@ -650,6 +839,13 @@ type DividerBlock struct {
 
 type Divider struct {
 	// empty
+}
+
+func NewDividerBlock() *DividerBlock {
+	return &DividerBlock{
+		BasicBlock: NewBasicBlock(BlockTypeDivider),
+		Divider:    Divider{},
+	}
 }
 
 type EquationBlock struct {
@@ -661,6 +857,13 @@ type Equation struct {
 	Expression string `json:"expression"`
 }
 
+func NewEquationBlock(eq Equation) *EquationBlock {
+	return &EquationBlock{
+		BasicBlock: NewBasicBlock(BlockTypeEquation),
+		Equation:   eq,
+	}
+}
+
 type BreadcrumbBlock struct {
 	BasicBlock
 	Breadcrumb Breadcrumb `json:"breadcrumb"`
@@ -668,6 +871,13 @@ type BreadcrumbBlock struct {
 
 type Breadcrumb struct {
 	// empty
+}
+
+func NewBreadcrumbBlock() *BreadcrumbBlock {
+	return &BreadcrumbBlock{
+		BasicBlock: NewBasicBlock(BlockTypeBreadcrumb),
+		Breadcrumb: Breadcrumb{},
+	}
 }
 
 type ColumnBlock struct {
@@ -678,6 +888,13 @@ type ColumnBlock struct {
 type Column struct {
 	// Children should at least have 1 block when appending.
 	Children Blocks `json:"children"`
+}
+
+func NewColumnBlock(col Column) *ColumnBlock {
+	return &ColumnBlock{
+		BasicBlock: NewBasicBlock(BlockTypeColumn),
+		Column:     col,
+	}
 }
 
 type ColumnListBlock struct {
@@ -691,6 +908,13 @@ type ColumnList struct {
 	Children Blocks `json:"children"`
 }
 
+func NewColumnListBlock(cl ColumnList) *ColumnListBlock {
+	return &ColumnListBlock{
+		BasicBlock: NewBasicBlock(BlockTypeColumnList),
+		ColumnList: cl,
+	}
+}
+
 // NOTE: will only be returned by the API. Cannot be created by the API.
 // https://developers.notion.com/reference/block#link-preview-blocks
 type LinkPreviewBlock struct {
@@ -700,6 +924,13 @@ type LinkPreviewBlock struct {
 
 type LinkPreview struct {
 	URL string `json:"url"`
+}
+
+func NewLinkPreviewBlock(lp LinkPreview) *LinkPreviewBlock {
+	return &LinkPreviewBlock{
+		BasicBlock:  NewBasicBlock(BlockTypeLinkPreview),
+		LinkPreview: lp,
+	}
 }
 
 type LinkToPageBlock struct {
@@ -713,6 +944,13 @@ type LinkToPage struct {
 	DatabaseID DatabaseID `json:"database_id,omitempty"`
 }
 
+func NewLinkToPageBlock(ltp LinkToPage) *LinkToPageBlock {
+	return &LinkToPageBlock{
+		BasicBlock: NewBasicBlock(BlockTypeLinkToPage),
+		LinkToPage: ltp,
+	}
+}
+
 type TemplateBlock struct {
 	BasicBlock
 	Template Template `json:"template"`
@@ -721,6 +959,13 @@ type TemplateBlock struct {
 type Template struct {
 	RichText []RichText `json:"rich_text"`
 	Children Blocks     `json:"children,omitempty"`
+}
+
+func NewTemplateBlock(template Template) *TemplateBlock {
+	return &TemplateBlock{
+		BasicBlock: NewBasicBlock(BlockTypeTemplate),
+		Template:   template,
+	}
 }
 
 type SyncedBlock struct {
@@ -736,6 +981,13 @@ type Synced struct {
 
 type SyncedFrom struct {
 	BlockID BlockID `json:"block_id"`
+}
+
+func NewSyncedBlock(synced Synced) *SyncedBlock {
+	return &SyncedBlock{
+		BasicBlock:  NewBasicBlock(BlockTypeSyncedBlock),
+		SyncedBlock: synced,
+	}
 }
 
 type UnsupportedBlock struct {
@@ -804,6 +1056,8 @@ func decodeBlock(raw map[string]interface{}) (Block, error) {
 		b = &EmbedBlock{}
 	case BlockTypeImage:
 		b = &ImageBlock{}
+	case BlockTypeAudio:
+		b = &AudioBlock{}
 	case BlockTypeVideo:
 		b = &VideoBlock{}
 	case BlockTypeFile:
@@ -838,7 +1092,6 @@ func decodeBlock(raw map[string]interface{}) (Block, error) {
 		b = &TableBlock{}
 	case BlockTypeTableRowBlock:
 		b = &TableRowBlock{}
-
 	case BlockTypeUnsupported:
 		b = &UnsupportedBlock{}
 	default:
