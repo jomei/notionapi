@@ -238,8 +238,8 @@ const (
 	BlockTypeLinkToPage      BlockType = "link_to_page"
 	BlockTypeTemplate        BlockType = "template"
 	BlockTypeSyncedBlock     BlockType = "synced_block"
-	BlockTypeTableBlock      BlockType = "table"
-	BlockTypeTableRowBlock   BlockType = "table_row"
+	BlockTypeTable           BlockType = "table"
+	BlockTypeTableRow        BlockType = "table_row"
 	BlockTypeUnsupported     BlockType = "unsupported"
 )
 

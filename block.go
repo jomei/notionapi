@@ -537,14 +537,14 @@ type TableRow struct {
 
 func NewTableRowBlock(tr TableRow) *TableRowBlock {
 	return &TableRowBlock{
-		BasicBlock: NewBasicBlock(BlockTypeTableRowBlock),
+		BasicBlock: NewBasicBlock(BlockTypeTableRow),
 		TableRow:   tr,
 	}
 }
 
 func NewTableBlock(table Table) *TableBlock {
 	return &TableBlock{
-		BasicBlock: NewBasicBlock(BlockTypeTableBlock),
+		BasicBlock: NewBasicBlock(BlockTypeTable),
 		Table:      table,
 	}
 }
@@ -1088,9 +1088,9 @@ func decodeBlock(raw map[string]interface{}) (Block, error) {
 		b = &TemplateBlock{}
 	case BlockTypeSyncedBlock:
 		b = &SyncedBlock{}
-	case BlockTypeTableBlock:
+	case BlockTypeTable:
 		b = &TableBlock{}
-	case BlockTypeTableRowBlock:
+	case BlockTypeTableRow:
 		b = &TableRowBlock{}
 	case BlockTypeUnsupported:
 		b = &UnsupportedBlock{}
