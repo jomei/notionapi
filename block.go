@@ -172,6 +172,7 @@ type BlockUpdateRequest struct {
 	Equation         *Equation  `json:"equation,omitempty"`
 	Quote            *Quote     `json:"quote,omitempty"`
 	TableRow         *TableRow  `json:"table_row,omitempty"`
+	Audio            *Audio     `json:"audio,omitempty"`
 }
 
 // Sets a Block object, including page blocks, to archived: true using the ID
@@ -776,6 +777,8 @@ func (r *AppendBlockChildrenResponse) UnmarshalJSON(data []byte) error {
 func decodeBlock(raw map[string]interface{}) (Block, error) {
 	var b Block
 	switch BlockType(raw["type"].(string)) {
+	case BlockTypeAudio:
+		b = &AudioBlock{}
 	case BlockTypeParagraph:
 		b = &ParagraphBlock{}
 	case BlockTypeHeading1:

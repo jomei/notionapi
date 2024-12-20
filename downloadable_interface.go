@@ -21,6 +21,23 @@ func (b *PdfBlock) GetURL() string {
 	return ""
 }
 
+// GetURL implements DownloadableFileBlock interface for AudioBlock by returning
+// the URL of the audio file. For internal files, this will be a Notion URL with
+// an expiry time. For external files, this will be the external URL.
+func (b *AudioBlock) GetURL() string {
+	return b.Audio.GetURL()
+}
+
+// GetExpiryTime implements DownloadableFileBlock interface for AudioBlock by returning
+// the expiry time of the internal audio file. Returns nil for external files or if no
+// expiry time is set.
+func (b *AudioBlock) GetExpiryTime() *time.Time {
+	if b.Audio.File != nil {
+		return b.Audio.File.ExpiryTime
+	}
+	return nil
+}
+
 // GetExpiryTime implements DownloadableFileBlock interface for PdfBlock
 func (b *PdfBlock) GetExpiryTime() *time.Time {
 	if b.Pdf.File != nil {
