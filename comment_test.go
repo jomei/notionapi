@@ -52,7 +52,7 @@ func TestCommentClient(t *testing.T) {
 							},
 							RichText: []notionapi.RichText{
 								{
-									Type: notionapi.ObjectTypeText,
+									Type: notionapi.RichTextTypeText,
 									Text: &notionapi.Text{Content: "content"},
 								},
 							},
@@ -70,7 +70,7 @@ func TestCommentClient(t *testing.T) {
 							},
 							RichText: []notionapi.RichText{
 								{
-									Type: notionapi.ObjectTypeText,
+									Type: notionapi.RichTextTypeText,
 									Text: &notionapi.Text{Content: "content"},
 								},
 							},
@@ -122,7 +122,7 @@ func TestCommentClient(t *testing.T) {
 					},
 					RichText: []notionapi.RichText{
 						{
-							Type: notionapi.ObjectTypeText,
+							Type: notionapi.RichTextTypeText,
 							Text: &notionapi.Text{Content: "Hello world"},
 						},
 					},
@@ -140,7 +140,7 @@ func TestCommentClient(t *testing.T) {
 					},
 					RichText: []notionapi.RichText{
 						{
-							Type: notionapi.ObjectTypeText,
+							Type: notionapi.RichTextTypeText,
 							Text: &notionapi.Text{Content: "Hello world"},
 						},
 					},

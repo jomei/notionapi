@@ -35,6 +35,12 @@ func (c Color) MarshalText() ([]byte, error) {
 	return []byte(c), nil
 }
 
+type RichTextType string
+
+func (rtType RichTextType) String() string {
+	return string(rtType)
+}
+
 type MentionType string
 
 func (mType MentionType) String() string {
@@ -71,7 +77,7 @@ type Mention struct {
 }
 
 type RichText struct {
-	Type        ObjectType   `json:"type,omitempty"`
+	Type        RichTextType `json:"type,omitempty"`
 	Text        *Text        `json:"text,omitempty"`
 	Mention     *Mention     `json:"mention,omitempty"`
 	Equation    *Equation    `json:"equation,omitempty"`
