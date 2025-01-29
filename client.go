@@ -7,7 +7,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"net/url"
 	"reflect"
@@ -190,7 +189,7 @@ func (c *Client) requestImpl(ctx context.Context, method string, urlStr string, 
 	}
 
 	if res.StatusCode != http.StatusOK {
-		data, err := ioutil.ReadAll(res.Body)
+		data, err := io.ReadAll(res.Body)
 		if err != nil {
 			return nil, err
 		}

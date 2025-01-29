@@ -25,7 +25,7 @@ First, please follow the [Getting Started Guide](https://developers.notion.com/d
 Import this library and initialize the API client using the obtained integration token.
 
 ```go
-import "github.com/jomei/notionapi"
+import "github.com/qonto/notionapi"
 
 client := notionapi.NewClient("your_integration_token")
 ```

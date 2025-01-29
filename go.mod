@@ -1,3 +1,3 @@
-module github.com/jomei/notionapi
+module github.com/qonto/notionapi
 
-go 1.14
+go 1.23
