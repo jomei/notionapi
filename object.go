@@ -161,10 +161,11 @@ type FileObject struct {
 }
 
 type Icon struct {
-	Type     FileType    `json:"type"`
-	Emoji    *Emoji      `json:"emoji,omitempty"`
-	File     *FileObject `json:"file,omitempty"`
-	External *FileObject `json:"external,omitempty"`
+	Type        FileType     `json:"type"`
+	Emoji       *Emoji       `json:"emoji,omitempty"`
+	CustomEmoji *CustomEmoji `json:"custom_emoji,omitempty"`
+	File        *FileObject  `json:"file,omitempty"`
+	External    *FileObject  `json:"external,omitempty"`
 }
 
 // GetURL returns the external or internal URL depending on the image type.
@@ -179,6 +180,12 @@ func (i Icon) GetURL() string {
 }
 
 type Emoji string
+
+type CustomEmoji struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
+	URL  string `json:"url"`
+}
 
 type PropertyID string
 
