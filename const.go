@@ -261,6 +261,12 @@ const (
 )
 
 const (
+	RichTextTypeText     RichTextType = "text"
+	RichTextTypeMention  RichTextType = "mention"
+	RichTextTypeEquation RichTextType = "equation"
+)
+
+const (
 	MentionTypeDatabase        MentionType = "database"
 	MentionTypePage            MentionType = "page"
 	MentionTypeUser            MentionType = "user"
