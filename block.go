@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -297,11 +298,11 @@ func (b BasicBlock) GetParent() *Parent {
 	return b.Parent
 }
 func concatenateRichText(richtext []RichText) string {
-	var result string
+	var text strings.Builder
 	for _, rt := range richtext {
-		result += rt.PlainText
+		text.WriteString(rt.PlainText)
 	}
-	return result
+	return text.String()
 }
 
 func (h Heading1Block) GetRichTextString() string {
@@ -385,7 +386,7 @@ func (b EquationBlock) GetRichTextString() string {
 }
 
 func (b BasicBlock) GetRichTextString() string {
-	return "No rich text of a basic block."
+	return ""
 }
 
 var _ Block = (*BasicBlock)(nil)

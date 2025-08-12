@@ -3,8 +3,8 @@ package notionapi_test
 import (
 	"context"
 	"encoding/json"
-	"io/ioutil"
 	"net/http"
+	"os"
 	"reflect"
 	"testing"
 	"time"
@@ -469,7 +469,7 @@ func TestBlockArrayUnmarshal(t *testing.T) {
 
 		for _, tt := range tests {
 			t.Run(tt.name, func(t *testing.T) {
-				data, err := ioutil.ReadFile(tt.filePath)
+				data, err := os.ReadFile(tt.filePath)
 				if err != nil {
 					t.Fatal(err)
 				}
