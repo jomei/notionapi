@@ -834,9 +834,9 @@ func decodeBlock(raw map[string]interface{}) (Block, error) {
 		b = &TemplateBlock{}
 	case BlockTypeSyncedBlock:
 		b = &SyncedBlock{}
-	case BlockTypeTableBlock:
+	case BlockTypeTable:
 		b = &TableBlock{}
-	case BlockTypeTableRowBlock:
+	case BlockTypeTableRow:
 		b = &TableRowBlock{}
 
 	case BlockTypeUnsupported:
