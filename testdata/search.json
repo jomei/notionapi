@@ -15,8 +15,8 @@
         "id": "some_id"
       },
       "parent": {
-        "type": "database_id",
-        "database_id": "some_id"
+        "type": "data_source_id",
+        "data_source_id": "some_id"
       },
       "archived": false,
       "properties": {
@@ -61,7 +61,7 @@
       }
     },
     {
-      "object": "database",
+      "object": "data_source",
       "id": "some_id",
       "created_time": "2021-05-24T05:06:34.827Z",
       "last_edited_time": "2021-05-24T05:06:34.827Z",
@@ -69,7 +69,7 @@
         {
           "type": "text",
           "text": {
-            "content": "Test Database",
+            "content": "Test Data Source",
             "link": null
           },
           "annotations": {
@@ -80,7 +80,7 @@
             "code": false,
             "color": "default"
           },
-          "plain_text": "Test Database",
+          "plain_text": "Test Data Source",
           "href": null
         }
       ],
