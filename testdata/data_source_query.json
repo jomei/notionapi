@@ -15,7 +15,7 @@
         "id": "some_id"
       },
       "parent": {
-        "type": "database_id",
+        "type": "data_source_id",
         "database_id": "some_id"
       },
       "archived": false,
