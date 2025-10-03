@@ -147,8 +147,8 @@ type Database struct {
 }
 
 type DatabaseDataSource struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
+	ID   DataSourceID `json:"id"`
+	Name string       `json:"name"`
 }
 
 func (db *Database) GetObject() ObjectType {
