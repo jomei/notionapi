@@ -123,7 +123,7 @@ func (p MultiSelectProperty) GetType() PropertyType {
 
 type Option struct {
 	ID    PropertyID `json:"id,omitempty"`
-	Name  string     `json:"name"`
+	Name  string     `json:"name,omitempty"`
 	Color Color      `json:"color,omitempty"`
 }
 

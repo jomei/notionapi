@@ -84,7 +84,7 @@ func TestBlockClient(t *testing.T) {
 								IsToggleable bool                 `json:"is_toggleable,omitempty"`
 							}{[]notionapi.RichText{
 								{
-									Type: notionapi.ObjectTypeText,
+									Type: notionapi.RichTextTypeText,
 									Text: &notionapi.Text{Content: "Hello"},
 								},
 							}, nil, "", false,
@@ -114,7 +114,7 @@ func TestBlockClient(t *testing.T) {
 							Paragraph: notionapi.Paragraph{
 								RichText: []notionapi.RichText{
 									{
-										Type: notionapi.ObjectTypeText,
+										Type: notionapi.RichTextTypeText,
 										Text: &notionapi.Text{Content: "AAAAAA"},
 										Annotations: &notionapi.Annotations{
 											Bold:  true,
@@ -259,7 +259,7 @@ func TestBlockClient(t *testing.T) {
 					Paragraph: notionapi.Paragraph{
 						RichText: []notionapi.RichText{
 							{
-								Type: notionapi.ObjectTypeText,
+								Type: notionapi.RichTextTypeText,
 								Text: &notionapi.Text{
 									Content: "Hello",
 								},

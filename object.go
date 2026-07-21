@@ -35,6 +35,12 @@ func (c Color) MarshalText() ([]byte, error) {
 	return []byte(c), nil
 }
 
+type RichTextType string
+
+func (rtType RichTextType) String() string {
+	return string(rtType)
+}
+
 type MentionType string
 
 func (mType MentionType) String() string {
@@ -71,7 +77,7 @@ type Mention struct {
 }
 
 type RichText struct {
-	Type        ObjectType   `json:"type,omitempty"`
+	Type        RichTextType `json:"type,omitempty"`
 	Text        *Text        `json:"text,omitempty"`
 	Mention     *Mention     `json:"mention,omitempty"`
 	Equation    *Equation    `json:"equation,omitempty"`
@@ -161,10 +167,11 @@ type FileObject struct {
 }
 
 type Icon struct {
-	Type     FileType    `json:"type"`
-	Emoji    *Emoji      `json:"emoji,omitempty"`
-	File     *FileObject `json:"file,omitempty"`
-	External *FileObject `json:"external,omitempty"`
+	Type        FileType     `json:"type"`
+	Emoji       *Emoji       `json:"emoji,omitempty"`
+	CustomEmoji *CustomEmoji `json:"custom_emoji,omitempty"`
+	File        *FileObject  `json:"file,omitempty"`
+	External    *FileObject  `json:"external,omitempty"`
 }
 
 // GetURL returns the external or internal URL depending on the image type.
@@ -179,6 +186,12 @@ func (i Icon) GetURL() string {
 }
 
 type Emoji string
+
+type CustomEmoji struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
+	URL  string `json:"url"`
+}
 
 type PropertyID string
 

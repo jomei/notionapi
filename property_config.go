@@ -359,7 +359,7 @@ type UniqueIDConfig struct {
 }
 
 func (p UniqueIDPropertyConfig) GetType() PropertyConfigType {
-	return ""
+	return p.Type
 }
 
 func (p UniqueIDPropertyConfig) GetID() PropertyID {
@@ -377,6 +377,20 @@ func (p VerificationPropertyConfig) GetType() PropertyConfigType {
 }
 
 func (p VerificationPropertyConfig) GetID() PropertyID {
+	return p.ID
+}
+
+type ButtonPropertyConfig struct {
+	ID     PropertyID         `json:"id"`
+	Type   PropertyConfigType `json:"type"`
+	Button struct{}           `json:"button"`
+}
+
+func (p ButtonPropertyConfig) GetType() PropertyConfigType {
+	return p.Type
+}
+
+func (p ButtonPropertyConfig) GetID() PropertyID {
 	return p.ID
 }
 
@@ -447,6 +461,8 @@ func parsePropertyConfigs(raw map[string]interface{}) (PropertyConfigs, error) {
 				p = &UniqueIDPropertyConfig{}
 			case PropertyConfigVerification:
 				p = &VerificationPropertyConfig{}
+			case PropertyConfigButton:
+				p = &ButtonPropertyConfig{}
 			default:
 
 				return nil, fmt.Errorf("unsupported property type: %s", rawProperty["type"].(string))

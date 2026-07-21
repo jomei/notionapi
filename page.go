@@ -133,7 +133,7 @@ type PageUpdateRequest struct {
 	// The property values to update for the page. The keys are the names or IDs
 	// of the property and the values are property values. If a page property ID
 	// is not included, then it is not changed.
-	Properties Properties `json:"properties"`
+	Properties Properties `json:"properties,omitempty"`
 	// Whether the page is archived (deleted). Set to true to archive a page. Set
 	// to false to un-archive (restore) a page.
 	Archived bool `json:"archived"`

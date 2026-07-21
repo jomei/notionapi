@@ -275,7 +275,7 @@ func TestPageClient(t *testing.T) {
 							Type: notionapi.PropertyTypeRichText,
 							RichText: []notionapi.RichText{
 								{
-									Type: notionapi.ObjectTypeText,
+									Type: notionapi.RichTextTypeText,
 									Text: &notionapi.Text{Content: "patch"},
 								},
 							},
@@ -386,7 +386,7 @@ func TestPageCreateRequest_MarshallJSON(t *testing.T) {
 					"Summary": notionapi.TextProperty{
 						Text: []notionapi.RichText{
 							{
-								Type: notionapi.ObjectTypeText,
+								Type: notionapi.RichTextTypeText,
 								Text: &notionapi.Text{
 									Content: "Some content",
 								},
@@ -435,7 +435,7 @@ func TestPageCreateRequest_MarshallJSON(t *testing.T) {
 					"Summary": notionapi.TextProperty{
 						Text: []notionapi.RichText{
 							{
-								Type: notionapi.ObjectTypeText,
+								Type: notionapi.RichTextTypeText,
 								Text: &notionapi.Text{
 									Content: "Some content",
 								},
@@ -460,7 +460,7 @@ func TestPageCreateRequest_MarshallJSON(t *testing.T) {
 						Heading2: notionapi.Heading{
 							RichText: []notionapi.RichText{
 								{
-									Type: notionapi.ObjectTypeText,
+									Type: notionapi.RichTextTypeText,
 									Text: &notionapi.Text{Content: "Lacinato"},
 								},
 							},

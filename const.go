@@ -34,6 +34,7 @@ const (
 	PropertyConfigStatus          PropertyConfigType = "status"
 	PropertyConfigUniqueID        PropertyConfigType = "unique_id"
 	PropertyConfigVerification    PropertyConfigType = "verification"
+	PropertyConfigButton          PropertyConfigType = "button"
 )
 
 const (
@@ -225,8 +226,8 @@ const (
 	BlockTypeBookmark        BlockType = "bookmark"
 	BlockTypeCode            BlockType = "code"
 	BlockTypeDivider         BlockType = "divider"
-	BlockCallout             BlockType = "callout"
-	BlockQuote               BlockType = "quote"
+	BlockTypeCallout         BlockType = "callout"
+	BlockTypeQuote           BlockType = "quote"
 	BlockTypeTableOfContents BlockType = "table_of_contents"
 	BlockTypeEquation        BlockType = "equation"
 	BlockTypeBreadcrumb      BlockType = "breadcrumb"
@@ -257,6 +258,12 @@ const (
 	RollupTypeNumber RollupType = "number"
 	RollupTypeDate   RollupType = "date"
 	RollupTypeArray  RollupType = "array"
+)
+
+const (
+	RichTextTypeText     RichTextType = "text"
+	RichTextTypeMention  RichTextType = "mention"
+	RichTextTypeEquation RichTextType = "equation"
 )
 
 const (
