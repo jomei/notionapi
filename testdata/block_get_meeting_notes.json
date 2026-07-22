@@ -1,0 +1,45 @@
+{
+  "object": "block",
+  "id": "d7b3c8f4-9e6e-4c1a-b5b8-2c0f4a0c5b8e",
+  "created_time": "2021-05-24T05:06:34.827Z",
+  "last_edited_time": "2021-05-24T05:06:34.827Z",
+  "created_by": {
+    "object": "user",
+    "id": "ee5f0f84-409a-440f-983a-a5315961c6e4"
+  },
+  "last_edited_by": {
+    "object": "user",
+    "id": "ee5f0f84-409a-440f-983a-a5315961c6e4"
+  },
+  "has_children": true,
+  "archived": false,
+  "type": "meeting_notes",
+  "meeting_notes": {
+    "title": [
+      {
+        "type": "text",
+        "text": {
+          "content": "Team Sync",
+          "link": null
+        },
+        "plain_text": "Team Sync",
+        "href": null
+      }
+    ],
+    "status": "notes_ready",
+    "children": {
+      "summary_block_id": "a1b2c3d4-5678-9abc-def0-1234567890ab",
+      "notes_block_id": "b2c3d4e5-6789-abcd-ef01-234567890abc",
+      "transcript_block_id": "c3d4e5f6-789a-bcde-f012-34567890abcd"
+    },
+    "calendar_event": {
+      "attendees": ["ee5f0f84-409a-440f-983a-a5315961c6e4"],
+      "start_time": "2026-02-24T10:00:00.000Z",
+      "end_time": "2026-02-24T10:45:00.000Z"
+    },
+    "recording": {
+      "start_time": "2026-02-24T10:00:00.000Z",
+      "end_time": "2026-02-24T10:45:00.000Z"
+    }
+  }
+}

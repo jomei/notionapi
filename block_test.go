@@ -203,6 +203,110 @@ func TestBlockClient(t *testing.T) {
 				wantErr: false,
 				err:     nil,
 			},
+			{
+				name:       "returns meeting_notes block",
+				filePath:   "testdata/block_get_meeting_notes.json",
+				statusCode: http.StatusOK,
+				id:         "d7b3c8f4-9e6e-4c1a-b5b8-2c0f4a0c5b8e",
+				want: &notionapi.MeetingNotesBlock{
+					BasicBlock: notionapi.BasicBlock{
+						Object:         notionapi.ObjectTypeBlock,
+						ID:             "d7b3c8f4-9e6e-4c1a-b5b8-2c0f4a0c5b8e",
+						Type:           notionapi.BlockTypeMeetingNotes,
+						CreatedTime:    &timestamp,
+						LastEditedTime: &timestamp,
+						CreatedBy: &notionapi.User{
+							Object: "user",
+							ID:     "ee5f0f84-409a-440f-983a-a5315961c6e4",
+						},
+						LastEditedBy: &notionapi.User{
+							Object: "user",
+							ID:     "ee5f0f84-409a-440f-983a-a5315961c6e4",
+						},
+						HasChildren: true,
+					},
+					MeetingNotes: notionapi.MeetingNotes{
+						Title: []notionapi.RichText{
+							{
+								Type: notionapi.RichTextTypeText,
+								Text: &notionapi.Text{
+									Content: "Team Sync",
+								},
+								PlainText: "Team Sync",
+							},
+						},
+						Status: "notes_ready",
+						Children: &notionapi.MeetingNotesChildren{
+							SummaryBlockID:    "a1b2c3d4-5678-9abc-def0-1234567890ab",
+							NotesBlockID:      "b2c3d4e5-6789-abcd-ef01-234567890abc",
+							TranscriptBlockID: "c3d4e5f6-789a-bcde-f012-34567890abcd",
+						},
+						CalendarEvent: &notionapi.CalendarEvent{
+							Attendees: []string{"ee5f0f84-409a-440f-983a-a5315961c6e4"},
+							StartTime: "2026-02-24T10:00:00.000Z",
+							EndTime:   "2026-02-24T10:45:00.000Z",
+						},
+						Recording: &notionapi.Recording{
+							StartTime: "2026-02-24T10:00:00.000Z",
+							EndTime:   "2026-02-24T10:45:00.000Z",
+						},
+					},
+				},
+				wantErr: false,
+				err:     nil,
+			},
+			{
+				name:       "returns transcription block (legacy) as meeting_notes",
+				filePath:   "testdata/block_get_transcription.json",
+				statusCode: http.StatusOK,
+				id:         "d7b3c8f4-9e6e-4c1a-b5b8-2c0f4a0c5b8e",
+				want: &notionapi.MeetingNotesBlock{
+					BasicBlock: notionapi.BasicBlock{
+						Object:         notionapi.ObjectTypeBlock,
+						ID:             "d7b3c8f4-9e6e-4c1a-b5b8-2c0f4a0c5b8e",
+						Type:           notionapi.BlockTypeMeetingNotes,
+						CreatedTime:    &timestamp,
+						LastEditedTime: &timestamp,
+						CreatedBy: &notionapi.User{
+							Object: "user",
+							ID:     "ee5f0f84-409a-440f-983a-a5315961c6e4",
+						},
+						LastEditedBy: &notionapi.User{
+							Object: "user",
+							ID:     "ee5f0f84-409a-440f-983a-a5315961c6e4",
+						},
+						HasChildren: true,
+					},
+					MeetingNotes: notionapi.MeetingNotes{
+						Title: []notionapi.RichText{
+							{
+								Type: notionapi.RichTextTypeText,
+								Text: &notionapi.Text{
+									Content: "Sprint Retro",
+								},
+								PlainText: "Sprint Retro",
+							},
+						},
+						Status: "notes_ready",
+						Children: &notionapi.MeetingNotesChildren{
+							SummaryBlockID:    "d1e2f3a4-5678-9abc-def0-1234567890ab",
+							NotesBlockID:      "e2f3a4b5-6789-abcd-ef01-234567890abc",
+							TranscriptBlockID: "f3a4b5c6-789a-bcde-f012-34567890abcd",
+						},
+						CalendarEvent: &notionapi.CalendarEvent{
+							Attendees: []string{"ee5f0f84-409a-440f-983a-a5315961c6e4"},
+							StartTime: "2026-02-21T09:00:00.000Z",
+							EndTime:   "2026-02-21T09:30:00.000Z",
+						},
+						Recording: &notionapi.Recording{
+							StartTime: "2026-02-21T09:00:00.000Z",
+							EndTime:   "2026-02-21T09:30:00.000Z",
+						},
+					},
+				},
+				wantErr: false,
+				err:     nil,
+			},
 		}
 
 		for _, tt := range tests {
