@@ -239,6 +239,8 @@ const (
 	BlockTypeSyncedBlock     BlockType = "synced_block"
 	BlockTypeTableBlock      BlockType = "table"
 	BlockTypeTableRowBlock   BlockType = "table_row"
+	BlockTypeMeetingNotes    BlockType = "meeting_notes"
+	BlockTypeTranscription   BlockType = "transcription"
 	BlockTypeUnsupported     BlockType = "unsupported"
 )
 

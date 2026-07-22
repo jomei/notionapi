@@ -380,6 +380,10 @@ func (b LinkPreviewBlock) GetRichTextString() string {
 	return b.LinkPreview.URL
 }
 
+func (b MeetingNotesBlock) GetRichTextString() string {
+	return concatenateRichText(b.MeetingNotes.Title)
+}
+
 func (b EquationBlock) GetRichTextString() string {
 	return b.Equation.Expression
 }
@@ -738,6 +742,36 @@ type SyncedFrom struct {
 	BlockID BlockID `json:"block_id"`
 }
 
+type MeetingNotesBlock struct {
+	BasicBlock
+	MeetingNotes MeetingNotes `json:"meeting_notes"`
+}
+
+type MeetingNotes struct {
+	Title         []RichText            `json:"title"`
+	Status        string                `json:"status"`
+	Children      *MeetingNotesChildren `json:"children,omitempty"`
+	CalendarEvent *CalendarEvent        `json:"calendar_event,omitempty"`
+	Recording     *Recording            `json:"recording,omitempty"`
+}
+
+type MeetingNotesChildren struct {
+	SummaryBlockID    BlockID `json:"summary_block_id,omitempty"`
+	NotesBlockID      BlockID `json:"notes_block_id,omitempty"`
+	TranscriptBlockID BlockID `json:"transcript_block_id,omitempty"`
+}
+
+type CalendarEvent struct {
+	StartTime string   `json:"start_time"`
+	EndTime   string   `json:"end_time"`
+	Attendees []string `json:"attendees,omitempty"`
+}
+
+type Recording struct {
+	StartTime string `json:"start_time"`
+	EndTime   string `json:"end_time"`
+}
+
 type UnsupportedBlock struct {
 	BasicBlock
 }
@@ -838,6 +872,13 @@ func decodeBlock(raw map[string]interface{}) (Block, error) {
 		b = &TableBlock{}
 	case BlockTypeTableRowBlock:
 		b = &TableRowBlock{}
+	case BlockTypeMeetingNotes:
+		b = &MeetingNotesBlock{}
+	case BlockTypeTranscription:
+		raw["type"] = "meeting_notes"
+		raw["meeting_notes"] = raw["transcription"]
+		delete(raw, "transcription")
+		b = &MeetingNotesBlock{}
 
 	case BlockTypeUnsupported:
 		b = &UnsupportedBlock{}
