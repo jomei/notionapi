@@ -219,6 +219,7 @@ type Block interface {
 	GetArchived() bool
 	GetParent() *Parent
 	GetRichTextString() string
+	GetMeetingNotes() *MeetingNotes
 }
 
 type Blocks []Block
@@ -296,6 +297,11 @@ func (b BasicBlock) GetArchived() bool {
 func (b BasicBlock) GetParent() *Parent {
 	return b.Parent
 }
+
+func (b BasicBlock) GetMeetingNotes() *MeetingNotes {
+	return nil
+}
+
 func concatenateRichText(richtext []RichText) string {
 	var result string
 	for _, rt := range richtext {
@@ -745,6 +751,10 @@ type SyncedFrom struct {
 type MeetingNotesBlock struct {
 	BasicBlock
 	MeetingNotes MeetingNotes `json:"meeting_notes"`
+}
+
+func (b *MeetingNotesBlock) GetMeetingNotes() *MeetingNotes {
+	return &b.MeetingNotes
 }
 
 type MeetingNotes struct {
