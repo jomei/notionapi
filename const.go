@@ -1,14 +1,15 @@
 package notionapi
 
 const (
-	ObjectTypeDatabase ObjectType = "database"
-	ObjectTypeBlock    ObjectType = "block"
-	ObjectTypePage     ObjectType = "page"
-	ObjectTypeList     ObjectType = "list"
-	ObjectTypeText     ObjectType = "text"
-	ObjectTypeUser     ObjectType = "user"
-	ObjectTypeError    ObjectType = "error"
-	ObjectTypeComment  ObjectType = "comment"
+	ObjectTypeDatabase   ObjectType = "database"
+	ObjectTypeDataSource ObjectType = "data_source"
+	ObjectTypeBlock      ObjectType = "block"
+	ObjectTypePage       ObjectType = "page"
+	ObjectTypeList       ObjectType = "list"
+	ObjectTypeText       ObjectType = "text"
+	ObjectTypeUser       ObjectType = "user"
+	ObjectTypeError      ObjectType = "error"
+	ObjectTypeComment    ObjectType = "comment"
 )
 
 const (
@@ -192,10 +193,11 @@ const (
 )
 
 const (
-	ParentTypeDatabaseID ParentType = "database_id"
-	ParentTypePageID     ParentType = "page_id"
-	ParentTypeWorkspace  ParentType = "workspace"
-	ParentTypeBlockID    ParentType = "block_id"
+	ParentTypeDatabaseID   ParentType = "database_id"
+	ParentTypeDataSourceID ParentType = "data_source_id"
+	ParentTypePageID       ParentType = "page_id"
+	ParentTypeWorkspace    ParentType = "workspace"
+	ParentTypeBlockID      ParentType = "block_id"
 )
 
 const (

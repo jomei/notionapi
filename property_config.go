@@ -229,6 +229,7 @@ type DualProperty struct{}
 
 type RelationConfig struct {
 	DatabaseID         DatabaseID         `json:"database_id"`
+	DataSourceID       DataSourceID       `json:"data_source_id"`
 	SyncedPropertyID   PropertyID         `json:"synced_property_id,omitempty"`
 	SyncedPropertyName string             `json:"synced_property_name,omitempty"`
 	Type               RelationConfigType `json:"type,omitempty"`

@@ -176,11 +176,12 @@ type ParentType string
 //
 // See https://developers.notion.com/reference/parent-object
 type Parent struct {
-	Type       ParentType `json:"type,omitempty"`
-	PageID     PageID     `json:"page_id,omitempty"`
-	DatabaseID DatabaseID `json:"database_id,omitempty"`
-	BlockID    BlockID    `json:"block_id,omitempty"`
-	Workspace  bool       `json:"workspace,omitempty"`
+	Type         ParentType   `json:"type,omitempty"`
+	PageID       PageID       `json:"page_id,omitempty"`
+	DatabaseID   DatabaseID   `json:"database_id,omitempty"`
+	DataSourceID DataSourceID `json:"data_source_id,omitempty"`
+	BlockID      BlockID      `json:"block_id,omitempty"`
+	Workspace    bool         `json:"workspace,omitempty"`
 }
 
 func handlePageResponse(res *http.Response) (*Page, error) {

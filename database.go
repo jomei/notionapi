@@ -18,7 +18,6 @@ func (dID DatabaseID) String() string {
 
 type DatabaseService interface {
 	Create(ctx context.Context, request *DatabaseCreateRequest) (*Database, error)
-	Query(context.Context, DatabaseID, *DatabaseQueryRequest) (*DatabaseQueryResponse, error)
 	Get(context.Context, DatabaseID) (*Database, error)
 	Update(context.Context, DatabaseID, *DatabaseUpdateRequest) (*Database, error)
 }
@@ -63,57 +62,6 @@ type DatabaseCreateRequest struct {
 	// appear in Notion and the values are property schema objects.
 	Properties PropertyConfigs `json:"properties"`
 	IsInline   bool            `json:"is_inline"`
-}
-
-// Gets a list of Pages contained in the database, filtered and ordered
-// according to the filter conditions and sort criteria provided in the request.
-// The response may contain fewer than page_size of results. If the response
-// includes a next_cursor value, refer to the pagination reference for details
-// about how to use a cursor to iterate through the list.
-//
-// Filters are similar to the filters provided in the Notion UI where the set of
-// filters and filter groups chained by "And" in the UI is equivalent to having
-// each filter in the array of the compound "and" filter. Similar a set of
-// filters chained by "Or" in the UI would be represented as filters in the
-// array of the "or" compound filter.
-//
-// Filters operate on database properties and can be combined. If no filter is
-// provided, all the pages in the database will be returned with pagination.
-//
-// See https://developers.notion.com/reference/post-database-query
-func (dc *DatabaseClient) Query(ctx context.Context, id DatabaseID, requestBody *DatabaseQueryRequest) (*DatabaseQueryResponse, error) {
-	res, err := dc.apiClient.request(ctx, http.MethodPost, fmt.Sprintf("databases/%s/query", id.String()), nil, requestBody)
-	if err != nil {
-		return nil, err
-	}
-
-	defer func() {
-		if errClose := res.Body.Close(); errClose != nil {
-			log.Println("failed to close body, should never happen")
-		}
-	}()
-
-	var response DatabaseQueryResponse
-	err = json.NewDecoder(res.Body).Decode(&response)
-	if err != nil {
-		return nil, err
-	}
-
-	return &response, nil
-}
-
-// DatabaseQueryRequest represents the request body for DatabaseClient.Query.
-type DatabaseQueryRequest struct {
-	// When supplied, limits which pages are returned based on the filter
-	// conditions.
-	Filter Filter
-	// When supplied, orders the results based on the provided sort criteria.
-	Sorts []SortObject `json:"sorts,omitempty"`
-	// When supplied, returns a page of results starting after the cursor provided.
-	// If not supplied, this endpoint will return the first page of results.
-	StartCursor Cursor `json:"start_cursor,omitempty"`
-	// The number of items from the full list desired in the response. Maximum: 100
-	PageSize int `json:"page_size,omitempty"`
 }
 
 // See https://developers.notion.com/reference/get-database
@@ -189,35 +137,20 @@ type Database struct {
 	URL            string     `json:"url"`
 	PublicURL      string     `json:"public_url"`
 	// Properties is a map of property configurations that defines what Page.Properties each page of the database can use
-	Properties  PropertyConfigs `json:"properties"`
-	Description []RichText      `json:"description"`
-	IsInline    bool            `json:"is_inline"`
-	Archived    bool            `json:"archived"`
-	Icon        *Icon           `json:"icon,omitempty"`
-	Cover       *Image          `json:"cover,omitempty"`
+	Properties  PropertyConfigs      `json:"properties"`
+	Description []RichText           `json:"description"`
+	IsInline    bool                 `json:"is_inline"`
+	Archived    bool                 `json:"archived"`
+	Icon        *Icon                `json:"icon,omitempty"`
+	Cover       *Image               `json:"cover,omitempty"`
+	DataSources []DatabaseDataSource `json:"data_sources"`
+}
+
+type DatabaseDataSource struct {
+	ID   DataSourceID `json:"id"`
+	Name string       `json:"name"`
 }
 
 func (db *Database) GetObject() ObjectType {
 	return db.Object
-}
-
-type DatabaseQueryResponse struct {
-	Object     ObjectType `json:"object"`
-	Results    []Page     `json:"results"`
-	HasMore    bool       `json:"has_more"`
-	NextCursor Cursor     `json:"next_cursor"`
-}
-
-func (qr *DatabaseQueryRequest) MarshalJSON() ([]byte, error) {
-	return json.Marshal(struct {
-		Sorts       []SortObject `json:"sorts,omitempty"`
-		StartCursor Cursor       `json:"start_cursor,omitempty"`
-		PageSize    int          `json:"page_size,omitempty"`
-		Filter      interface{}  `json:"filter,omitempty"`
-	}{
-		Sorts:       qr.Sorts,
-		StartCursor: qr.StartCursor,
-		PageSize:    qr.PageSize,
-		Filter:      qr.Filter,
-	})
 }
