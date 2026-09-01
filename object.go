@@ -228,3 +228,6 @@ type Verification struct {
 
 type Button struct {
 }
+
+type Place struct {
+}
