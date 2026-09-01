@@ -44,3 +44,17 @@ func TestNumberPropertyConfig_MarshalJSON(t *testing.T) {
 		})
 	}
 }
+
+func TestPlacePropertyConfig_MarshalJSON(t *testing.T) {
+	p := PlacePropertyConfig{
+		Type: PropertyConfigPlace,
+	}
+	got, err := json.Marshal(p)
+	if err != nil {
+		t.Fatalf("MarshalJSON() error = %v", err)
+	}
+	want := []byte(`{"type":"place","place":{}}`)
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("MarshalJSON() got = %v, want %v", string(got), string(want))
+	}
+}

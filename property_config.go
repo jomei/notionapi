@@ -395,6 +395,20 @@ func (p ButtonPropertyConfig) GetID() PropertyID {
 	return p.ID
 }
 
+type PlacePropertyConfig struct {
+	ID    PropertyID         `json:"id,omitempty"`
+	Type  PropertyConfigType `json:"type"`
+	Place struct{}           `json:"place"`
+}
+
+func (p PlacePropertyConfig) GetType() PropertyConfigType {
+	return p.Type
+}
+
+func (p PlacePropertyConfig) GetID() PropertyID {
+	return p.ID
+}
+
 type PropertyConfigs map[string]PropertyConfig
 
 func (p *PropertyConfigs) UnmarshalJSON(data []byte) error {
@@ -464,6 +478,8 @@ func parsePropertyConfigs(raw map[string]interface{}) (PropertyConfigs, error) {
 				p = &VerificationPropertyConfig{}
 			case PropertyConfigButton:
 				p = &ButtonPropertyConfig{}
+			case PropertyConfigPlace:
+				p = &PlacePropertyConfig{}
 			default:
 
 				return nil, fmt.Errorf("unsupported property type: %s", rawProperty["type"].(string))

@@ -36,6 +36,7 @@ const (
 	PropertyConfigUniqueID        PropertyConfigType = "unique_id"
 	PropertyConfigVerification    PropertyConfigType = "verification"
 	PropertyConfigButton          PropertyConfigType = "button"
+	PropertyConfigPlace           PropertyConfigType = "place"
 )
 
 const (
@@ -63,6 +64,7 @@ const (
 	PropertyTypeUniqueID       PropertyType = "unique_id"
 	PropertyTypeVerification   PropertyType = "verification"
 	PropertyTypeButton         PropertyType = "button"
+	PropertyTypePlace          PropertyType = "place"
 )
 
 const (
