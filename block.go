@@ -851,6 +851,8 @@ func decodeBlock(raw map[string]interface{}) (Block, error) {
 		b = &ImageBlock{}
 	case BlockTypeVideo:
 		b = &VideoBlock{}
+	case BlockTypeAudio:
+		b = &AudioBlock{}
 	case BlockTypeFile:
 		b = &FileBlock{}
 	case BlockTypePdf:

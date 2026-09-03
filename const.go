@@ -223,6 +223,7 @@ const (
 	BlockTypeEmbed           BlockType = "embed"
 	BlockTypeImage           BlockType = "image"
 	BlockTypeVideo           BlockType = "video"
+	BlockTypeAudio           BlockType = "audio"
 	BlockTypeFile            BlockType = "file"
 	BlockTypePdf             BlockType = "pdf"
 	BlockTypeBookmark        BlockType = "bookmark"
